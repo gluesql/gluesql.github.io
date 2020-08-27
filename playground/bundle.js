@@ -128,7 +128,7 @@ object-assign
   border: 0;
   background-color: ${b.console.bg};
   color: ${b.console.fg};
-  font-size: 20px;
+  font-size: 16px;
   font-family: consolas, monospace;
   overflow-y: scroll;
 `,L=c.a.pre`
@@ -141,7 +141,7 @@ object-assign
   background-color: transparent;
   border: none;
   font-family: consolas, monospace;
-  font-size: 20px;
+  font-size: 16px;
   color: ${b.console.fg};
   outline: none;
   width: calc(100% - 30px);
@@ -156,7 +156,7 @@ object-assign
   }
 
   & td {
-    padding: 10px;
+    padding: 5px;
   }
 `;function U(e,t){return a.a.createElement(r.Fragment,{key:t},a.a.createElement("span",null,e),a.a.createElement("br",null))}var V=v((function({db:e,activeTab:t}){if(!t)return a.a.createElement(M,null);const{type:n,name:i}=t,[l,o]=Object(r.useState)(""),[u,c]=Object(r.useState)([]),s=Object(r.useRef)(null);return Object(r.useEffect)(()=>{o(""),c(d(t)),s.current.focus()},[t]),a.a.createElement(M,null,a.a.createElement(L,null,"[Storage]",a.a.createElement("br",null),"Type: "+n,a.a.createElement("br",null),"Name: "+i,a.a.createElement("br",null),a.a.createElement("br",null)),u.map((e,t)=>a.a.createElement(r.Fragment,{key:`${i}-${t}`},a.a.createElement(L,null,a.a.createElement(j,null,"[Run]"),a.a.createElement("br",null),"> "+e.query,a.a.createElement("br",null),a.a.createElement(j,null,"[Result]"),a.a.createElement("br",null),function(e){if("string"==typeof e.result)return U(e.result);if(!Array.isArray(e.result)){const t=Object.keys(e.result)[0];return U(`[${t} Error] ${JSON.stringify(e.result[t])}`)}const t=e.result.map((e,t)=>{switch(e.query){case"CREATE":case"DROP":case"INSERT":return U(`[${e.query}] succeeded.`,"result-"+t);case"DELETE":case"UPDATE":return U(`[${e.query}] ${e.data} row(s) affected.`,"result-"+t);case"SELECT":return a.a.createElement($,{key:"result-"+t},a.a.createElement("tbody",null,e.data.map((e,t)=>a.a.createElement("tr",{key:"row-"+t},e.map((e,n)=>a.a.createElement("td",{key:`col-${t}-${n}`},e))))));default:return U(JSON.stringify(e),"result-"+t)}});return a.a.createElement(a.a.Fragment,null,t)}(e),a.a.createElement("br",null)))),a.a.createElement(F,null,a.a.createElement("span",null,"$"),a.a.createElement(D,{ref:s,autoFocus:!0,rows:"10",value:l,onChange:e=>o(e.target.value),onKeyUp:r=>{if("Enter"===r.key&&l.includes(";")){let r;try{r=e.execute(l)}catch(e){r=e}p({type:n,name:i,query:l,result:r}),c(d(t)),o(""),s.current.focus()}}})))}));const W=c.a.div`
   display: flex;
