@@ -129,18 +129,18 @@ object-assign
   background-color: ${b.console.bg};
   color: ${b.console.fg};
   font-size: 20px;
-  font-family: consolas;
+  font-family: consolas, monospace;
   overflow-y: scroll;
 `,L=c.a.pre`
   display: block;
-  font-family: consolas;
+  font-family: consolas, monospace;
 `,F=c.a.div`
   display: flex;
 `,D=c.a.textarea`
   padding: 0 0 0 10px;
   background-color: transparent;
   border: none;
-  font-family: consolas;
+  font-family: consolas, monospace;
   font-size: 20px;
   color: ${b.console.fg};
   outline: none;
