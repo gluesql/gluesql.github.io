@@ -168,6 +168,87 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="multi-threaded-with-sledstorage"><a class="header" href="#multi-threaded-with-sledstorage">Multi-threaded with SledStorage</a></h1>
+<pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
+mod sled_multi_threaded {
+    use {
+        gluesql::{parse, Glue, Payload, SledStorage, Value},
+        std::thread,
+    };
+
+    pub fn run() {
+        let storage = SledStorage::new(&quot;/tmp/gluesql/hello_world&quot;).expect(&quot;Something went wrong!&quot;);
+        let mut glue = Glue::new(storage.clone());
+        let queries = &quot;
+          CREATE TABLE IF NOT EXISTS greet (name TEXT);
+          DELETE FROM greet;
+        &quot;;
+
+        let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
+        for query in parsed_queries {
+            glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
+        }
+        /*
+            SledStorage supports cloning, using this we can create copies of the storage for new threads;
+              all we need to do is wrap it in glue again.
+        */
+        let foo_storage = storage.clone();
+        let foo_thread = thread::spawn(move || {
+            let mut glue = Glue::new(foo_storage);
+            let queries = &quot;INSERT INTO greet (name) VALUES (\&quot;Foo\&quot;)&quot;;
+            let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
+            for query in parsed_queries {
+                glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
+            }
+        });
+
+        let world_storage = storage.clone();
+        let world_thread = thread::spawn(move || {
+            let mut glue = Glue::new(world_storage);
+            let queries = &quot;INSERT INTO greet (name) VALUES (\&quot;World\&quot;)&quot;;
+            let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
+            for query in parsed_queries {
+                glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
+            }
+        });
+
+        world_thread
+            .join()
+            .expect(&quot;Something went wrong in the world thread&quot;);
+
+        foo_thread
+            .join()
+            .expect(&quot;Something went wrong in the foo thread&quot;);
+
+        let queries = &quot;
+          SELECT name FROM greet
+        &quot;;
+
+        let parsed_query = &amp;parse(queries).expect(&quot;Failed to parse query&quot;)[0];
+
+        let result = glue.execute(&amp;parsed_query).expect(&quot;Failed to execute&quot;);
+
+        let rows = match result {
+            Payload::Select { labels: _, rows } =&gt; rows,
+            _ =&gt; panic!(&quot;Unexpected result: {:?}&quot;, result),
+        };
+
+        let first_row = &amp;rows[0];
+        let first_row_unwrapped = &amp;first_row.0;
+        let first_value = &amp;first_row_unwrapped[0];
+        let to_greet = match first_value {
+            Value::Str(to_greet) =&gt; to_greet,
+            value =&gt; panic!(&quot;Unexpected type: {:?}&quot;, value),
+        };
+
+        println!(&quot;Hello {}!&quot;, to_greet); // Will typically output &quot;Hello Foo!&quot; but will sometimes output &quot;Hello World!&quot;; depends on which thread finished first.
+    }
+}
+
+fn main() {
+    #[cfg(feature = &quot;sled-storage&quot;)]
+    sled_multi_threaded::run();
+}
+</code></pre></pre>
 
                     </main>
 

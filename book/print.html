@@ -211,7 +211,160 @@ gluesql = &quot;^0&quot; # This will set it to the latest pre 1.0.0 version. Set
 <h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <h1 id="hello-world"><a class="header" href="#hello-world">Hello World</a></h1>
 <p>Assumes you have completed <a href="./installation.html">installation.md</a>.</p>
+<pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
+mod hello_world {
+    use gluesql::{parse, Glue, Payload, SledStorage, Value};
+
+    pub fn run() {
+        /*
+            Initiate a connection
+        */
+        /*
+            Open a Sled database, this will create one if one does not yet exist
+        */
+        let storage = SledStorage::new(&quot;/tmp/gluesql/hello_world&quot;).expect(&quot;Something went wrong!&quot;);
+        /*
+            Wrap the Sled database with Glue
+        */
+        let mut glue = Glue::new(storage);
+
+        /*
+            Create table then insert a row
+
+            Write queries as a string
+        */
+        let queries = &quot;
+          CREATE TABLE greet (name TEXT);
+          INSERT INTO greet VALUES (\&quot;World\&quot;);
+        &quot;;
+
+        let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
+        for query in parsed_queries {
+            glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
+        }
+
+        /*
+            Select inserted row
+        */
+        let queries = &quot;
+          SELECT name FROM greet
+        &quot;;
+
+        let parsed_query = &amp;parse(queries).expect(&quot;Failed to parse query&quot;)[0];
+
+        let result = glue.execute(&amp;parsed_query).expect(&quot;Failed to execute&quot;);
+
+        /*
+            Query results are wrapped into a payload enum, on the basis of the query type
+        */
+        let rows = match result {
+            Payload::Select { labels: _, rows } =&gt; rows,
+            _ =&gt; panic!(&quot;Unexpected result: {:?}&quot;, result),
+        };
+
+        let first_row = &amp;rows[0];
+        let first_row_unwrapped = &amp;first_row.0;
+        let first_value = &amp;first_row_unwrapped[0];
+
+        /*
+            Row values are wrapped into a value enum, on the basis of the result type
+        */
+        let to_greet = match first_value {
+            Value::Str(to_greet) =&gt; to_greet,
+            value =&gt; panic!(&quot;Unexpected type: {:?}&quot;, value),
+        };
+
+        println!(&quot;Hello {}!&quot;, to_greet); // Will always output &quot;Hello World!&quot;
+    }
+}
+
+fn main() {
+    #[cfg(feature = &quot;sled-storage&quot;)]
+    hello_world::run();
+}
+</code></pre></pre>
 <h1 id="multi-threaded-with-sledstorage"><a class="header" href="#multi-threaded-with-sledstorage">Multi-threaded with SledStorage</a></h1>
+<pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
+mod sled_multi_threaded {
+    use {
+        gluesql::{parse, Glue, Payload, SledStorage, Value},
+        std::thread,
+    };
+
+    pub fn run() {
+        let storage = SledStorage::new(&quot;/tmp/gluesql/hello_world&quot;).expect(&quot;Something went wrong!&quot;);
+        let mut glue = Glue::new(storage.clone());
+        let queries = &quot;
+          CREATE TABLE IF NOT EXISTS greet (name TEXT);
+          DELETE FROM greet;
+        &quot;;
+
+        let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
+        for query in parsed_queries {
+            glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
+        }
+        /*
+            SledStorage supports cloning, using this we can create copies of the storage for new threads;
+              all we need to do is wrap it in glue again.
+        */
+        let foo_storage = storage.clone();
+        let foo_thread = thread::spawn(move || {
+            let mut glue = Glue::new(foo_storage);
+            let queries = &quot;INSERT INTO greet (name) VALUES (\&quot;Foo\&quot;)&quot;;
+            let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
+            for query in parsed_queries {
+                glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
+            }
+        });
+
+        let world_storage = storage.clone();
+        let world_thread = thread::spawn(move || {
+            let mut glue = Glue::new(world_storage);
+            let queries = &quot;INSERT INTO greet (name) VALUES (\&quot;World\&quot;)&quot;;
+            let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
+            for query in parsed_queries {
+                glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
+            }
+        });
+
+        world_thread
+            .join()
+            .expect(&quot;Something went wrong in the world thread&quot;);
+
+        foo_thread
+            .join()
+            .expect(&quot;Something went wrong in the foo thread&quot;);
+
+        let queries = &quot;
+          SELECT name FROM greet
+        &quot;;
+
+        let parsed_query = &amp;parse(queries).expect(&quot;Failed to parse query&quot;)[0];
+
+        let result = glue.execute(&amp;parsed_query).expect(&quot;Failed to execute&quot;);
+
+        let rows = match result {
+            Payload::Select { labels: _, rows } =&gt; rows,
+            _ =&gt; panic!(&quot;Unexpected result: {:?}&quot;, result),
+        };
+
+        let first_row = &amp;rows[0];
+        let first_row_unwrapped = &amp;first_row.0;
+        let first_value = &amp;first_row_unwrapped[0];
+        let to_greet = match first_value {
+            Value::Str(to_greet) =&gt; to_greet,
+            value =&gt; panic!(&quot;Unexpected type: {:?}&quot;, value),
+        };
+
+        println!(&quot;Hello {}!&quot;, to_greet); // Will typically output &quot;Hello Foo!&quot; but will sometimes output &quot;Hello World!&quot;; depends on which thread finished first.
+    }
+}
+
+fn main() {
+    #[cfg(feature = &quot;sled-storage&quot;)]
+    sled_multi_threaded::run();
+}
+</code></pre></pre>
 <h1 id="internal"><a class="header" href="#internal">Internal</a></h1>
 <h1 id="type-errors"><a class="header" href="#type-errors">Type Errors</a></h1>
 <p>In current integration test system, there should be no way to generate <code>Conflict-</code> or <code>Unreachable-</code>.</p>
