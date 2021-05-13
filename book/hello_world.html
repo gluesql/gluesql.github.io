@@ -140,13 +140,15 @@
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                         
+                        
+
                     </div>
                 </div>
 
                 
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -171,7 +173,7 @@
 <p>Assumes you have completed <a href="./installation.html">installation.md</a>.</p>
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod hello_world {
-    use gluesql::{parse, Glue, Payload, SledStorage, Value};
+    use gluesql::{Glue, Payload, SledStorage, Value};
 
     pub fn run() {
         /*
@@ -196,10 +198,7 @@ mod hello_world {
           INSERT INTO greet VALUES (\&quot;World\&quot;);
         &quot;;
 
-        let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
-        for query in parsed_queries {
-            glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
-        }
+        glue.execute(queries).expect(&quot;Execution failed&quot;);
 
         /*
             Select inserted row
@@ -208,9 +207,7 @@ mod hello_world {
           SELECT name FROM greet
         &quot;;
 
-        let parsed_query = &amp;parse(queries).expect(&quot;Failed to parse query&quot;)[0];
-
-        let result = glue.execute(&amp;parsed_query).expect(&quot;Failed to execute&quot;);
+        let result = glue.execute(queries).expect(&quot;Failed to execute&quot;);
 
         /*
             Query results are wrapped into a payload enum, on the basis of the query type
@@ -236,10 +233,13 @@ mod hello_world {
     }
 }
 
+#[cfg(feature = &quot;sled-storage&quot;)]
 fn main() {
-    #[cfg(feature = &quot;sled-storage&quot;)]
     hello_world::run();
 }
+
+#[cfg(not(feature = &quot;sled-storage&quot;))]
+fn main() {}
 </code></pre></pre>
 
                     </main>

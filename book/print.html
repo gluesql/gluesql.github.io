@@ -142,13 +142,15 @@
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                         
+                        
+
                     </div>
                 </div>
 
                 
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -170,7 +172,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="a-hrefhttpsdocsrsgluesql040gluesqlcrate-docs-docsrsa"><a class="header" href="#a-hrefhttpsdocsrsgluesql040gluesqlcrate-docs-docsrsa"><a href="https://docs.rs/gluesql/0.4.0/gluesql/">Crate docs (docs.rs)</a></a></h1>
-<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p><a href="https://crates.io/crates/gluesql"><img src="https://img.shields.io/crates/v/gluesql.svg" alt="crates.io" /></a>
 <a href="https://docs.rs/gluesql"><img src="https://docs.rs/gluesql/badge.svg" alt="docs.rs" /></a>
 <a href="https://github.com/gluesql/gluesql/blob/main/LICENSE"><img src="https://img.shields.io/crates/l/gluesql.svg" alt="LICENSE" /></a>
@@ -193,12 +195,12 @@ GlueSQL-js provides 3 storage options,</p>
 <li>localStorage</li>
 <li>sessionStorage</li>
 </ul>
-<h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
 <p>In your <code>Cargo.toml</code></p>
 <pre><code class="language-toml">[dependencies]
 gluesql = &quot;^0&quot; # This will set it to the latest pre 1.0.0 version. Set to a specific version if you want it to be predictable.
 </code></pre>
-<h1 id="implemented-sql-features"><a class="header" href="#implemented-sql-features">Implemented SQL Features</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="implemented-sql-features"><a class="header" href="#implemented-sql-features">Implemented SQL Features</a></h1>
 <p>GlueSQL currently supports limited queries, it's in very early stage.</p>
 <ul>
 <li><code>CREATE</code> with 4 types: <code>INTEGER</code>, <code>FLOAT</code>, <code>BOOLEAN</code>, <code>TEXT</code> with an optional <code>NULL</code> attribute.</li>
@@ -208,12 +210,12 @@ gluesql = &quot;^0&quot; # This will set it to the latest pre 1.0.0 version. Set
 <li>Nested select, join, aggregations ...</li>
 </ul>
 <p>You can see current query supports in <a href="https://github.com/gluesql/gluesql/tree/main/src/tests">src/tests/*</a>.</p>
-<h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
-<h1 id="hello-world"><a class="header" href="#hello-world">Hello World</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello World</a></h1>
 <p>Assumes you have completed <a href="./installation.html">installation.md</a>.</p>
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod hello_world {
-    use gluesql::{parse, Glue, Payload, SledStorage, Value};
+    use gluesql::{Glue, Payload, SledStorage, Value};
 
     pub fn run() {
         /*
@@ -238,10 +240,7 @@ mod hello_world {
           INSERT INTO greet VALUES (\&quot;World\&quot;);
         &quot;;
 
-        let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
-        for query in parsed_queries {
-            glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
-        }
+        glue.execute(queries).expect(&quot;Execution failed&quot;);
 
         /*
             Select inserted row
@@ -250,9 +249,7 @@ mod hello_world {
           SELECT name FROM greet
         &quot;;
 
-        let parsed_query = &amp;parse(queries).expect(&quot;Failed to parse query&quot;)[0];
-
-        let result = glue.execute(&amp;parsed_query).expect(&quot;Failed to execute&quot;);
+        let result = glue.execute(queries).expect(&quot;Failed to execute&quot;);
 
         /*
             Query results are wrapped into a payload enum, on the basis of the query type
@@ -278,16 +275,19 @@ mod hello_world {
     }
 }
 
+#[cfg(feature = &quot;sled-storage&quot;)]
 fn main() {
-    #[cfg(feature = &quot;sled-storage&quot;)]
     hello_world::run();
 }
+
+#[cfg(not(feature = &quot;sled-storage&quot;))]
+fn main() {}
 </code></pre></pre>
-<h1 id="multi-threaded-with-sledstorage"><a class="header" href="#multi-threaded-with-sledstorage">Multi-threaded with SledStorage</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="multi-threaded-with-sledstorage"><a class="header" href="#multi-threaded-with-sledstorage">Multi-threaded with SledStorage</a></h1>
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod sled_multi_threaded {
     use {
-        gluesql::{parse, Glue, Payload, SledStorage, Value},
+        gluesql::{Glue, Payload, SledStorage, Value},
         std::thread,
     };
 
@@ -299,10 +299,8 @@ mod sled_multi_threaded {
           DELETE FROM greet;
         &quot;;
 
-        let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
-        for query in parsed_queries {
-            glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
-        }
+        glue.execute(queries).unwrap();
+
         /*
             SledStorage supports cloning, using this we can create copies of the storage for new threads;
               all we need to do is wrap it in glue again.
@@ -310,21 +308,17 @@ mod sled_multi_threaded {
         let foo_storage = storage.clone();
         let foo_thread = thread::spawn(move || {
             let mut glue = Glue::new(foo_storage);
-            let queries = &quot;INSERT INTO greet (name) VALUES (\&quot;Foo\&quot;)&quot;;
-            let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
-            for query in parsed_queries {
-                glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
-            }
+            let query = &quot;INSERT INTO greet (name) VALUES (\&quot;Foo\&quot;)&quot;;
+
+            glue.execute(query).unwrap();
         });
 
         let world_storage = storage.clone();
         let world_thread = thread::spawn(move || {
             let mut glue = Glue::new(world_storage);
-            let queries = &quot;INSERT INTO greet (name) VALUES (\&quot;World\&quot;)&quot;;
-            let parsed_queries = parse(queries).expect(&quot;Parsing failed&quot;);
-            for query in parsed_queries {
-                glue.execute(&amp;query).expect(&quot;Execution failed&quot;);
-            }
+            let query = &quot;INSERT INTO greet (name) VALUES (\&quot;World\&quot;)&quot;;
+
+            glue.execute(query).unwrap();
         });
 
         world_thread
@@ -335,13 +329,8 @@ mod sled_multi_threaded {
             .join()
             .expect(&quot;Something went wrong in the foo thread&quot;);
 
-        let queries = &quot;
-          SELECT name FROM greet
-        &quot;;
-
-        let parsed_query = &amp;parse(queries).expect(&quot;Failed to parse query&quot;)[0];
-
-        let result = glue.execute(&amp;parsed_query).expect(&quot;Failed to execute&quot;);
+        let query = &quot;SELECT name FROM greet&quot;;
+        let result = glue.execute(query).unwrap();
 
         let rows = match result {
             Payload::Select { labels: _, rows } =&gt; rows,
@@ -360,13 +349,16 @@ mod sled_multi_threaded {
     }
 }
 
+#[cfg(feature = &quot;sled-storage&quot;)]
 fn main() {
-    #[cfg(feature = &quot;sled-storage&quot;)]
     sled_multi_threaded::run();
 }
+
+#[cfg(not(feature = &quot;sled-storage&quot;))]
+fn main() {}
 </code></pre></pre>
-<h1 id="internal"><a class="header" href="#internal">Internal</a></h1>
-<h1 id="type-errors"><a class="header" href="#type-errors">Type Errors</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="internal"><a class="header" href="#internal">Internal</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="type-errors"><a class="header" href="#type-errors">Type Errors</a></h1>
 <p>In current integration test system, there should be no way to generate <code>Conflict-</code> or <code>Unreachable-</code>.</p>
 <h2 id="conflict--type-errors-exist-because-of-storage-level-data-conflict"><a class="header" href="#conflict--type-errors-exist-because-of-storage-level-data-conflict"><code>Conflict-</code> type errors exist because of storage level data conflict.</a></h2>
 <p>If users only manipulate data using <code>GlueSQL</code> and that is properly executed, then that is not possible to see <code>Conflict-</code> type errors.
@@ -382,15 +374,15 @@ It is <code>Unreachable-</code>'s main role.</p>
 <p>Other use cases are... when it is too hard to deal with hidden errors.
 Good to avoid use <code>Unreachable-</code> for hidden errors, but if we get too stress from this, then use this.
 It is not ideal, but it is better than giving up.</p>
-<h1 id="community"><a class="header" href="#community">Community</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="community"><a class="header" href="#community">Community</a></h1>
 <p><a href="https://discord.gg/C6TDEgzDzY">Join the Discord!</a></p>
-<h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
 <p>It's very early stage, please feel free to do whatever you want to.<br />
 Only the thing you need to be aware of is...</p>
 <ul>
 <li>Except for <code>src/glue.rs</code>, <code>src/tests/</code> and <code>src/utils/</code>, there is no place to use <code>mut</code> keyword.</li>
 </ul>
-<h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
 <ul>
 <li>Taehoon Moon - <a href="https://github.com/panarch">panarch</a></li>
 <li><a href="https://github.com/ryanhossain9797">ryanhossain9797</a></li>
