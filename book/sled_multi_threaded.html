@@ -201,8 +201,7 @@ mod sled_multi_threaded {
         };
 
         let first_row = &amp;rows[0];
-        let first_row_unwrapped = &amp;first_row.0;
-        let first_value = &amp;first_row_unwrapped[0];
+        let first_value = &amp;first_row[0];
         let to_greet = match first_value {
             Value::Str(to_greet) =&gt; to_greet,
             value =&gt; panic!(&quot;Unexpected type: {:?}&quot;, value),

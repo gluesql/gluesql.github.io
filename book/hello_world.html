@@ -195,8 +195,7 @@ mod hello_world {
         };
 
         let first_row = &amp;rows[0];
-        let first_row_unwrapped = &amp;first_row.0;
-        let first_value = &amp;first_row_unwrapped[0];
+        let first_value = &amp;first_row[0];
 
         /*
             Row values are wrapped into a value enum, on the basis of the result type
