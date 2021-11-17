@@ -141,7 +141,7 @@
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod sled_multi_threaded {
     use {
-        gluesql::{Glue, Payload, SledStorage, Value},
+        gluesql::prelude::{Glue, Payload, SledStorage, Value},
         std::thread,
     };
 

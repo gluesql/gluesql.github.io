@@ -182,7 +182,7 @@ gluesql = &quot;^0&quot; # This will set it to the latest pre 1.0.0 version. Set
 <p>Assumes you have completed <a href="./installation.html">installation.md</a>.</p>
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod hello_world {
-    use gluesql::{Glue, Payload, SledStorage, Value};
+    use gluesql::prelude::{Glue, Payload, SledStorage, Value};
 
     pub fn run() {
         /*
@@ -253,7 +253,7 @@ fn main() {}
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod sled_multi_threaded {
     use {
-        gluesql::{Glue, Payload, SledStorage, Value},
+        gluesql::prelude::{Glue, Payload, SledStorage, Value},
         std::thread,
     };
 

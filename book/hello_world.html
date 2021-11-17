@@ -141,7 +141,7 @@
 <p>Assumes you have completed <a href="./installation.html">installation.md</a>.</p>
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod hello_world {
-    use gluesql::{Glue, Payload, SledStorage, Value};
+    use gluesql::prelude::{Glue, Payload, SledStorage, Value};
 
     pub fn run() {
         /*
