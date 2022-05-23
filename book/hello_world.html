@@ -141,9 +141,12 @@
 <p>Assumes you have completed <a href="./installation.html">installation.md</a>.</p>
 <pre><pre class="playground"><code class="language-rust">#[cfg(feature = &quot;sled-storage&quot;)]
 mod hello_world {
-    use gluesql::{
-        prelude::{Glue, Payload, Value},
-        sled_storage::SledStorage,
+    use {
+        gluesql::{
+            prelude::{Glue, Payload, Value},
+            sled_storage::SledStorage,
+        },
+        std::fs,
     };
 
     pub fn run() {
@@ -153,7 +156,9 @@ mod hello_world {
         /*
             Open a Sled database, this will create one if one does not yet exist
         */
-        let storage = SledStorage::new(&quot;/tmp/gluesql/hello_world&quot;).expect(&quot;Something went wrong!&quot;);
+        let sled_dir = &quot;/tmp/gluesql/hello_world&quot;;
+        fs::remove_dir_all(sled_dir).unwrap_or(());
+        let storage = SledStorage::new(sled_dir).expect(&quot;Something went wrong!&quot;);
         /*
             Wrap the Sled database with Glue
         */
@@ -183,7 +188,8 @@ mod hello_world {
         /*
             Query results are wrapped into a payload enum, on the basis of the query type
         */
-        let rows = match result {
+        assert_eq!(result.len(), 1);
+        let rows = match &amp;result[0] {
             Payload::Select { labels: _, rows } =&gt; rows,
             _ =&gt; panic!(&quot;Unexpected result: {:?}&quot;, result),
         };
