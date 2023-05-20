@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://gluesql.org/docs/dev/blog</id>
+    <title>GlueSQL Blog</title>
+    <updated>2023-05-18T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://gluesql.org/docs/dev/blog"/>
+    <subtitle>GlueSQL Blog</subtitle>
+    <icon>https://gluesql.org/docs/dev/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Test - Greetings!]]></title>
+        <id>https://gluesql.org/docs/dev/blog/greetings</id>
+        <link href="https://gluesql.org/docs/dev/blog/greetings"/>
+        <updated>2023-05-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Blog test test test]]></summary>
+        <content type="html"><![CDATA[<p>Hello World</p>]]></content>
+        <author>
+            <name>Taehoon Moon</name>
+            <uri>https://github.com/panarch</uri>
+        </author>
+        <category label="temp" term="temp"/>
+        <category label="greetings" term="greetings"/>
+    </entry>
+</feed>

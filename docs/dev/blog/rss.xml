@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>GlueSQL Blog</title>
+        <link>https://gluesql.org/docs/dev/blog</link>
+        <description>GlueSQL Blog</description>
+        <lastBuildDate>Thu, 18 May 2023 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[Test - Greetings!]]></title>
+            <link>https://gluesql.org/docs/dev/blog/greetings</link>
+            <guid>https://gluesql.org/docs/dev/blog/greetings</guid>
+            <pubDate>Thu, 18 May 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Blog test test test]]></description>
+            <content:encoded><![CDATA[<p>Hello World</p>]]></content:encoded>
+            <category>temp</category>
+            <category>greetings</category>
+        </item>
+    </channel>
+</rss>
