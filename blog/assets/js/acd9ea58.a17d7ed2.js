@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[888],{3018:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/proposal","page":1,"postsPerPage":1,"totalPages":1,"totalCount":1,"blogDescription":"GlueSQL Blog","blogTitle":"GlueSQL Blog"}')}}]);
