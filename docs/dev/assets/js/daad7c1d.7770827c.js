@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[2463],{7641:s=>{s.exports=JSON.parse('{"label":"gluesql","permalink":"/docs/dev/blog/tags/gluesql","allTagsPath":"/docs/dev/blog/tags","count":1}')}}]);
