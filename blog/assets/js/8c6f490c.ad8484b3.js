@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[841],{9397:e=>{e.exports=JSON.parse('{"label":"Test-Driven-Documentation","permalink":"/blog/tags/test-driven-documentation","allTagsPath":"/blog/tags","count":1}')}}]);
