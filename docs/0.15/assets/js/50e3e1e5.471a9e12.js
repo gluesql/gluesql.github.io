@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[7515],{721:s=>{s.exports=JSON.parse('{"label":"ChatGPT","permalink":"/docs/0.15/blog/tags/chat-gpt","allTagsPath":"/docs/0.15/blog/tags","count":1}')}}]);
