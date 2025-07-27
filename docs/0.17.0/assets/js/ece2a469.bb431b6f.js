@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[6426],{5809:e=>{e.exports=JSON.parse('{"label":"query-interface","permalink":"/docs/0.17.0/blog/tags/query-interface","allTagsPath":"/docs/0.17.0/blog/tags","count":1}')}}]);
