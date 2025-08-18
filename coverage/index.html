@@ -25,6 +25,9 @@
       pre { overflow:auto; }
       .code-line { display:block; }
       .code-line .ln { color:#888; display:inline-block; min-width:3em; }
+      tr.folder td.file { cursor:pointer; font-weight:bold; }
+      tr.folder td.file::before { content:"▶ "; }
+      tr.folder.open td.file::before { content:"▼ "; }
       @media (max-width:600px) { table { display:block; overflow-x:auto; white-space:nowrap; } th { top:0; } }
     </style>
   </head>
@@ -217,6 +220,87 @@
         return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
       }
 
+      function buildTree(files){
+        const root={name:'',children:{}};
+        for(const f of files){
+          const parts=f.display.split('/');
+          let node=root;
+          for(const part of parts){
+            if(!node.children[part]){
+              node.children[part]={name:part,children:{},totals:{LF:0,LH:0,FNF:0,FNH:0,BRF:0,BRH:0}};
+            }
+            const t=node.children[part].totals;
+            t.LF+=f.totals.LF; t.LH+=f.totals.LH;
+            t.FNF+=f.totals.FNF; t.FNH+=f.totals.FNH;
+            t.BRF+=f.totals.BRF; t.BRH+=f.totals.BRH;
+            node=node.children[part];
+          }
+          node.file=f;
+        }
+        return root;
+      }
+
+      function renderTree(node,parentPath='',depth=0){
+        const entries=Object.entries(node.children).sort((a,b)=>a[0].localeCompare(b[0]));
+        for(const [name,child] of entries){
+          const full=parentPath? parentPath+'/'+name : name;
+          if(child.file){
+            const tr=document.createElement('tr');
+            tr.dataset.parent=parentPath;
+            tr.innerHTML=`<td class="file" style="padding-left:${depth*1.25}rem">${escapeHtml(name)}</td>`+
+              `<td class="num">${child.file.linePct.toFixed(1)}%</td><td class="num">${child.file.totals.LH}/${child.file.totals.LF}</td>`+
+              `<td class="num">${child.file.funcPct.toFixed(1)}%</td><td class="num">${child.file.totals.FNH}/${child.file.totals.FNF}</td>`+
+              `<td class="num">${child.file.branchPct.toFixed(1)}%</td><td class="num">${child.file.totals.BRH}/${child.file.totals.BRF}</td>`;
+            tr.addEventListener('click',()=>toggleDetails(tr,child.file));
+            if(parentPath) tr.style.display='none';
+            tableBody.appendChild(tr);
+          }else{
+            const linePct=pct(child.totals.LH,child.totals.LF);
+            const funcPct=pct(child.totals.FNH,child.totals.FNF);
+            const branchPct=pct(child.totals.BRH,child.totals.BRF);
+            const tr=document.createElement('tr');
+            tr.className='folder';
+            tr.dataset.path=full;
+            tr.dataset.parent=parentPath;
+            tr.innerHTML=`<td class="file" style="padding-left:${depth*1.25}rem">${escapeHtml(name)}</td>`+
+              `<td class="num">${linePct.toFixed(1)}%</td><td class="num">${child.totals.LH}/${child.totals.LF}</td>`+
+              `<td class="num">${funcPct.toFixed(1)}%</td><td class="num">${child.totals.FNH}/${child.totals.FNF}</td>`+
+              `<td class="num">${branchPct.toFixed(1)}%</td><td class="num">${child.totals.BRH}/${child.totals.BRF}</td>`;
+            tr.addEventListener('click',()=>toggleFolder(full));
+            if(parentPath) tr.style.display='none';
+            tableBody.appendChild(tr);
+            renderTree(child,full,depth+1);
+          }
+        }
+      }
+
+      function toggleFolder(path){
+        const row=tableBody.querySelector(`tr[data-path="${path}"]`);
+        const open=row.classList.toggle('open');
+        const rows=tableBody.querySelectorAll('tr[data-parent]');
+        for(const r of rows){
+          if(r.dataset.parent===path || r.dataset.parent.startsWith(path+'/')){
+            if(open){
+              let p=r.dataset.parent;
+              let visible=true;
+              while(p){
+                const anc=tableBody.querySelector(`tr[data-path="${p}"]`);
+                if(anc && !anc.classList.contains('open')){ visible=false; break; }
+                const idx=p.lastIndexOf('/');
+                if(idx<0) break;
+                p=p.slice(0,idx);
+              }
+              if(visible) r.style.display='';
+            }else{
+              r.style.display='none';
+              if(r.classList.contains('folder')) r.classList.remove('open');
+              const next=r.nextElementSibling;
+              if(next && next.classList.contains('details')) next.remove();
+            }
+          }
+        }
+      }
+
       function renderSummary(){
         const t=aggregate(filesData);
         summaryEl.innerHTML=`
@@ -231,15 +315,16 @@
         emptyEl.style.display='none';
         const filter = filterInput.value.toLowerCase();
         const prefix = findCommonPrefix(filesData.map(f=>f.sf));
-        const data = filesData.map(f=>({
+        let data = filesData.map(f=>({
           ...f,
           display: f.sf.startsWith(prefix) ? f.sf.slice(prefix.length) : f.sf,
           linePct: pct(f.totals.LH,f.totals.LF),
           funcPct: pct(f.totals.FNH,f.totals.FNF),
           branchPct: pct(f.totals.BRH,f.totals.BRF)
         }));
+        if(filter) data = data.filter(f=>f.display.toLowerCase().includes(filter));
         data.sort((a,b)=>{
-          let va, vb;
+          let va,vb;
           switch(sortKey){
             case 'file': va=a.display.toLowerCase(); vb=b.display.toLowerCase(); return va<vb? (sortAsc?-1:1) : va>vb? (sortAsc?1:-1):0;
             case 'linePct': va=a.linePct; vb=b.linePct; break;
@@ -248,16 +333,8 @@
           }
           return sortAsc? va-vb : vb-va;
         });
-        for (const f of data){
-          if (filter && !f.display.toLowerCase().includes(filter)) continue;
-          const tr=document.createElement('tr');
-          tr.innerHTML=`<td class="file">${escapeHtml(f.display)}</td>
-            <td class="num">${f.linePct.toFixed(1)}%</td><td class="num">${f.totals.LH}/${f.totals.LF}</td>
-            <td class="num">${f.funcPct.toFixed(1)}%</td><td class="num">${f.totals.FNH}/${f.totals.FNF}</td>
-            <td class="num">${f.branchPct.toFixed(1)}%</td><td class="num">${f.totals.BRH}/${f.totals.BRF}</td>`;
-          tr.addEventListener('click',()=>toggleDetails(tr,f));
-          tableBody.appendChild(tr);
-        }
+        const tree = buildTree(data);
+        renderTree(tree);
       }
 
       async function toggleDetails(tr,file){
