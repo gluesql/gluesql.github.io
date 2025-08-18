@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>LCOV Coverage Viewer</title>
+    <style>
+      body { font-family: sans-serif; margin:0; padding-top:3.5rem; }
+      header { position:fixed; top:0; left:0; right:0; background:#fff; border-bottom:1px solid #ccc; padding:.5rem; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; z-index:1000; }
+      header input[type=text]{ flex:1; min-width:200px; }
+      header button{ padding:.25rem .5rem; }
+      header span#status { margin-left:1rem; font-size:.9rem; color:#555; }
+      main { padding:1rem; }
+      #summary { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1rem; }
+      .card { border:1px solid #ccc; border-radius:4px; padding:.5rem 1rem; min-width:120px; }
+      table { width:100%; border-collapse:collapse; margin-top:1rem; }
+      th, td { padding:.25rem .5rem; border-bottom:1px solid #ddd; text-align:left; }
+      th { position:sticky; top:3.5rem; background:#f9f9f9; }
+      th button { background:none; border:none; font:inherit; cursor:pointer; }
+      th[aria-sort="ascending"]::after { content:" \25B2"; }
+      th[aria-sort="descending"]::after { content:" \25BC"; }
+      tr:hover { background:#f0f0f0; }
+      tr.details td { background:#f5f5f5; }
+      td.num { text-align:right; }
+      .missed-line { background:#fee; }
+      pre { overflow:auto; }
+      .code-line { display:block; }
+      .code-line .ln { color:#888; display:inline-block; min-width:3em; }
+      @media (max-width:600px) { table { display:block; overflow-x:auto; white-space:nowrap; } th { top:0; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <input id="path" type="text" placeholder="LCOV path" aria-label="LCOV path" />
+      <button id="load">Load</button>
+      <button id="permalink">Permalink</button>
+      <span id="status"></span>
+    </header>
+    <main>
+      <div id="summary"></div>
+      <div id="controls">
+        <input id="filter" type="text" placeholder="Filter files" aria-label="Filter files" />
+      </div>
+      <table id="files" aria-describedby="status">
+        <thead>
+          <tr>
+            <th aria-sort="none"><button data-sort="file">File</button></th>
+            <th aria-sort="none"><button data-sort="linePct">Lines %</button></th>
+            <th aria-sort="none">LH/LF</th>
+            <th aria-sort="none"><button data-sort="funcPct">Funcs %</button></th>
+            <th aria-sort="none">FNH/FNF</th>
+            <th aria-sort="none"><button data-sort="branchPct">Branches %</button></th>
+            <th aria-sort="none">BRH/BRF</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="empty">Provide an LCOV file path using the input above or <code>?path=...</code> in the URL.</div>
+    </main>
+    <script type="module">
+      const pathInput = document.getElementById('path');
+      const loadBtn = document.getElementById('load');
+      const permalinkBtn = document.getElementById('permalink');
+      const statusEl = document.getElementById('status');
+      const summaryEl = document.getElementById('summary');
+      const filterInput = document.getElementById('filter');
+      const tableBody = document.querySelector('#files tbody');
+      const emptyEl = document.getElementById('empty');
+
+      const params = new URLSearchParams(location.search);
+      pathInput.value = params.get('path') || '';
+      filterInput.value = params.get('filter') || '';
+      let srcRoot = params.get('srcRoot') || '';
+      if (srcRoot && !/^https?:/i.test(srcRoot)) srcRoot = '';
+
+      let filesData = [];
+      let sortKey = 'linePct';
+      let sortAsc = false;
+
+      function status(msg){ statusEl.textContent = msg; }
+
+      loadBtn.addEventListener('click', ()=>{
+        params.set('path', pathInput.value.trim());
+        if (filterInput.value) params.set('filter', filterInput.value.trim()); else params.delete('filter');
+        history.replaceState(null,'', '?' + params.toString());
+        load();
+      });
+
+      permalinkBtn.addEventListener('click', ()=>{
+        if (pathInput.value) params.set('path', pathInput.value.trim()); else params.delete('path');
+        if (srcRoot) params.set('srcRoot', srcRoot); else params.delete('srcRoot');
+        if (filterInput.value) params.set('filter', filterInput.value.trim()); else params.delete('filter');
+        const url = location.origin + location.pathname + '?' + params.toString();
+        navigator.clipboard?.writeText(url);
+        history.replaceState(null,'', '?' + params.toString());
+        status('Permalink copied');
+      });
+
+      filterInput.addEventListener('input', () => {
+        renderTable();
+      });
+
+      document.querySelectorAll('th button[data-sort]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const key = btn.dataset.sort;
+          if (sortKey === key) sortAsc = !sortAsc; else { sortKey = key; sortAsc = key === 'file'; }
+          updateSortIndicators();
+          renderTable();
+        });
+      });
+
+      function updateSortIndicators(){
+        document.querySelectorAll('th').forEach(th=>th.setAttribute('aria-sort','none'));
+        const th = document.querySelector(`th button[data-sort="${sortKey}"]`).parentElement;
+        th.setAttribute('aria-sort', sortAsc? 'ascending' : 'descending');
+      }
+
+      function normalizePath(p){
+        if (!p) throw new Error('Path required');
+        if (/^(https?:)?\/\//i.test(p)) throw new Error('Absolute URLs not allowed');
+        let path = p;
+        if (path.startsWith('/')) {
+        } else if (path.startsWith('coverage/')) {
+          path = '/' + path;
+        } else {
+          path = '/coverage/' + path;
+        }
+        const url = new URL(path, location.origin);
+        if (url.origin !== location.origin) throw new Error('Cross-origin path not allowed');
+        return url;
+      }
+
+      async function fetchText(url){
+        if (url.pathname.endsWith('.xz')) throw new Error('.xz compression not supported');
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (url.pathname.endsWith('.gz')){
+          if (!('DecompressionStream' in window)) throw new Error('gzip not supported in this browser');
+          const ds = new DecompressionStream('gzip');
+          const stream = res.body.pipeThrough(ds);
+          return await new Response(stream).text();
+        }
+        return await res.text();
+      }
+
+      function parseLcov(text){
+        const files=[]; let current=null;
+        const lines=text.split(/\r?\n/);
+        for (const line of lines){
+          if (!line) continue;
+          if (line.startsWith('TN:')){
+          } else if (line.startsWith('SF:')){
+            if (current) finalize();
+            current = {sf: line.slice(3).trim(), fnDefs:{}, fnHits:{}, lines:{}, branches:[], totals:{}};
+          } else if (line.startsWith('FN:')){
+            const [ln,name] = line.slice(3).split(',');
+            current.fnDefs[name] = Number(ln);
+          } else if (line.startsWith('FNDA:')){
+            const [hits,name] = line.slice(5).split(',');
+            current.fnHits[name] = Number(hits);
+          } else if (line.startsWith('DA:')){
+            const [ln,count] = line.slice(3).split(',');
+            current.lines[Number(ln)] = Number(count);
+          } else if (line.startsWith('BRDA:')){
+            const [ln,block,br,taken] = line.slice(5).split(',');
+            current.branches.push({line:Number(ln), taken: taken === '-'?0:Number(taken)});
+          } else if (line.startsWith('LF:')) current.totals.LF = Number(line.slice(3));
+          else if (line.startsWith('LH:')) current.totals.LH = Number(line.slice(3));
+          else if (line.startsWith('FNF:')) current.totals.FNF = Number(line.slice(4));
+          else if (line.startsWith('FNH:')) current.totals.FNH = Number(line.slice(4));
+          else if (line.startsWith('BRF:')) current.totals.BRF = Number(line.slice(4));
+          else if (line.startsWith('BRH:')) current.totals.BRH = Number(line.slice(4));
+          else if (line === 'end_of_record'){ finalize(); current=null; }
+        }
+        if (current) finalize();
+        return files;
+
+        function finalize(){
+          const t=current.totals;
+          const lineVals=Object.values(current.lines);
+          if (t.LF==null) t.LF = Object.keys(current.lines).length;
+          if (t.LH==null) t.LH = lineVals.filter(v=>v>0).length;
+          const fnNames=Object.keys(current.fnDefs);
+          if (t.FNF==null) t.FNF = fnNames.length;
+          if (t.FNH==null) t.FNH = fnNames.filter(n=>current.fnHits[n]>0).length;
+          if (t.BRF==null) t.BRF = current.branches.length;
+          if (t.BRH==null) t.BRH = current.branches.filter(b=>b.taken>0).length;
+          current.missed = Object.entries(current.lines).filter(([,c])=>c===0).map(([l])=>Number(l)).sort((a,b)=>a-b);
+          files.push(current);
+        }
+      }
+
+      function pct(hit, found){ return found ? (hit/found*100) : 100; }
+
+      function aggregate(files){
+        const total={LF:0,LH:0,FNF:0,FNH:0,BRF:0,BRH:0};
+        for (const f of files){
+          total.LF+=f.totals.LF; total.LH+=f.totals.LH;
+          total.FNF+=f.totals.FNF; total.FNH+=f.totals.FNH;
+          total.BRF+=f.totals.BRF; total.BRH+=f.totals.BRH;
+        }
+        return total;
+      }
+
+      function findCommonPrefix(paths){
+        if (!paths.length) return '';
+        const segs = paths.map(p=>p.split('/'));
+        const out=[];
+        for (let i=0; ; i++){
+          const s=segs[0][i];
+          if (!s) break;
+          if (segs.every(a=>a[i]===s)) out.push(s); else break;
+        }
+        return out.length? out.join('/') + '/': '';
+      }
+
+      function escapeHtml(s){
+        return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+      }
+
+      function renderSummary(){
+        const t=aggregate(filesData);
+        summaryEl.innerHTML=`
+          <div class="card">Lines: ${t.LH}/${t.LF} (${pct(t.LH,t.LF).toFixed(1)}%)</div>
+          <div class="card">Funcs: ${t.FNH}/${t.FNF} (${pct(t.FNH,t.FNF).toFixed(1)}%)</div>
+          <div class="card">Branches: ${t.BRH}/${t.BRF} (${pct(t.BRH,t.BRF).toFixed(1)}%)</div>`;
+      }
+
+      function renderTable(){
+        tableBody.innerHTML='';
+        if (!filesData.length){ emptyEl.style.display='block'; return; }
+        emptyEl.style.display='none';
+        const filter = filterInput.value.toLowerCase();
+        const prefix = findCommonPrefix(filesData.map(f=>f.sf));
+        const data = filesData.map(f=>({
+          ...f,
+          display: f.sf.startsWith(prefix) ? f.sf.slice(prefix.length) : f.sf,
+          linePct: pct(f.totals.LH,f.totals.LF),
+          funcPct: pct(f.totals.FNH,f.totals.FNF),
+          branchPct: pct(f.totals.BRH,f.totals.BRF)
+        }));
+        data.sort((a,b)=>{
+          let va, vb;
+          switch(sortKey){
+            case 'file': va=a.display.toLowerCase(); vb=b.display.toLowerCase(); return va<vb? (sortAsc?-1:1) : va>vb? (sortAsc?1:-1):0;
+            case 'linePct': va=a.linePct; vb=b.linePct; break;
+            case 'funcPct': va=a.funcPct; vb=b.funcPct; break;
+            case 'branchPct': va=a.branchPct; vb=b.branchPct; break;
+          }
+          return sortAsc? va-vb : vb-va;
+        });
+        for (const f of data){
+          if (filter && !f.display.toLowerCase().includes(filter)) continue;
+          const tr=document.createElement('tr');
+          tr.innerHTML=`<td class="file">${escapeHtml(f.display)}</td>
+            <td class="num">${f.linePct.toFixed(1)}%</td><td class="num">${f.totals.LH}/${f.totals.LF}</td>
+            <td class="num">${f.funcPct.toFixed(1)}%</td><td class="num">${f.totals.FNH}/${f.totals.FNF}</td>
+            <td class="num">${f.branchPct.toFixed(1)}%</td><td class="num">${f.totals.BRH}/${f.totals.BRF}</td>`;
+          tr.addEventListener('click',()=>toggleDetails(tr,f));
+          tableBody.appendChild(tr);
+        }
+      }
+
+      async function toggleDetails(tr,file){
+        const next=tr.nextElementSibling;
+        if (next && next.classList.contains('details')){ next.remove(); return; }
+        const detail=document.createElement('tr');
+        detail.className='details';
+        const td=document.createElement('td');
+        td.colSpan=7;
+        td.innerHTML=`<div class="detail">
+          <div>Lines: ${file.totals.LH}/${file.totals.LF} (${pct(file.totals.LH,file.totals.LF).toFixed(1)}%)</div>
+          <div>Funcs: ${file.totals.FNH}/${file.totals.FNF} (${pct(file.totals.FNH,file.totals.FNF).toFixed(1)}%)</div>
+          <div>Branches: ${file.totals.BRH}/${file.totals.BRF} (${pct(file.totals.BRH,file.totals.BRF).toFixed(1)}%)</div>
+          <details class="missed"><summary>Missed lines (${file.missed.length})</summary><div class="missed-list"></div></details>
+          <div class="source"></div>
+        </div>`;
+        detail.appendChild(td);
+        tr.after(detail);
+        td.querySelector('.missed-list').textContent = file.missed.join(', ') || 'None';
+        if (srcRoot){
+          const srcDiv=td.querySelector('.source');
+          srcDiv.textContent='Loading source...';
+          try{
+            const url=new URL(file.sf, srcRoot);
+            const res=await fetch(url);
+            if(!res.ok) throw new Error('HTTP '+res.status);
+            const text=await res.text();
+            srcDiv.innerHTML=renderSource(text, file.missed);
+          }catch(e){
+            srcDiv.textContent='Failed to load source';
+          }
+        }
+      }
+
+      function renderSource(text, missed){
+        const lines=text.split(/\r?\n/);
+        const set=new Set(missed);
+        const width=String(lines.length).length;
+        const html=lines.map((line,i)=>{
+          const num=String(i+1).padStart(width,' ');
+          const cls=set.has(i+1)?'missed-line':'';
+          return `<span class="code-line ${cls}"><span class="ln">${num}</span> ${escapeHtml(line)}</span>`;
+        }).join('\n');
+        return `<pre>${html}</pre>`;
+      }
+
+      async function load(){
+        const pathVal=pathInput.value.trim();
+        if(!pathVal){ status('Path required'); filesData=[]; renderSummary(); renderTable(); return; }
+        status('Loading...');
+        try{
+          const url=normalizePath(pathVal);
+          const text=await fetchText(url);
+          filesData=parseLcov(text);
+          renderSummary();
+          renderTable();
+          status('Loaded '+url.pathname);
+        }catch(e){
+          filesData=[]; renderSummary(); renderTable();
+          status('Error: '+e.message);
+        }
+      }
+
+      if (pathInput.value){ load(); } else { status('Enter LCOV path'); }
+      updateSortIndicators();
+    </script>
+  </body>
+</html>
