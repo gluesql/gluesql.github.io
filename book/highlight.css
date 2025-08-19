@@ -23,7 +23,7 @@
 .hljs-name,
 .hljs-selector-id,
 .hljs-selector-class {
-  color: #d70025;
+  color: #e60026;
 }
 
 /* Orange */
@@ -41,7 +41,7 @@
 .hljs-string,
 .hljs-symbol,
 .hljs-bullet {
-  color: #008200;
+  color: #006400;
 }
 
 /* Blue */
@@ -59,7 +59,7 @@
 .hljs {
   display: block;
   overflow-x: auto;
-  background: #f6f7f6;
+  background: #ffffff;
   color: #000;
 }
 
@@ -72,11 +72,11 @@
 }
 
 .hljs-addition {
-  color: #22863a;
-  background-color: #f0fff4;
+  color: #006400;
+  background-color: #e6ffe6;
 }
 
 .hljs-deletion {
-  color: #b31d28;
-  background-color: #ffeef0;
+  color: #cc0000;
+  background-color: #ffe6e9;
 }
