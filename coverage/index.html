@@ -4,7 +4,13 @@
     <meta charset="utf-8" />
     <title>LCOV Coverage Viewer</title>
     <style>
-      body { font-family: sans-serif; margin:0; padding-top:3.5rem; }
+      @font-face {
+        font-family: '0xProto';
+        src: url('https://raw.githubusercontent.com/0xType/0xProto/main/fonts/0xProto-Regular.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
+      body { font-family: '0xProto', monospace; margin:0; padding-top:3.5rem; }
       header { position:fixed; top:0; left:0; right:0; background:#fff; border-bottom:1px solid #ccc; padding:.5rem; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; z-index:1000; }
       header input[type=text]{ flex:1; min-width:200px; }
       header button{ padding:.25rem .5rem; }
