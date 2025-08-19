@@ -24,6 +24,8 @@
       td.num { text-align:right; }
       .missed-line { background:#fee; }
       .hit-line { background:#efe; }
+      tr.full-coverage { background:#dfd; }
+      tr.full-coverage:hover { background:#cfc; }
       pre { overflow:auto; }
       .code-line { display:block; margin:0; padding:0.1rem 0; }
       .code-line .ln { color:#888; display:inline-block; min-width:3em; }
@@ -259,6 +261,7 @@
           const full=parentPath? parentPath+'/'+name : name;
           if(child.file){
             const tr=document.createElement('tr');
+            if(child.file.linePct >= 100) tr.classList.add('full-coverage');
             tr.dataset.parent=parentPath;
             tr.innerHTML=`<td class="file" style="padding-left:${depth*1.25}rem">${escapeHtml(name)}</td>`+
               `<td class="num">${child.file.linePct.toFixed(1)}%</td><td class="num">${child.file.totals.LH}/${child.file.totals.LF}</td>`+
@@ -273,6 +276,7 @@
             const branchPct=pct(child.totals.BRH,child.totals.BRF);
             const tr=document.createElement('tr');
             tr.className='folder';
+            if(linePct >= 100) tr.classList.add('full-coverage');
             tr.dataset.path=full;
             tr.dataset.parent=parentPath;
             tr.innerHTML=`<td class="file" style="padding-left:${depth*1.25}rem">${escapeHtml(name)}</td>`+
