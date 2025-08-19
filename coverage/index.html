@@ -32,6 +32,10 @@
       tr.folder.open td.file::before { content:"▼ "; }
       @media (max-width:600px) { table { display:block; overflow-x:auto; white-space:nowrap; } th { top:0; } }
     </style>
+    <script>
+      window["stream/web"] = { ReadableStream, TransformStream, WritableStream };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/xz-decompress@0.2.3/dist/package/xz-decompress.js"></script>
   </head>
   <body>
     <header>
@@ -135,9 +139,14 @@
       }
 
       async function fetchText(url){
-        if (url.pathname.endsWith('.xz')) throw new Error('.xz compression not supported');
         const res = await fetch(url);
         if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (url.pathname.endsWith('.xz')){
+          const xz = window['xz-decompress'];
+          if (!xz?.XzReadableStream) throw new Error('xz not supported in this browser');
+          const stream = new xz.XzReadableStream(res.body);
+          return await new Response(stream).text();
+        }
         if (url.pathname.endsWith('.gz')){
           if (!('DecompressionStream' in window)) throw new Error('gzip not supported in this browser');
           const ds = new DecompressionStream('gzip');
@@ -387,7 +396,7 @@
         const pathVal=pathInput.value.trim();
         if(!pathVal){ status('Path required'); filesData=[]; renderSummary(); renderTable(); return; }
         if(!params.get('srcRoot')){
-          const m=pathVal.match(/[\\/]([0-9a-f]{40})[\\/]lcov\.info$/);
+          const m=pathVal.match(/[\\/]([0-9a-f]{40})[\\/]lcov\.info(?:\.gz|\.xz)?$/);
           srcRoot = m ? `https://raw.githubusercontent.com/gluesql/gluesql/${m[1]}/` : '';
         }
         status('Loading...');
