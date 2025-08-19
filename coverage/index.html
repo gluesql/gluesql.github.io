@@ -378,8 +378,8 @@
           const num=String(i+1).padStart(width,' ');
           const count=lineHits[i+1];
           const cls=count===0? 'missed-line' : count>0? 'hit-line' : '';
-          return `<span class="code-line ${cls}"><span class="ln">${num}</span> ${escapeHtml(line)}</span>`;
-        }).join('\n');
+          return `<code class="code-line ${cls}"><span class="ln">${num}</span> ${escapeHtml(line)}</code>`;
+        }).join('');
         return `<pre>${html}</pre>`;
       }
 
