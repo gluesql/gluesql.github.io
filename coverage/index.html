@@ -13,7 +13,7 @@
       body { font-family: '0xProto', monospace; margin:0; padding-top:3.5rem; background:#fff; }
       pre, code { font-family: '0xProto', monospace; }
       header { position:fixed; top:0; left:0; right:0; background:#fff; border-bottom:1px solid #ccc; padding:.5rem; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; z-index:1000; }
-      header input[type=text]{ flex:1; min-width:200px; }
+      header input[type=text], header input[type=file]{ flex:1; min-width:200px; }
       header button{ padding:.25rem .5rem; }
       header span#status { margin-left:1rem; font-size:.9rem; color:#555; }
       main { padding:1rem; }
@@ -52,6 +52,7 @@
   <body>
     <header>
       <input id="path" type="text" placeholder="LCOV path" aria-label="LCOV path" />
+      <input id="file" type="file" aria-label="LCOV file" />
       <button id="load">Load</button>
       <button id="permalink">Permalink</button>
       <span id="status"></span>
@@ -75,10 +76,11 @@
         </thead>
         <tbody></tbody>
       </table>
-      <div id="empty">Provide an LCOV file path using the input above or <code>?path=...</code> in the URL.</div>
+      <div id="empty">Provide an LCOV file path or upload an LCOV file using the inputs above or <code>?path=...</code> in the URL.</div>
     </main>
     <script type="module">
       const pathInput = document.getElementById('path');
+      const fileInput = document.getElementById('file');
       const loadBtn = document.getElementById('load');
       const permalinkBtn = document.getElementById('permalink');
       const statusEl = document.getElementById('status');
@@ -114,6 +116,14 @@
         navigator.clipboard?.writeText(url);
         history.replaceState(null,'', '?' + params.toString());
         status('Permalink copied');
+      });
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+        params.delete('path');
+        history.replaceState(null,'', '?' + params.toString());
+        loadFile(file);
       });
 
       filterInput.addEventListener('input', () => {
@@ -166,6 +176,22 @@
           return await new Response(stream).text();
         }
         return await res.text();
+      }
+
+      async function readFile(file){
+        if (file.name.endsWith('.xz')){
+          const xz = window['xz-decompress'];
+          if (!xz?.XzReadableStream) throw new Error('xz not supported in this browser');
+          const stream = new xz.XzReadableStream(file.stream());
+          return await new Response(stream).text();
+        }
+        if (file.name.endsWith('.gz')){
+          if (!('DecompressionStream' in window)) throw new Error('gzip not supported in this browser');
+          const ds = new DecompressionStream('gzip');
+          const stream = file.stream().pipeThrough(ds);
+          return await new Response(stream).text();
+        }
+        return await file.text();
       }
 
       function parseLcov(text){
@@ -423,6 +449,21 @@
           renderSummary();
           renderTable();
           status('Loaded '+url.pathname);
+        }catch(e){
+          filesData=[]; renderSummary(); renderTable();
+          status('Error: '+e.message);
+        }
+      }
+
+      async function loadFile(file){
+        pathInput.value=''; srcRoot='';
+        status('Loading...');
+        try{
+          const text=await readFile(file);
+          filesData=parseLcov(text);
+          renderSummary();
+          renderTable();
+          status('Loaded '+file.name);
         }catch(e){
           filesData=[]; renderSummary(); renderTable();
           status('Error: '+e.message);
