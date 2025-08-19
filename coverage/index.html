@@ -30,6 +30,8 @@
       tr.folder td.file { cursor:pointer; font-weight:bold; }
       tr.folder td.file::before { content:"▶ "; }
       tr.folder.open td.file::before { content:"▼ "; }
+      tr.open-file td { background:#e0f7ff; }
+      tr.open-file + tr.details td { border-left:4px solid #a3d8ff; }
       @media (max-width:600px) { table { display:block; overflow-x:auto; white-space:nowrap; } th { top:0; } }
     </style>
   </head>
@@ -296,6 +298,7 @@
             }else{
               r.style.display='none';
               if(r.classList.contains('folder')) r.classList.remove('open');
+              r.classList.remove('open-file');
               const next=r.nextElementSibling;
               if(next && next.classList.contains('details')) next.remove();
             }
@@ -341,7 +344,7 @@
 
       async function toggleDetails(tr,file){
         const next=tr.nextElementSibling;
-        if (next && next.classList.contains('details')){ next.remove(); return; }
+        if (next && next.classList.contains('details')){ next.remove(); tr.classList.remove('open-file'); return; }
         const detail=document.createElement('tr');
         detail.className='details';
         const td=document.createElement('td');
@@ -355,6 +358,7 @@
         </div>`;
         detail.appendChild(td);
         tr.after(detail);
+        tr.classList.add('open-file');
         td.querySelector('.missed-list').textContent = file.missed.join(', ') || 'None';
         if (srcRoot){
           const srcDiv=td.querySelector('.source');
