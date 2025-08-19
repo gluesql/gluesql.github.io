@@ -36,9 +36,10 @@
       pre { overflow:auto; }
       .code-line { display:block; margin:0; padding:0.1rem 0; }
       .code-line .ln { color:#888; display:inline-block; min-width:3em; }
+      td.file::before { content:""; display:inline-block; width:1.2em; text-align:center; }
       tr.folder td.file { cursor:pointer; font-weight:bold; }
-      tr.folder td.file::before { content:"▶ "; }
-      tr.folder.open td.file::before { content:"▼ "; }
+      tr.folder td.file::before { content:"▶"; }
+      tr.folder.open td.file::before { content:"▼"; }
       tr.open-file td { background:#e0f7ff; }
       tr.open-file + tr.details td { border-left:4px solid #a3d8ff; }
       @media (max-width:600px) { table { display:block; overflow-x:auto; white-space:nowrap; } th { top:0; } }
