@@ -49,6 +49,8 @@
     <script>
       window["stream/web"] = { ReadableStream, TransformStream, WritableStream };
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xz-decompress@0.2.3/dist/package/xz-decompress.js"></script>
   </head>
   <body>
@@ -425,15 +427,17 @@
       }
 
       function renderSource(text, lineHits){
-        const lines=text.split(/\r?\n/);
+        const { value } = hljs.highlightAuto(text);
+        const lines=value.split(/\r?\n/);
         const width=String(lines.length).length;
         const html=lines.map((line,i)=>{
           const num=String(i+1).padStart(width,' ');
           const count=lineHits[i+1];
           const cls=count===0? 'missed-line' : count>0? 'hit-line' : '';
-          return `<code class="code-line ${cls}"><span class="ln">${num}</span> ${escapeHtml(line)}</code>`;
+          const content=line || '&nbsp;';
+          return `<code class="code-line ${cls}"><span class="ln">${num}</span> ${content}</code>`;
         }).join('');
-        return `<pre>${html}</pre>`;
+        return `<pre class="hljs">${html}</pre>`;
       }
 
       async function load(){
