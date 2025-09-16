@@ -96,12 +96,13 @@
       const params = new URLSearchParams(location.search);
       pathInput.value = params.get('path') || '';
       filterInput.value = params.get('filter') || '';
-      let srcRoot = params.get('srcRoot') || '';
-      if (srcRoot && !/^https?:/i.test(srcRoot)) srcRoot = '';
+      const initialSrcRoot = params.get('srcRoot');
+      let srcRoot = initialSrcRoot && /^https?:/i.test(initialSrcRoot) ? initialSrcRoot : '';
 
       let filesData = [];
       let sortKey = 'file';
       let sortAsc = true;
+      let repoSlug = '';
 
       function status(msg){ statusEl.textContent = msg; }
 
@@ -206,7 +207,8 @@
           if (line.startsWith('TN:')){
           } else if (line.startsWith('SF:')){
             if (current) finalize();
-            current = {sf: line.slice(3).trim(), fnDefs:{}, fnHits:{}, lines:{}, branches:[], totals:{}};
+            const sfPath = normalizeSourcePath(line.slice(3).trim());
+            current = {sf: sfPath, fnDefs:{}, fnHits:{}, lines:{}, branches:[], totals:{}};
           } else if (line.startsWith('FN:')){
             const [ln,name] = line.slice(3).split(',');
             current.fnDefs[name] = Number(ln);
@@ -259,7 +261,7 @@
 
       function findCommonPrefix(paths){
         if (!paths.length) return '';
-        const segs = paths.map(p=>p.split('/'));
+        const segs = paths.map(p=> (p ? p.split('/').filter(Boolean) : []));
         const out=[];
         for (let i=0; ; i++){
           const s=segs[0][i];
@@ -267,6 +269,53 @@
           if (segs.every(a=>a[i]===s)) out.push(s); else break;
         }
         return out.length? out.join('/') + '/': '';
+      }
+
+      function normalizeSourcePath(path){
+        return path ? path.replace(/\\/g, '/') : '';
+      }
+
+      function cleanPath(path){
+        return normalizeSourcePath(path).replace(/^\/+/, '').replace(/^\.\/+/, '');
+      }
+
+      function inferRepoSlug(pathVal, files){
+        const repoMap = { glues: 'gluesql/glues' };
+        const cleaned = normalizeSourcePath(pathVal || '').replace(/^\/+/, '');
+        const segments = cleaned.split('/').filter(Boolean);
+        if (segments[0] === 'coverage') segments.shift();
+        const first = (segments[0] || '').toLowerCase();
+        if (repoMap[first]) return repoMap[first];
+        for (const f of files || []){
+          const sf = f.sf || '';
+          const workMatch = sf.match(/\/(?:work|__w)\/([^\/]+)\/\1\//);
+          if (workMatch) return `gluesql/${workMatch[1]}`;
+          const workspaceMatch = sf.match(/\/github\/workspace\/([^\/]+)\//);
+          if (workspaceMatch) return `gluesql/${workspaceMatch[1]}`;
+        }
+        return 'gluesql/gluesql';
+      }
+
+      function resolveRepoPath(path, slug){
+        const normalized = cleanPath(path);
+        const repoName = (slug || '').split('/')[1] || '';
+        if (repoName){
+          const needle = `/${repoName}/`;
+          const idx = normalized.lastIndexOf(needle);
+          if (idx >= 0) return normalized.slice(idx + needle.length);
+          if (normalized.startsWith(`${repoName}/`)) return normalized.slice(repoName.length + 1);
+        }
+        return normalized;
+      }
+
+      function slugFromSrcRoot(url){
+        if (!url) return '';
+        try{
+          const parsed = new URL(url);
+          const segs = parsed.pathname.split('/').filter(Boolean);
+          if (segs.length >= 2) return `${segs[0]}/${segs[1]}`;
+        }catch(e){}
+        return '';
       }
 
       function escapeHtml(s){
@@ -370,15 +419,33 @@
         if (!filesData.length){ emptyEl.style.display='block'; return; }
         emptyEl.style.display='none';
         const filter = filterInput.value.toLowerCase();
-        const prefix = findCommonPrefix(filesData.map(f=>f.sf));
-        let data = filesData.map(f=>({
-          ...f,
-          display: f.sf.startsWith(prefix) ? f.sf.slice(prefix.length) : f.sf,
-          linePct: pct(f.totals.LH,f.totals.LF),
-          funcPct: pct(f.totals.FNH,f.totals.FNF),
-          branchPct: pct(f.totals.BRH,f.totals.BRF)
-        }));
-        if(filter) data = data.filter(f=>f.display.toLowerCase().includes(filter));
+        let data = filesData.map(f=>{
+          let repoPath = resolveRepoPath(f.sf, repoSlug);
+          if (!repoPath) repoPath = cleanPath(f.sf);
+          return {
+            ...f,
+            repoPath,
+            linePct: pct(f.totals.LH,f.totals.LF),
+            funcPct: pct(f.totals.FNH,f.totals.FNF),
+            branchPct: pct(f.totals.BRH,f.totals.BRF)
+          };
+        });
+        const prefix = findCommonPrefix(data.map(f=>f.repoPath));
+        data = data.map(f=>{
+          let display = f.repoPath;
+          if (prefix && display.startsWith(prefix)) display = display.slice(prefix.length);
+          if (!display) display = f.repoPath;
+          if (!display) display = cleanPath(f.sf) || f.sf || '';
+          return {
+            ...f,
+            display
+          };
+        });
+        if(filter) data = data.filter(f=>{
+          const displayLower = f.display.toLowerCase();
+          const repoLower = (f.repoPath || '').toLowerCase();
+          return displayLower.includes(filter) || repoLower.includes(filter);
+        });
         data.sort((a,b)=>{
           let va,vb;
           switch(sortKey){
@@ -415,7 +482,10 @@
           const srcDiv=td.querySelector('.source');
           srcDiv.textContent='Loading source...';
           try{
-            const url=new URL(file.sf, srcRoot);
+            const rawPath = file.repoPath || file.display || file.sf || '';
+            const relative = normalizeSourcePath(rawPath).replace(/^\/+/,'').replace(/^\.\/+/,'');
+            if (!relative) throw new Error('Missing relative path');
+            const url=new URL(relative, srcRoot);
             const res=await fetch(url);
             if(!res.ok) throw new Error('HTTP '+res.status);
             const text=await res.text();
@@ -442,23 +512,36 @@
 
       async function load(){
         let pathVal=pathInput.value.trim();
-        if(!pathVal){ status('Path required'); filesData=[]; renderSummary(); renderTable(); return; }
+        if(!pathVal){ status('Path required'); filesData=[]; repoSlug=''; renderSummary(); renderTable(); return; }
         try{ pathVal = decodeURIComponent(pathVal); }catch{}
-        if(!params.get('srcRoot')){
+        let inferredCommit='';
+        const srcRootParamValue = params.get('srcRoot');
+        const hasSrcRootParam = !!(srcRootParamValue && /^https?:/i.test(srcRootParamValue));
+        if(hasSrcRootParam){
+          srcRoot = srcRootParamValue;
+        }else{
           // Match commit hash in filenames like {timestamp}.{hash}.lcov.info or {hash}-lcov.info[.xz]
           const m=pathVal.match(/([0-9a-fA-F]{40})(?=[^\/]*[.-]lcov\.info(?:\.xz)?$)/);
-          srcRoot = m ? `https://raw.githubusercontent.com/gluesql/gluesql/${m[1]}/` : '';
+          inferredCommit = m ? m[1] : '';
+          srcRoot = '';
         }
         status('Loading...');
         try{
           const url=normalizePath(pathVal);
           const text=await fetchText(url);
           filesData=parseLcov(text);
+          const inferredSlug = inferRepoSlug(pathVal, filesData);
+          if (hasSrcRootParam){
+            repoSlug = slugFromSrcRoot(srcRootParamValue) || inferredSlug;
+          }else{
+            repoSlug = inferredSlug;
+            srcRoot = inferredCommit ? `https://raw.githubusercontent.com/${repoSlug}/${inferredCommit}/` : '';
+          }
           renderSummary();
           renderTable();
           status('Loaded '+url.pathname);
         }catch(e){
-          filesData=[]; renderSummary(); renderTable();
+          filesData=[]; repoSlug=''; renderSummary(); renderTable();
           status('Error: '+e.message);
         }
       }
@@ -469,11 +552,12 @@
         try{
           const text=await readFile(file);
           filesData=parseLcov(text);
+          repoSlug='';
           renderSummary();
           renderTable();
           status('Loaded '+file.name);
         }catch(e){
-          filesData=[]; renderSummary(); renderTable();
+          filesData=[]; repoSlug=''; renderSummary(); renderTable();
           status('Error: '+e.message);
         }
       }
