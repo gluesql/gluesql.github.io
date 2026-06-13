@@ -481,9 +481,6 @@
         <loc>https://gluesql.org/docs/dev/storages/supported-storages/git-storage/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/storages/supported-storages/idb-storage/</loc>
-      </url>
-      <url>
         <loc>https://gluesql.org/docs/dev/storages/supported-storages/json-storage/</loc>
       </url>
       <url>
@@ -506,9 +503,6 @@
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/storages/supported-storages/sled-storage/</loc>
-      </url>
-      <url>
-        <loc>https://gluesql.org/docs/dev/storages/supported-storages/web-storage/</loc>
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/storages/developing-custom-storages/intro/</loc>

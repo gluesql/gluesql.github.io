@@ -6027,33 +6027,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../storages/supported-storages/idb-storage/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  IndexedDB Storage
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../storages/supported-storages/json-storage/" class="md-nav__link">
         
   
@@ -6251,33 +6224,6 @@
     
   
   Sled Storage
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../storages/supported-storages/web-storage/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  WebStorage (local &amp; session)
 
     
   </span>
@@ -7163,8 +7109,6 @@
 <li><code>gluesql-shared-memory-storage</code> - A wrapper around memory-storage for easy use in multi-threaded environments</li>
 <li><code>gluesql-json-storage</code> - Storage that allows you to analyze and modify JSON or JSONL files using SQL</li>
 <li><code>gluesql-composite-storage</code> - A storage feature that enables joining and processing data from multiple storage types simultaneously</li>
-<li><code>gluesql-web-storage</code> - Storage supporting localStorage and sessionStorage, available only in web assembly builds</li>
-<li><code>gluesql-idb-storage</code> - IndexedDB-based storage, available only in web assembly builds</li>
 </ul>
 <p>If you don't need all the default storage features, you can disable them and select only the ones you require. To do this, update your <code>Cargo.toml</code> file with the following lines:</p>
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[dependencies.gluesql]</span>
