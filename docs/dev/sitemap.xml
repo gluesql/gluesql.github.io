@@ -343,127 +343,127 @@
         <loc>https://gluesql.org/docs/dev/sql-syntax/functions/others/ifnull/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/intro/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/intro/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/fetching-data-from-storage/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/fetching-data-from-storage/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/using-preloaded-data/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/using-preloaded-data/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/creating-derived-subqueries/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/creating-derived-subqueries/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/data-aggregation/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/data-aggregation/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/data-injection/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/data-injection/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/data-joining/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/data-joining/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/data-selection-and-projection/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/data-selection-and-projection/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/querying/data-sorting-and-limiting/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/querying/data-sorting-and-limiting/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/data-manipulation/inserting-data/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/data-manipulation/inserting-data/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/data-manipulation/updating-data/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/data-manipulation/updating-data/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/statements/data-manipulation/deleting-data/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/statements/data-manipulation/deleting-data/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/expressions/conditional/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/expressions/conditional/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/expressions/nested/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/expressions/nested/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/expressions/operator-based/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/expressions/operator-based/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/expressions/pattern-matching/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/expressions/pattern-matching/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/expressions/value-checking/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/expressions/value-checking/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/text/case-conversion/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/text/case-conversion/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/text/character-conversion/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/text/character-conversion/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/text/padding/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/text/padding/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/text/position-and-indexing/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/text/position-and-indexing/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/text/text-manipulation/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/text/text-manipulation/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/text/trimming/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/text/trimming/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/math/basic-arithmetic/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/math/basic-arithmetic/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/math/conversion/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/math/conversion/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/math/logarithmic-and-exponential/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/math/logarithmic-and-exponential/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/math/rounding/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/math/rounding/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/math/special-mathematical/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/math/special-mathematical/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/math/trigonometric/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/math/trigonometric/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/date-&-time/conversion/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/date-&-time/conversion/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/date-&-time/current-date-and-time/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/date-&-time/current-date-and-time/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/date-&-time/date-and-time-extraction/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/date-&-time/date-and-time-extraction/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/date-&-time/formatting/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/date-&-time/formatting/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/list-&-map/list-and-map-concatenation/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/list-&-map/list-and-map-concatenation/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/list-&-map/list-manipulation/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/list-&-map/list-manipulation/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/geometry/coordinate-extraction/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/geometry/coordinate-extraction/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/geometry/distance-calculation/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/geometry/distance-calculation/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/geometry/point-creation/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/geometry/point-creation/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/others/null-handling/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/others/null-handling/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/others/type-conversion/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/others/type-conversion/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/ast-builder/functions/others/unique-identifier/</loc>
+        <loc>https://gluesql.org/docs/dev/query-builder/functions/others/unique-identifier/</loc>
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/storages/intro/</loc>
