@@ -7235,8 +7235,7 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">.</span><span class="n">select</span><span class="p">()</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s">&quot;time_stamp&quot;</span><span class="p">).</span><span class="n">gt</span><span class="p">(</span><span class="n">now</span><span class="p">()))</span><span class="w">  </span><span class="c1">// select rows where &quot;time_stamp&quot; is later than current time</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">.</span><span class="n">project</span><span class="p">(</span><span class="s">&quot;id, time_stamp&quot;</span><span class="p">)</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">glue</span><span class="p">)</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="p">.</span><span class="k">await</span><span class="p">;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">glue</span><span class="p">);</span>
 </span></code></pre></div>
 <p>In the above example, the <code>filter</code> method uses <code>now</code> to select rows where the "time_stamp" column is later than the current time.</p>
 <p>When inserting data into a table, you can use the <code>now</code> function to record the current time:</p>
@@ -7247,8 +7246,7 @@
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="s">&quot;2, NOW()&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// Inserts the current time</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="s">&quot;3, &#39;9999-12-31T23:59:40.364832862&#39;&quot;</span><span class="p">,</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">])</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">glue</span><span class="p">)</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="p">.</span><span class="k">await</span><span class="p">;</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">glue</span><span class="p">);</span>
 </span></code></pre></div>
 In the example above, the "time_stamp" column for the row with id 2 is set to the current time at the moment of insertion.</p>
 
