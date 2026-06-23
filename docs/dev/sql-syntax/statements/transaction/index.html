@@ -7349,7 +7349,7 @@
 
 <h1 id="transaction">Transaction<a class="headerlink" href="#transaction" title="Permanent link">&para;</a></h1>
 <p>Transactions in SQL are a series of queries that are executed as a single unit of work. In GlueSQL, transactions help to ensure the consistency and integrity of the database. They follow the ACID properties: Atomicity, Consistency, Isolation, and Durability.</p>
-<p><strong>Note: In GlueSQL, transactions are an optional feature. Support for transactions depends on the storage engine being used. Currently, only <code>SledStorage</code> supports transactions, but there are plans to add support for other storage engines in the future. Transaction isolation levels may also vary depending on the storage engine. For example, the current transaction isolation level for <code>SledStorage</code> is SNAPSHOT ISOLATION.</strong></p>
+<p><strong>Note: In GlueSQL, transactions are an optional feature. Support for transactions depends on the storage engine being used. Currently, both <code>SledStorage</code> and <code>RedbStorage</code> support transactions, and additional storages may add support in the future. Transaction isolation levels may also vary depending on the storage engine. For example, the current transaction isolation level for <code>SledStorage</code> is SNAPSHOT ISOLATION.</strong></p>
 <h2 id="begin-transaction">BEGIN TRANSACTION<a class="headerlink" href="#begin-transaction" title="Permanent link">&para;</a></h2>
 <p>To start a new transaction, use the <code>BEGIN</code> keyword:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>BEGIN;
