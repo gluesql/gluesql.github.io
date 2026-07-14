@@ -6207,6 +6207,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#file-format-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        File format migration
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7124,6 +7135,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#file-format-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        File format migration
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7240,6 +7262,12 @@
 <li>Only one RedbStorage instance should open the same database file at a time.</li>
 </ul>
 <p>RedbStorage gives you an embedded, serverless database that integrates seamlessly with GlueSQL. Use <code>RedbStorage::new</code> to open or create a database file and execute SQL through <code>Glue</code>.</p>
+<h2 id="file-format-migration">File format migration<a class="headerlink" href="#file-format-migration" title="Permanent link">&para;</a></h2>
+<p>GlueSQL continues to use the redb 2.6 crate, but new databases use redb's internal file format v3. GlueSQL's redb storage format version is also v3; this is separate metadata used to require the file upgrade, not the redb crate version.</p>
+<p>Existing redb storage format v1 or v2 files must be upgraded once before opening them:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>gluesql<span class="w"> </span>--storage<span class="w"> </span>redb<span class="w"> </span>--path<span class="w"> </span>data.redb<span class="w"> </span>--upgrade
+</span></code></pre></div>
+<p>Library users can call <code>gluesql_redb_storage::migrate_to_latest(path)</code> instead. The migration preserves the existing row serialization while upgrading the redb file from v2 to v3. Back up the database first because older GlueSQL releases reject storage format v3 after the upgrade.</p>
 
 
 
