@@ -7303,7 +7303,7 @@
 <li><code>map</code> – Map expression to convert.</li>
 </ul>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ENTRIES</span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="s1">&#39;{&quot;name&quot;:&quot;GlueSQL&quot;}&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">MAP</span><span class="p">));</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ENTRIES</span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'{"name":"GlueSQL"}'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">MAP</span><span class="p">));</span>
 </span></code></pre></div>
 <p>This returns <code>[["name", "GlueSQL"]]</code>.</p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>

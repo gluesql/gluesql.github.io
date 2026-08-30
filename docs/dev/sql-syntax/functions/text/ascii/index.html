@@ -7284,11 +7284,11 @@
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <p>Let's consider a few examples to understand how to use the ASCII function.</p>
 <p>To get the ASCII value of a character:</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">VALUES</span><span class="p">(</span><span class="n">ASCII</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">));</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">VALUES</span><span class="p">(</span><span class="n">ASCII</span><span class="p">(</span><span class="s1">'A'</span><span class="p">));</span>
 </span></code></pre></div>
 <p>This will return <code>65</code>, which is the ASCII value for 'A'.</p>
 <p>Please note that the ASCII function expects a single character value. If a string with more than one character is passed, it will throw an error. For instance:</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">VALUES</span><span class="p">(</span><span class="n">ASCII</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">));</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">VALUES</span><span class="p">(</span><span class="n">ASCII</span><span class="p">(</span><span class="s1">'AB'</span><span class="p">));</span>
 </span></code></pre></div>
 <p>This will throw an error because 'AB' contains more than one character.</p>
 <p>You can also use the ASCII function in a SELECT statement. Consider the following table named 'Ascii':</p>
@@ -7310,18 +7310,18 @@
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nb">text</span><span class="w"> </span><span class="nb">TEXT</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">);</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Ascii</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;F&#39;</span><span class="p">);</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Ascii</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'F'</span><span class="p">);</span>
 </span></code></pre></div>
 <p>You can select the ASCII value of the 'text' column:</p>
 <div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ASCII</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ascii</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ascii</span><span class="p">;</span>
 </span></code></pre></div>
 <p>This will return <code>70</code>, which is the ASCII value for 'F'.</p>
 <p>The ASCII function can also take a string directly:</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ASCII</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ascii</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ascii</span><span class="p">;</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ASCII</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ascii</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ascii</span><span class="p">;</span>
 </span></code></pre></div>
 <p>This will return <code>97</code>, which is the ASCII value for 'a'.</p>
 <p>If a non-ASCII character is passed to the function, it will throw an error. For instance:</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ASCII</span><span class="p">(</span><span class="s1">&#39;ㄱ&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ascii</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ascii</span><span class="p">;</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ASCII</span><span class="p">(</span><span class="s1">'ㄱ'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ascii</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ascii</span><span class="p">;</span>
 </span></code></pre></div>
 <p>This will throw an error because 'ㄱ' is not an ASCII character.</p>
 <p>If no argument is passed to the ASCII function, it will also throw an error:</p>
@@ -7329,7 +7329,7 @@
 </span></code></pre></div>
 <p>This will throw an error because the ASCII function expects one argument.</p>
 <p>Remember, the ASCII function expects a single character. If the column value contains more than one character, it will throw an error:</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Ascii</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Foo&#39;</span><span class="p">);</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Ascii</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Foo'</span><span class="p">);</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ASCII</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ascii</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ascii</span><span class="p">;</span>
 </span></code></pre></div>
 <p>This will throw an error because 'Foo' contains more than one character.</p>

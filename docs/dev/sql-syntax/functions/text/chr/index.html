@@ -7321,7 +7321,7 @@
 </span></code></pre></div>
 <p>This will return <code>'A'</code>, which is the character for the ASCII value 65.</p>
 <p>If a non-integer value is passed to the function, it will throw an error. For instance:</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">CHR</span><span class="p">(</span><span class="s1">&#39;ukjhg&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">chr</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Chr</span><span class="p">;</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">CHR</span><span class="p">(</span><span class="s1">'ukjhg'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">chr</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Chr</span><span class="p">;</span>
 </span></code></pre></div>
 <p>This will throw an error because 'ukjhg' is not an integer value.</p>
 <p>Remember, the CHR function expects an integer value between 0 and 255. If the column value is outside this range, it will throw an error:</p>
