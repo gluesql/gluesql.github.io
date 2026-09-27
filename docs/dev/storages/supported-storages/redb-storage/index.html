@@ -1475,6 +1475,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../sql-syntax/data-types/point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  POINT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../sql-syntax/data-types/bytea/" class="md-nav__link">
         
   
@@ -1789,6 +1816,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../sql-syntax/functions/text/hex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  HEX
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../sql-syntax/functions/text/initcap/" class="md-nav__link">
         
   
@@ -1986,6 +2040,33 @@
     
   
   REPEAT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sql-syntax/functions/text/replace/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  REPLACE
 
     
   </span>
@@ -4006,6 +4087,33 @@
     
   
   IFNULL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sql-syntax/functions/others/nullif/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  NULLIF
 
     
   </span>
@@ -7267,7 +7375,7 @@
 <p>RedbStorage allows GlueSQL to persist data using the <a href="https://github.com/cberner/redb">redb</a> embedded key-value database. It provides ACID transactions, fast single-file access, and a stable API.</p>
 <p>RedbStorage implements GlueSQL's <code>Store</code>, <code>StoreMut</code>, and <code>Transaction</code> traits.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">use</span><span class="w"> </span><span class="n">gluesql</span><span class="p">::{</span><span class="n">prelude</span><span class="p">::</span><span class="n">Glue</span><span class="p">,</span><span class="w"> </span><span class="n">redb_storage</span><span class="p">::</span><span class="n">RedbStorage</span><span class="p">};</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">use</span><span class="w"> </span><span class="n">gluesql</span><span class="p">::{</span><span class="n">gluesql_redb_storage</span><span class="p">::</span><span class="n">RedbStorage</span><span class="p">,</span><span class="w"> </span><span class="n">prelude</span><span class="p">::</span><span class="n">Glue</span><span class="p">};</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RedbStorage</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"data/my_db.redb"</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>

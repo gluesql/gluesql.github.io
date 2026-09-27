@@ -1735,6 +1735,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../sql-syntax/data-types/point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  POINT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../sql-syntax/data-types/bytea/" class="md-nav__link">
         
   
@@ -2049,6 +2076,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../sql-syntax/functions/text/hex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  HEX
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../sql-syntax/functions/text/initcap/" class="md-nav__link">
         
   
@@ -2246,6 +2300,33 @@
     
   
   REPEAT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-syntax/functions/text/replace/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  REPLACE
 
     
   </span>
@@ -4266,6 +4347,33 @@
     
   
   IFNULL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-syntax/functions/others/nullif/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  NULLIF
 
     
   </span>
@@ -7604,18 +7712,19 @@
 </span></code></pre></div>
 <h2 id="running-the-cli">Running the CLI<a class="headerlink" href="#running-the-cli" title="Permanent link">&para;</a></h2>
 <p>Once you have installed the GlueSQL CLI, you can use it to interact with your database. The CLI has several options that you can use to customize your database configuration:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ gluesql [--execute ~/sql_path] [--path ~/data_path --storage={redb | sled | json}]
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ gluesql [--execute ~/sql_path] [--storage=memory]
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>$ gluesql [--execute ~/sql_path] --path ~/data_path --storage={redb | json | csv | parquet | file | sled}
 </span></code></pre></div>
 <h3 id="-execute">--execute<a class="headerlink" href="#-execute" title="Permanent link">&para;</a></h3>
 <p>This option allows you to execute a SQL query that is stored in a specific file path. You need to provide the path to the SQL file that contains the query you want to execute. For example, you can use the following command to execute a file located at <code>~/sql_path/query.sql</code></p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>gluesql --execute ~/sql_path/query.sql
 </span></code></pre></div>
 <h3 id="-path">--path<a class="headerlink" href="#-path" title="Permanent link">&para;</a></h3>
-<p>This option allows you to specify the path to your database's data directory. By default, GlueSQL stores your database in the current directory. However, you can use the --path option to specify a custom directory where you want to store your database files. For example, you can use the following command to specify a custom data directory <code>~/mydatabase</code>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>gluesql --path ~/mydatabase
+<p>This option allows you to specify the path to your database's data directory or file. The default <code>memory</code> storage is non-persistent and does not use <code>--path</code>. For path-backed storages, specify both <code>--path</code> and <code>--storage</code>. For example, you can use the following command to specify a custom data path <code>~/mydatabase</code>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>gluesql --path ~/mydatabase --storage=redb
 </span></code></pre></div>
 <h3 id="-storage">--storage<a class="headerlink" href="#-storage" title="Permanent link">&para;</a></h3>
-<p>This option allows you to specify the storage engine you want to use for your database. By default, GlueSQL uses the <a href="../../storages/supported-storages/memory-storage"><code>memory</code></a> storage engine. For persistent storage, use <a href="../../storages/supported-storages/redb-storage"><code>redb</code></a>. The <a href="../../storages/supported-storages/sled-storage"><code>sled</code></a> option is deprecated as of v0.20.0 and will be removed in v0.21.0. Storage engines other than <code>memory</code> should be used with <code>--path</code>. For example, you can use the following command to specify the <code>json</code> storage engine:</p>
+<p>This option allows you to specify the storage engine you want to use for your database. By default, GlueSQL uses the <a href="../../storages/supported-storages/memory-storage"><code>memory</code></a> storage engine. For persistent storage, use <a href="../../storages/supported-storages/redb-storage"><code>redb</code></a>. The other path-backed storages are <code>json</code>, <code>csv</code>, <code>parquet</code>, and <code>file</code>. The <a href="../../storages/supported-storages/sled-storage"><code>sled</code></a> option is deprecated as of v0.20.0 and will be removed in v0.21.0. Storage engines other than <code>memory</code> must be used with <code>--path</code>. For example, you can use the following command to specify the <code>json</code> storage engine:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>gluesql --path ~/mydatabase --storage=json
 </span></code></pre></div>
 <h2 id="dot-command">Dot command<a class="headerlink" href="#dot-command" title="Permanent link">&para;</a></h2>

@@ -1475,6 +1475,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../sql-syntax/data-types/point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  POINT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../sql-syntax/data-types/bytea/" class="md-nav__link">
         
   
@@ -1789,6 +1816,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../sql-syntax/functions/text/hex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  HEX
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../sql-syntax/functions/text/initcap/" class="md-nav__link">
         
   
@@ -1986,6 +2040,33 @@
     
   
   REPEAT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sql-syntax/functions/text/replace/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  REPLACE
 
     
   </span>
@@ -4006,6 +4087,33 @@
     
   
   IFNULL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sql-syntax/functions/others/nullif/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  NULLIF
 
     
   </span>
@@ -7330,7 +7438,7 @@
 <p>Follow the <a href="https://www.mongodb.com/docs/manual/installation/">official MongoDB installation guide</a>.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <p>Below is a minimal example showing how to execute SQL statements on MongoDB using GlueSQL in Rust:</p>
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">use</span><span class="w"> </span><span class="n">gluesql</span><span class="p">::{</span><span class="n">prelude</span><span class="p">::</span><span class="n">Glue</span><span class="p">,</span><span class="w"> </span><span class="n">mongo_storage</span><span class="p">::</span><span class="n">MongoStorage</span><span class="p">};</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">use</span><span class="w"> </span><span class="n">gluesql</span><span class="p">::{</span><span class="n">gluesql_mongo_storage</span><span class="p">::</span><span class="n">MongoStorage</span><span class="p">,</span><span class="w"> </span><span class="n">prelude</span><span class="p">::</span><span class="n">Glue</span><span class="p">};</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">conn_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mongodb://localhost:27017"</span><span class="p">;</span>

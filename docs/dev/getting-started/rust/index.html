@@ -1487,6 +1487,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../sql-syntax/data-types/point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  POINT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../sql-syntax/data-types/bytea/" class="md-nav__link">
         
   
@@ -1801,6 +1828,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../sql-syntax/functions/text/hex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  HEX
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../sql-syntax/functions/text/initcap/" class="md-nav__link">
         
   
@@ -1998,6 +2052,33 @@
     
   
   REPEAT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-syntax/functions/text/replace/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  REPLACE
 
     
   </span>
@@ -4018,6 +4099,33 @@
     
   
   IFNULL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-syntax/functions/others/nullif/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  NULLIF
 
     
   </span>
@@ -7128,15 +7236,15 @@
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[dependencies]</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">gluesql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.20.0"</span>
 </span></code></pre></div>
-<p>By default, all available storage features are included with GlueSQL. Here's a list of the available features:</p>
+<p>By default, GlueSQL enables all bundled storage features. Here's a list of the available storage features:</p>
 <ul>
 <li><code>gluesql_sled_storage</code> - Deprecated Sled-backed storage; use <code>gluesql-redb-storage</code> for new persistent-storage deployments. It will be removed in v0.21.0</li>
 <li><code>gluesql-redb-storage</code> - Storage using the redb embedded database</li>
 <li><code>gluesql_memory_storage</code> - Simple in-memory storage</li>
 <li><code>gluesql-shared-memory-storage</code> - A wrapper around memory-storage for easy use in multi-threaded environments</li>
 <li><code>gluesql-json-storage</code> - Storage that allows you to analyze and modify JSON or JSONL files using SQL</li>
-<li><code>gluesql-parquet-storage</code> - Storage for querying Parquet files</li>
-<li><code>gluesql-csv-storage</code> - Storage for querying CSV files</li>
+<li><code>gluesql-parquet-storage</code> - Storage for reading and writing Parquet files</li>
+<li><code>gluesql-csv-storage</code> - Storage for reading and writing CSV files</li>
 <li><code>gluesql-composite-storage</code> - A storage feature that enables joining and processing data from multiple storage types simultaneously</li>
 <li><code>gluesql-mongo-storage</code> - Storage backed by MongoDB</li>
 <li><code>gluesql-redis-storage</code> - Storage backed by Redis</li>

@@ -100,6 +100,9 @@
         <loc>https://gluesql.org/docs/dev/sql-syntax/data-types/map/</loc>
       </url>
       <url>
+        <loc>https://gluesql.org/docs/dev/sql-syntax/data-types/point/</loc>
+      </url>
+      <url>
         <loc>https://gluesql.org/docs/dev/sql-syntax/data-types/bytea/</loc>
       </url>
       <url>
@@ -124,6 +127,9 @@
         <loc>https://gluesql.org/docs/dev/sql-syntax/functions/text/find-idx/</loc>
       </url>
       <url>
+        <loc>https://gluesql.org/docs/dev/sql-syntax/functions/text/hex/</loc>
+      </url>
+      <url>
         <loc>https://gluesql.org/docs/dev/sql-syntax/functions/text/initcap/</loc>
       </url>
       <url>
@@ -146,6 +152,9 @@
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/sql-syntax/functions/text/repeat/</loc>
+      </url>
+      <url>
+        <loc>https://gluesql.org/docs/dev/sql-syntax/functions/text/replace/</loc>
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/sql-syntax/functions/text/reverse/</loc>
@@ -341,6 +350,9 @@
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/sql-syntax/functions/others/ifnull/</loc>
+      </url>
+      <url>
+        <loc>https://gluesql.org/docs/dev/sql-syntax/functions/others/nullif/</loc>
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/query-builder/intro/</loc>

@@ -1475,6 +1475,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../sql-syntax/data-types/point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  POINT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../sql-syntax/data-types/bytea/" class="md-nav__link">
         
   
@@ -1789,6 +1816,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../sql-syntax/functions/text/hex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  HEX
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../sql-syntax/functions/text/initcap/" class="md-nav__link">
         
   
@@ -1986,6 +2040,33 @@
     
   
   REPEAT
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../sql-syntax/functions/text/replace/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  REPLACE
 
     
   </span>
@@ -4018,6 +4099,33 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../sql-syntax/functions/others/nullif/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  NULLIF
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -5761,6 +5869,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#nullif-nullif" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        NULLIF - nullif
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7131,6 +7250,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#nullif-nullif" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        NULLIF - nullif
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7255,7 +7385,7 @@
                   
 
 <h1 id="null-handling">Null Handling<a class="headerlink" href="#null-handling" title="Permanent link">&para;</a></h1>
-<p>In some cases, you may need to handle <code>NULL</code> values in your database. GlueSQL provides a function called <code>ifnull</code> to handle these cases.</p>
+<p>In some cases, you may need to handle <code>NULL</code> values in your database. GlueSQL provides functions such as <code>ifnull</code> and <code>nullif</code> to handle these cases.</p>
 <h2 id="ifnull-ifnull">IFNULL - ifnull<a class="headerlink" href="#ifnull-ifnull" title="Permanent link">&para;</a></h2>
 <p>The <code>ifnull</code> function checks if the first expression is <code>NULL</code>, and if it is, it returns the value of the second expression. If the first expression is not <code>NULL</code>, it returns the value of the first expression.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">table</span><span class="p">(</span><span class="s">"Foo"</span><span class="p">)</span>
@@ -7275,12 +7405,28 @@
 <p>In this example, if the "name" column is <code>NULL</code>, the value from the "nickname" column is returned. If "name" is not <code>NULL</code>, the value of the "name" column is returned.</p>
 <p>The <code>ifnull</code> function can also be used without a table:</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">values</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="fm">vec!</span><span class="p">[</span><span class="n">query_builder</span><span class="p">::</span><span class="n">ifnull</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s">"HELLO"</span><span class="p">),</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="s">"WORLD"</span><span class="p">))],</span><span class="w">  </span><span class="c1">// If "HELLO" is NULL (it's not), return "WORLD". Otherwise, return "HELLO".</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="fm">vec!</span><span class="p">[</span><span class="n">query_builder</span><span class="p">::</span><span class="n">ifnull</span><span class="p">(</span><span class="n">null</span><span class="p">(),</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="s">"WORLD"</span><span class="p">))],</span><span class="w">  </span><span class="c1">// If NULL is NULL (it is), return "WORLD".</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="fm">vec!</span><span class="p">[</span><span class="n">query_builder</span><span class="p">::</span><span class="n">function</span><span class="p">::</span><span class="n">ifnull</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s">"HELLO"</span><span class="p">),</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="s">"WORLD"</span><span class="p">))],</span><span class="w">  </span><span class="c1">// If "HELLO" is NULL (it's not), return "WORLD". Otherwise, return "HELLO".</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="fm">vec!</span><span class="p">[</span><span class="n">query_builder</span><span class="p">::</span><span class="n">function</span><span class="p">::</span><span class="n">ifnull</span><span class="p">(</span><span class="n">null</span><span class="p">(),</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="s">"WORLD"</span><span class="p">))],</span><span class="w">  </span><span class="c1">// If NULL is NULL (it is), return "WORLD".</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">])</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">glue</span><span class="p">);</span>
 </span></code></pre></div>
 <p>In the first case, "HELLO" is returned because it's not <code>NULL</code>. In the second case, "WORLD" is returned because the first value is <code>NULL</code>.</p>
+<h2 id="nullif-nullif">NULLIF - nullif<a class="headerlink" href="#nullif-nullif" title="Permanent link">&para;</a></h2>
+<p>The <code>nullif</code> function compares two expressions. If they are equal, it returns <code>NULL</code>; otherwise, it returns the first expression.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">table</span><span class="p">(</span><span class="s">"Foo"</span><span class="p">)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="p">.</span><span class="n">select</span><span class="p">()</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p">.</span><span class="n">project</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">.</span><span class="n">project</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s">"name"</span><span class="p">).</span><span class="n">nullif</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s">"hello"</span><span class="p">)))</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">glue</span><span class="p">);</span>
+</span></code></pre></div>
+<p>You can also use <code>nullif</code> without a table:</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">values</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="fm">vec!</span><span class="p">[</span><span class="n">query_builder</span><span class="p">::</span><span class="n">function</span><span class="p">::</span><span class="n">nullif</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s">"HELLO"</span><span class="p">),</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="s">"WORLD"</span><span class="p">))],</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="fm">vec!</span><span class="p">[</span><span class="n">query_builder</span><span class="p">::</span><span class="n">function</span><span class="p">::</span><span class="n">nullif</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s">"WORLD"</span><span class="p">),</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="s">"WORLD"</span><span class="p">))],</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">])</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">glue</span><span class="p">);</span>
+</span></code></pre></div>
+<p>In the first case, "HELLO" is returned because the two values are different. In the second case, <code>NULL</code> is returned because the two values are equal.</p>
 
 
 
