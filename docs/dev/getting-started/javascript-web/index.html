@@ -348,6 +348,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#choosing-an-entry-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Choosing an Entry Point
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -405,6 +416,56 @@
       </span>
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#persistent-storage-with-opfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Persistent Storage with OPFS
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Persistent Storage with OPFS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worker-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Worker Location
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharing-a-database-across-tabs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Sharing a Database Across Tabs
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#browser-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Browser Requirements
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -7297,6 +7358,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#choosing-an-entry-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Choosing an Entry Point
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -7354,6 +7426,56 @@
       </span>
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#persistent-storage-with-opfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Persistent Storage with OPFS
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Persistent Storage with OPFS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worker-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Worker Location
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharing-a-database-across-tabs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Sharing a Database Across Tabs
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#browser-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Browser Requirements
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -7439,26 +7561,55 @@
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">}</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
 </span></code></pre></div>
+<h2 id="choosing-an-entry-point">Choosing an Entry Point<a class="headerlink" href="#choosing-an-entry-point" title="Permanent link">&para;</a></h2>
+<p>The <code>gluesql</code> package provides three browser entry points. Pick the one that matches where your data should live:</p>
+<table>
+<thead>
+<tr>
+<th>Entry point</th>
+<th>Storage</th>
+<th>Persistence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gluesql</code></td>
+<td><code>memory</code>, <code>localStorage</code>, <code>sessionStorage</code></td>
+<td>Memory is lost on reload; Web Storage follows the browser's storage rules</td>
+</tr>
+<tr>
+<td><code>gluesql/opfs</code></td>
+<td>OPFS file</td>
+<td>Survives reloads and browser restarts, one tab at a time</td>
+</tr>
+<tr>
+<td><code>gluesql/opfs/shared</code></td>
+<td>OPFS file, shared across tabs</td>
+<td>Survives reloads and browser restarts, safe to open in many tabs when Web Locks and <code>BroadcastChannel</code> are available</td>
+</tr>
+</tbody>
+</table>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>GlueSQL can be used in different environments. Here we will look at how to use it with JavaScript modules, Webpack, and Rollup.</p>
 <h3 id="javascript-modules">JavaScript Modules<a class="headerlink" href="#javascript-modules" title="Permanent link">&para;</a></h3>
 <p>In an HTML file, you can use GlueSQL by importing it with a script tag:</p>
 <div class="language-html highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">"module"</span><span class="p">&gt;</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">gluesql</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'gluesql'</span><span class="p">;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">gluesql</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'https://cdn.jsdelivr.net/npm/gluesql/gluesql.js'</span><span class="p">;</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">gluesql</span><span class="p">();</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">loadIndexedDB</span><span class="p">();</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="sb">`</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="sb">      CREATE TABLE Foo (id INTEGER) ENGINE = memory;</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="sb">      INSERT INTO Foo (1, 'glue'), (2, 'sql');</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="sb">      SELECT * FROM Foo;</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="sb">    `</span><span class="p">);</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">   </span><span class="p">}</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="sb">`</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="sb">      CREATE TABLE Foo (id INTEGER, name TEXT) ENGINE = memory;</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="sb">      INSERT INTO Foo VALUES (1, 'glue'), (2, 'sql');</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="sb">      SELECT * FROM Foo;</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="sb">    `</span><span class="p">);</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="nx">main</span><span class="p">();</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </span></code></pre></div>
 <h3 id="webpack">Webpack<a class="headerlink" href="#webpack" title="Permanent link">&para;</a></h3>
 <p>For Webpack, the usage is almost the same as JavaScript modules:</p>
@@ -7466,16 +7617,15 @@
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">gluesql</span><span class="p">();</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">loadIndexedDB</span><span class="p">();</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="sb">`</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="sb">    CREATE TABLE Foo (id INTEGER) ENGINE = memory;</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="sb">    INSERT INTO Foo VALUES (1, 'glue'), (2, 'sql');</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="sb">    SELECT * FROM Foo;</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="sb">  `</span><span class="p">);</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">}</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="sb">`</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="sb">    CREATE TABLE Foo (id INTEGER, name TEXT) ENGINE = memory;</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="sb">    INSERT INTO Foo VALUES (1, 'glue'), (2, 'sql');</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="sb">    SELECT * FROM Foo;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="sb">  `</span><span class="p">);</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="rollup">Rollup<a class="headerlink" href="#rollup" title="Permanent link">&para;</a></h3>
 <p>For Rollup, you need to adjust your import statement and add some configurations to your <code>rollup.config.js</code> file.</p>
@@ -7505,17 +7655,69 @@
 </span></code></pre></div>
 <p>Now, you can use GlueSQL in your Rollup project as you would in any other JavaScript module.</p>
 <h2 id="supported-storage-engines">Supported Storage Engines<a class="headerlink" href="#supported-storage-engines" title="Permanent link">&para;</a></h2>
-<p>GlueSQL supports four storage types: In-Memory Storage, Local Storage, Session Storage, and IndexedDB. </p>
+<p>The main <code>gluesql</code> entry point supports three storage types: In-Memory Storage, Local Storage, and Session Storage.</p>
 <p>You can specify the storage type when creating a table using the <code>ENGINE</code> clause:</p>
 <ul>
 <li>For In-Memory Storage: <code>ENGINE = memory</code></li>
 <li>For Local Storage: <code>ENGINE = localStorage</code></li>
 <li>For Session Storage: <code>ENGINE = sessionStorage</code></li>
-<li>For IndexedDB: <code>ENGINE = indexedDB</code></li>
 </ul>
 <p>For example:</p>
 <div class="language-sql highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">Foo</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memory</span><span class="p">;</span>
 </span></code></pre></div>
+<p>Tables stored in different engines can be joined in a single query.</p>
+<p>When the <code>ENGINE</code> clause is omitted, the default engine is used. The default engine is <code>memory</code> initially, and you can change it with <code>setDefaultEngine</code>:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">setDefaultEngine</span><span class="p">(</span><span class="s1">'localStorage'</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Web Storage is limited to a few megabytes per origin. For larger or long-lived data, use the OPFS entry point.</p>
+<h2 id="persistent-storage-with-opfs">Persistent Storage with OPFS<a class="headerlink" href="#persistent-storage-with-opfs" title="Permanent link">&para;</a></h2>
+<p>The <code>gluesql/opfs</code> entry point stores the database as a file in the <a href="https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system">Origin Private File System (OPFS)</a>. Data survives page reloads and browser restarts.</p>
+<p>GlueSQL and its storage run inside a Dedicated Worker, which keeps queries off the main thread. The <code>gluesql()</code> function returns a proxy whose <code>query</code> method sends SQL to the worker and returns a <code>Promise</code>.</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">gluesql</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'gluesql/opfs'</span><span class="p">;</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gluesql</span><span class="p">();</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="sb">`</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="sb">  CREATE TABLE IF NOT EXISTS User (id INTEGER, name TEXT);</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="sb">  INSERT INTO User VALUES (1, 'glue');</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="sb">`</span><span class="p">);</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1">// The data is still there after a reload.</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="kd">const</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">rows</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">'SELECT * FROM User;'</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Unlike the main entry point, <code>gluesql()</code> here does not need to be awaited. OPFS is the only storage in this entry point, so the <code>ENGINE</code> clause and <code>setDefaultEngine</code> do not apply.</p>
+<p>Use the <code>namespace</code> option to keep separate databases, each stored in its own file. When it is omitted, the <code>gluesql</code> namespace is used.</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">app1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gluesql</span><span class="p">({</span><span class="w"> </span><span class="nx">namespace</span><span class="o">:</span><span class="w"> </span><span class="s1">'app1'</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">app2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gluesql</span><span class="p">({</span><span class="w"> </span><span class="nx">namespace</span><span class="o">:</span><span class="w"> </span><span class="s1">'app2'</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div>
+<p>Call <code>terminate()</code> to stop the worker. Queries that are still pending are rejected.</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">terminate</span><span class="p">();</span>
+</span></code></pre></div>
+<h3 id="worker-location">Worker Location<a class="headerlink" href="#worker-location" title="Permanent link">&para;</a></h3>
+<p>The entry point loads <code>gluesql.opfs.worker.js</code> relative to its own module URL, and the worker loads its WebAssembly from the <code>dist_opfs/</code> directory next to it. When the package files are served from your own origin, no extra configuration is needed.</p>
+<p>Browsers only allow workers from the same origin, so the OPFS entry points cannot be loaded directly from a third-party CDN. If you serve the worker from a different path, copy <code>dist_opfs/</code> next to it and pass its URL:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gluesql</span><span class="p">({</span><span class="w"> </span><span class="nx">workerUrl</span><span class="o">:</span><span class="w"> </span><span class="s1">'/assets/gluesql.opfs.worker.js'</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div>
+<h3 id="sharing-a-database-across-tabs">Sharing a Database Across Tabs<a class="headerlink" href="#sharing-a-database-across-tabs" title="Permanent link">&para;</a></h3>
+<p>The OPFS file handle is exclusive, so a namespace opened with <code>gluesql/opfs</code> can only be used by one tab at a time. To open the same database in multiple tabs, use <code>gluesql/opfs/shared</code> (experimental). The API is the same:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">gluesql</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'gluesql/opfs/shared'</span><span class="p">;</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gluesql</span><span class="p">({</span><span class="w"> </span><span class="nx">namespace</span><span class="o">:</span><span class="w"> </span><span class="s1">'app'</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">'CREATE TABLE IF NOT EXISTS Log (at TEXT);'</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Tabs using the same namespace elect a leader with the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API">Web Locks API</a>. Only the leader starts the database worker and holds the OPFS file, and the other tabs send their queries to it through a <a href="https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel"><code>BroadcastChannel</code></a>. A write from one tab is immediately visible to the others.</p>
+<p>If the leader tab closes or crashes, another tab becomes the leader, and pending queries are delivered to it. A query whose acceptance by the lost leader was already confirmed is rejected with a <code>leader lost</code> error, because it may or may not have been applied. A query whose acceptance was not confirmed is resent to the new leader, so if the old leader crashed right after starting it, the query can run twice. Retry reads freely, but guard non-idempotent writes in your application.</p>
+<p>If the Web Locks API or <code>BroadcastChannel</code> is unavailable, this entry point falls back to the single-tab behavior of <code>gluesql/opfs</code>.</p>
+<p>For the full list of caveats, see the <a href="https://github.com/gluesql/gluesql-js#every-tab-one-database-gluesqlopfsshared-experimental">gluesql-js README</a>.</p>
+<h3 id="browser-requirements">Browser Requirements<a class="headerlink" href="#browser-requirements" title="Permanent link">&para;</a></h3>
+<p>The OPFS entry points require:</p>
+<ul>
+<li>A <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts">secure context</a>: serve the page over HTTPS or <code>localhost</code>. Opening it via <code>file://</code> does not work.</li>
+<li>A browser that supports <a href="https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker">module workers</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle"><code>FileSystemSyncAccessHandle</code></a> in Dedicated Workers.</li>
+</ul>
+<p>If <code>FileSystemSyncAccessHandle</code> is unavailable, queries fail with an error. GlueSQL does not silently fall back to another storage.</p>
+<p>A runnable example is available in <a href="https://github.com/gluesql/gluesql-js/tree/main/examples/web/opfs"><code>examples/web/opfs</code></a>.</p>
 
 
 
