@@ -6874,6 +6874,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#error-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Error variants
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#error-prefixes" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -7387,6 +7398,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#error-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Error variants
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#error-prefixes" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -7537,7 +7559,18 @@ imports and re-exports do not.</p>
 user-facing message. Reapply this rule when moving a check to another module.</p>
 <p>An error propagated from a call keeps the type chosen where it was created.
 The caller's location does not change its ownership.</p>
-<p>Ownership selects the error type; prefixes describe the error condition.</p>
+<p>Ownership selects the error type. Variants distinguish failures; prefixes
+classify their conditions.</p>
+<h2 id="error-variants">Error variants<a class="headerlink" href="#error-variants" title="Permanent link">&para;</a></h2>
+<p>Give independent failure conditions distinct variants, even when their messages
+would be similar. Do not reuse a broad variant across unrelated checks.</p>
+<p>Represent distinctions within a variant with enum payloads, not string tags or
+message text. String fields may carry diagnostic data such as table names.</p>
+<p>For example, use <code>CreateIndexTableNotFound(String)</code> for a missing CREATE INDEX
+target and <code>CtasSourceTableNotFound(String)</code> for a missing CTAS source. Each string
+holds the table name; the variants identify the failed checks.</p>
+<p>An error produced by the same check in a shared function may be propagated
+unchanged by multiple callers.</p>
 <h2 id="error-prefixes">Error prefixes<a class="headerlink" href="#error-prefixes" title="Permanent link">&para;</a></h2>
 <p>The following error-variant prefixes have specific meanings. Choose a prefix by
 examining the condition that produces the error and how that condition can be
