@@ -553,6 +553,15 @@
         <loc>https://gluesql.org/docs/dev/development/review-policy/</loc>
       </url>
       <url>
+        <loc>https://gluesql.org/docs/dev/development/review-policy/errors/</loc>
+      </url>
+      <url>
+        <loc>https://gluesql.org/docs/dev/development/review-policy/testing/</loc>
+      </url>
+      <url>
+        <loc>https://gluesql.org/docs/dev/development/review-policy/code-structure/</loc>
+      </url>
+      <url>
         <loc>https://gluesql.org/docs/dev/articles/</loc>
       </url>
       <url>
