@@ -6945,6 +6945,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Error ownership">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shared-storage-interface-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shared storage-interface errors
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -7531,6 +7548,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Error ownership">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shared-storage-interface-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shared storage-interface errors
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -7719,6 +7753,8 @@
 
 <h1 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h1>
 <h2 id="error-ownership">Error ownership<a class="headerlink" href="#error-ownership" title="Permanent link">&para;</a></h2>
+<p>Use the shared storage-interface errors described below for their matching
+failure conditions. For other errors, follow the declaration-location rule.</p>
 <p>For an error created in a module, search that module and then its parents.
 Use the first existing error type declared along that path, adding a variant
 there if needed. A module's own <code>error.rs</code> counts as its declaration site;
@@ -7729,6 +7765,15 @@ user-facing message. Reapply this rule when moving a check to another module.</p
 The caller's location does not change its ownership.</p>
 <p>Ownership selects the error type. Variants distinguish failures; prefixes
 classify their conditions.</p>
+<h3 id="shared-storage-interface-errors">Shared storage-interface errors<a class="headerlink" href="#shared-storage-interface-errors" title="Permanent link">&para;</a></h3>
+<p><code>AlterTableError</code> and <code>IndexError</code> are shared by implementations of the
+corresponding storage traits. Use their existing variants for matching failure
+conditions, including in new storage implementations. Preserve these variants
+when returning GlueSQL's <code>Error</code>.</p>
+<p>Use the declaration-location rule for storage-specific failures. Do not create
+a storage-local duplicate of a shared error solely to satisfy that rule.
+Reusing an existing error does not require reproducing another storage's
+internal checks.</p>
 <h2 id="error-variants">Error variants<a class="headerlink" href="#error-variants" title="Permanent link">&para;</a></h2>
 <p>Give independent failure conditions distinct variants, even when their messages
 would be similar. Do not reuse a broad variant across unrelated checks.</p>

@@ -6986,6 +6986,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#storage-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Storage integration tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#expected-results" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -7495,6 +7506,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#storage-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Storage integration tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#expected-results" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -7619,20 +7641,61 @@
 
 <h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h1>
 <h2 id="unit-tests">Unit tests<a class="headerlink" href="#unit-tests" title="Permanent link">&para;</a></h2>
-<p>Test every reachable branch of the implementation. Use inputs that reach each
-branch, and assert its result or state change. A test that fails earlier in the
-pipeline does not cover that branch.</p>
-<p>Put unit tests in an inline <code>#[cfg(test)] mod tests</code> in the module that contains
-the implementation. Do not put them in a separate <code>tests.rs</code> file or a module
-that only re-exports the implementation.</p>
-<p>Move the tests when you move the implementation. Do not widen production
-visibility just to let tests access private code.</p>
-<p>Test the branches of shared code in its own module. Caller tests cover the
-caller's branches, including how it uses results and handles errors from shared
-code.</p>
-<p>For a planner pass, prepare the inputs it needs and call the pass directly.
-Use separate test cases to check that the full planner pipeline runs the pass.</p>
-<p>Test an execution entry point's own branches in its unit tests.</p>
+<ul>
+<li>
+<p><strong>Test every reachable branch and check transformation results.</strong></p>
+<p>Build cases from the implementation under test. Use inputs that reach each
+branch, and assert the returned value or state change. A test that fails
+before reaching the target code does not test that code's error handling.</p>
+</li>
+<li>
+<p><strong>Test the caller's own behavior when it calls another function.</strong></p>
+<p>Check how the caller uses return values and handles errors. Test the called
+function's internal algorithms and branches in the module that implements it.
+Do not repeat a shared function's case list in every caller.</p>
+<p>Passing tests for the called function do not verify the caller. Run the caller
+and assert its result or state change.</p>
+<p>For a helper that only forwards a call or wraps its result, check the result
+through the caller. Do not add a separate helper test that repeats the same
+assertion.</p>
+</li>
+<li>
+<p><strong>Do not put integration test scenarios in unit tests.</strong></p>
+<p>A unit test for a sorting function can pass <code>[3, 1, 2]</code> to the function and
+assert that the result is <code>[1, 2, 3]</code>.</p>
+<p>Creating a table, inserting those values, and checking the result of
+<code>SELECT ... ORDER BY</code> tests SQL execution together with data storage and
+retrieval. Put that scenario in the shared SQL fixtures in <code>test-suite</code>,
+not in the sorting function's unit tests.</p>
+</li>
+<li>
+<p><strong>Write inputs and expected results that show the behavior being tested.</strong></p>
+<p>Long AST or plan construction code can obscure the transformation being
+tested. In that case, write expected results as SQL and let a helper parse
+them for comparison.</p>
+<p>This example uses SQL to show that the query builder should combine two
+filters with <code>AND</code>:</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">table</span><span class="p">(</span><span class="s">"Items"</span><span class="p">)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">.</span><span class="n">select</span><span class="p">()</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="s">"n &gt; 10"</span><span class="p">)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="s">"n &lt; 20"</span><span class="p">);</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kd">let</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT * FROM Items WHERE n &gt; 10 AND n &lt; 20"</span><span class="p">;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">test_query_builder</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="p">);</span>
+</span></code></pre></div>
+<p>The helper compares the builder's output with the parsed expected SQL as ASTs
+and plans. Parsing makes the expected result easier to read; the test checks
+the builder's filter combination. Do not add parser syntax cases to this test.</p>
+<p>Other modules may prepare inputs or express expected results. Using them for
+those tasks does not make their behavior part of this test's scope.</p>
+</li>
+<li>
+<p><strong>Keep unit tests in the module that contains the implementation.</strong></p>
+<p>Write them in an inline <code>#[cfg(test)] mod tests</code>. Do not put them in a separate
+<code>tests.rs</code> file or a module that only re-exports the implementation. Move the
+tests when you move the implementation. Do not widen production visibility
+just to let tests access private code.</p>
+</li>
+</ul>
 <h2 id="sql-fixtures">SQL fixtures<a class="headerlink" href="#sql-fixtures" title="Permanent link">&para;</a></h2>
 <p>The SQL fixtures in <code>test-suite/fixtures</code> are executable documentation for
 people and tools. Group cases by SQL feature and behavior. Use representative
@@ -7648,6 +7711,24 @@ separate examples even when they use the same branch.</p>
 <p>Constructing an AST or plan directly does not prove that SQL can reach the same
 behavior. For guards that require a manually constructed plan or inconsistent
 storage, use the setup and assertions in <a href="../errors/#error-prefixes">Error prefixes</a>.</p>
+<h2 id="storage-integration-tests">Storage integration tests<a class="headerlink" href="#storage-integration-tests" title="Permanent link">&para;</a></h2>
+<p>Put behavior that storage implementations must share in <code>test-suite</code>. Use SQL
+fixtures for shared SQL behavior, including index updates and transaction
+commit or rollback. Keep these cases in the shared suite; storage crates
+register and run them.</p>
+<p>Put behavior that can only be verified for a particular storage implementation
+in that storage crate's <code>tests/</code> directory. For example, transaction isolation
+levels can differ between storages. Test concurrent transaction visibility
+against that storage's isolation guarantees in its integration tests. Do not
+put one storage's expected visibility in the shared suite as a requirement
+for all storages.</p>
+<p>Tests that reopen a storage's database files, migrate its on-disk format, or
+inspect its internal data structures also belong in that storage's tests.</p>
+<p>Apply the same placement rule to errors: shared failure conditions belong in
+<code>test-suite</code>, and storage-specific failures belong in that storage's tests.
+Call the operation that should fail and assert its error. Constructing an
+internal error and calling its conversion helper does not verify what the
+operation returns.</p>
 <h2 id="expected-results">Expected results<a class="headerlink" href="#expected-results" title="Permanent link">&para;</a></h2>
 <p>Assert the expected result:</p>
 <ul>
