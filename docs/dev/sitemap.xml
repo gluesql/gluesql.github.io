@@ -514,9 +514,6 @@
         <loc>https://gluesql.org/docs/dev/storages/supported-storages/shared-memory-storage/</loc>
       </url>
       <url>
-        <loc>https://gluesql.org/docs/dev/storages/supported-storages/sled-storage/</loc>
-      </url>
-      <url>
         <loc>https://gluesql.org/docs/dev/storages/developing-custom-storages/intro/</loc>
       </url>
       <url>

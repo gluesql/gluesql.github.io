@@ -347,17 +347,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sled-storage" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Sled Storage
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#redb-storage" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -6610,33 +6599,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="./storages/supported-storages/sled-storage/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Sled Storage
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -7795,17 +7757,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sled-storage" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Sled Storage
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#redb-storage" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -8022,8 +7973,6 @@
 <p>Memory Storage is a foundational storage option designed for in-memory, non-persistent data. It is a simple yet robust storage option that can be used in production environments.</p>
 <h3 id="shared-memory-storage">Shared Memory Storage<a class="headerlink" href="#shared-memory-storage" title="Permanent link">&para;</a></h3>
 <p>Shared Memory Storage is a storage option designed to provide more comfortable usage of Memory Storage in concurrent environments. It wraps the Memory Storage with a read-write lock and an atomic reference count, allowing you to clone the storage instance and use it effortlessly across multiple threads. All storage instances will refer to the same data, making it a convenient option for concurrent environments.</p>
-<h3 id="sled-storage">Sled Storage<a class="headerlink" href="#sled-storage" title="Permanent link">&para;</a></h3>
-<p><strong>Deprecated:</strong> Sled Storage is deprecated as of v0.20.0 and will be removed in v0.21.0. Existing deployments can continue using it during the deprecation period, but new persistent-storage deployments should use Redb Storage.</p>
 <h3 id="redb-storage">Redb Storage<a class="headerlink" href="#redb-storage" title="Permanent link">&para;</a></h3>
 <p>Redb Storage leverages the <a href="https://docs.rs/redb">redb</a> embedded database for persistent storage with transactional support. It keeps all tables in a single database file, offering another simple way to keep your data on disk while enjoying GlueSQL's query capabilities.</p>
 <h3 id="json-storage">JSON Storage<a class="headerlink" href="#json-storage" title="Permanent link">&para;</a></h3>
