@@ -457,6 +457,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#-dump" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        --dump
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -7704,6 +7715,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#-dump" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        --dump
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -7940,18 +7962,24 @@
 <p>This option allows you to specify the storage engine you want to use for your database. By default, GlueSQL uses the <a href="../../storages/supported-storages/memory-storage"><code>memory</code></a> storage engine. For persistent storage, use <a href="../../storages/supported-storages/redb-storage"><code>redb</code></a>. The other path-backed storages are <code>json</code>, <code>csv</code>, <code>parquet</code>, and <code>file</code>. The <a href="../../storages/supported-storages/sled-storage"><code>sled</code></a> option is deprecated as of v0.20.0 and will be removed in v0.21.0. Storage engines other than <code>memory</code> must be used with <code>--path</code>. For example, you can use the following command to specify the <code>json</code> storage engine:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>gluesql --path ~/mydatabase --storage=json
 </span></code></pre></div>
+<h3 id="-dump">--dump<a class="headerlink" href="#-dump" title="Permanent link">&para;</a></h3>
+<p>Export the selected storage's table definitions and rows to a SQL file, then exit:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>gluesql<span class="w"> </span>--storage<span class="o">=</span>redb<span class="w"> </span>--path<span class="w"> </span>~/data.redb<span class="w"> </span>--dump<span class="w"> </span>./dump.sql
+</span></code></pre></div>
+<p><code>--dump</code> requires <code>--storage</code>. For path-backed storages, also specify <code>--path</code>.
+<code>--dump</code> cannot be combined with <code>--execute</code> or <code>--upgrade</code>.</p>
 <h2 id="dot-command">Dot command<a class="headerlink" href="#dot-command" title="Permanent link">&para;</a></h2>
 <h3 id="show">.show<a class="headerlink" href="#show" title="Permanent link">&para;</a></h3>
 <p>This command shows current <a href="#print-options">Print options</a>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>gluesql&gt; .show all
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>tabular ON
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>colsep "|"
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>colwrap ""
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>heading ON
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>gluesql&gt; .show all
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>tabular ON
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>colsep "|"
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>colwrap ""
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>heading ON
 </span></code></pre></div>
 <p>or you can specify a option</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>gluesql&gt; .show colsep
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>colsep "|"
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>gluesql&gt; .show colsep
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>colsep "|"
 </span></code></pre></div>
 <h3 id="set">.set<a class="headerlink" href="#set" title="Permanent link">&para;</a></h3>
 <p>This command can set each Print options</p>
@@ -7982,97 +8010,97 @@
 </tr>
 </tbody>
 </table>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>| column1 | column2 |
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>|---------|---------|
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>| 1       | Glue    |
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>| 2       | SQL     |
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>gluesql&gt; .set tabular off
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>column1|column2
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>1|Glue
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>2|SQL
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>gluesql&gt; .set colsep ,
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
-</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>column1,column2
-</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>1,Glue
-</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>2,SQL
-</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>gluesql&gt; .set colwrap '
-</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
-</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>'column1','column2'
-</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>'1','Glue'
-</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>'2','SQL'
-</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>gluesql&gt; .set heading off
-</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
-</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>'1','Glue'
-</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>'2','SQL'
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>| column1 | column2 |
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>|---------|---------|
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>| 1       | Glue    |
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>| 2       | SQL     |
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>gluesql&gt; .set tabular off
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>column1|column2
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>1|Glue
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>2|SQL
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>gluesql&gt; .set colsep ,
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>column1,column2
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>1,Glue
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>2,SQL
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>gluesql&gt; .set colwrap '
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>'column1','column2'
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>'1','Glue'
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>'2','SQL'
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>gluesql&gt; .set heading off
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>gluesql&gt; VALUES (1, 'Glue'), (2, 'SQL');
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>'1','Glue'
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>'2','SQL'
 </span></code></pre></div>
 <h3 id="edit">.edit<a class="headerlink" href="#edit" title="Permanent link">&para;</a></h3>
 <p>This command open editor with last executed SQL or PATH</p>
 <h4 id="with-last-executed-sql">With last executed SQL<a class="headerlink" href="#with-last-executed-sql" title="Permanent link">&para;</a></h4>
 <p>if you execute <code>.edit</code>, it opens specified (set on <code>$EDITOR</code> env) or OS default editor.</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="err">$</span><span class="w"> </span><span class="n">export</span><span class="w"> </span><span class="err">$</span><span class="n">EDITOR</span><span class="o">=</span><span class="n">vi</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="err">$</span><span class="w"> </span><span class="n">gluesql</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="o">|</span><span class="c1">---------|---------|</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">edit</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="err">$</span><span class="w"> </span><span class="n">export</span><span class="w"> </span><span class="err">$</span><span class="n">EDITOR</span><span class="o">=</span><span class="n">vi</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="err">$</span><span class="w"> </span><span class="n">gluesql</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="o">|</span><span class="c1">---------|---------|</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">edit</span>
 </span></code></pre></div>
 <p>Last executed SQL is opened with <code>vi</code></p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1">--! /tmp/Glue_xxxxx.sql</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1">--! /tmp/Glue_xxxxx.sql</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
 </span></code></pre></div>
 <h4 id="with-path">With PATH<a class="headerlink" href="#with-path" title="Permanent link">&para;</a></h4>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">edit</span><span class="w"> </span><span class="k">insert</span><span class="p">.</span><span class="k">sql</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">edit</span><span class="w"> </span><span class="k">insert</span><span class="p">.</span><span class="k">sql</span>
 </span></code></pre></div>
 <p>It opens editor and shows the contents of <code>create_insert.sql</code></p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">--! create_insert.sql</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">Items</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">);</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Items</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">--! create_insert.sql</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">Items</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">);</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Items</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
 </span></code></pre></div>
 <h3 id="execute">.execute<a class="headerlink" href="#execute" title="Permanent link">&para;</a></h3>
 <p>This command executes SQL from PATH</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="k">execute</span><span class="w"> </span><span class="n">create_insert</span><span class="p">.</span><span class="k">sql</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">Table</span><span class="w"> </span><span class="n">created</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="mi">2</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">inserted</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="k">execute</span><span class="w"> </span><span class="n">create_insert</span><span class="p">.</span><span class="k">sql</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">Table</span><span class="w"> </span><span class="n">created</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="mi">2</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">inserted</span>
 </span></code></pre></div>
 <h3 id="run">.run<a class="headerlink" href="#run" title="Permanent link">&para;</a></h3>
 <p>This command executes last executed command again.</p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="o">|</span><span class="c1">---------|---------|</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">run</span>
-</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
-</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="o">|</span><span class="c1">---------|---------|</span>
-</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
-</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
-</span></code></pre></div>
-<p>Also possible to combinate with <code>.edit</code></p>
 <div class="language-sql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
 </span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="o">|</span><span class="c1">---------|---------|</span>
 </span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
 </span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
 </span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">edit</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">run</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="o">|</span><span class="c1">---------|---------|</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
+</span></code></pre></div>
+<p>Also possible to combinate with <code>.edit</code></p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">);</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="o">|</span><span class="c1">---------|---------|</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">edit</span>
 </span></code></pre></div>
 <p>edit to add <code>(3, 'Rust')</code></p>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1">--! /tmp/Glue_xxxxxx.sql</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'Rust'</span><span class="p">)</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">--! /tmp/Glue_xxxxxx.sql</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Glue'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'Rust'</span><span class="p">)</span>
 </span></code></pre></div>
-<div class="language-sql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">run</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="o">|</span><span class="c1">---------|---------|</span>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
-</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="o">|</span><span class="w"> </span><span class="mi">3</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Rust</span><span class="w">    </span><span class="o">|</span>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">gluesql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">.</span><span class="n">run</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="o">|</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="o">|</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="o">|</span><span class="c1">---------|---------|</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Glue</span><span class="w">    </span><span class="o">|</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="k">SQL</span><span class="w">     </span><span class="o">|</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="o">|</span><span class="w"> </span><span class="mi">3</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="n">Rust</span><span class="w">    </span><span class="o">|</span>
 </span></code></pre></div>
 <h3 id="more-commands">More commands<a class="headerlink" href="#more-commands" title="Permanent link">&para;</a></h3>
 <p>If you execute <code>.help</code>, you can see various helper command starting with dot(<code>.</code>)</p>
@@ -8135,16 +8163,20 @@
 </tbody>
 </table>
 <h2 id="migration-using-cli">Migration using CLI<a class="headerlink" href="#migration-using-cli" title="Permanent link">&para;</a></h2>
-<p>GlueSQL CLI supports generating SQL scripts for dumping whole schemas and data.</p>
-<p>During the v0.20.0 deprecation period, <code>--dump</code> continues to open the source database with Sled Storage so existing deployments can export their schema and data before Sled Storage is removed in v0.21.0. To create a file named <code>dump.sql</code>, use the following command:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>$ gluesql --path ~/glue_data --dump ./dump.sql
+<p>Use <code>--dump</code> to export table definitions, index definitions, and rows as SQL:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>gluesql<span class="w"> </span>--storage<span class="o">=</span>redb<span class="w"> </span>--path<span class="w"> </span>~/data.redb<span class="w"> </span>--dump<span class="w"> </span>./dump.sql
 </span></code></pre></div>
-<p>This prints a deprecation warning and creates a SQL script in the current directory that you can use to recreate your database. Complete this export before upgrading to v0.21.0.</p>
-<p>If you want to import the database from the <code>dump.sql</code> file, you can use the following command:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>$ gluesql --execute ./dump.sql --path ~/new_data --storage=redb
+<p>To restore the dump into a new Redb database, execute the SQL file:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>gluesql<span class="w"> </span>--storage<span class="o">=</span>redb<span class="w"> </span>--path<span class="w"> </span>~/restored.redb<span class="w"> </span>--execute<span class="w"> </span>./dump.sql
 </span></code></pre></div>
-<p>This will create a new database in the specified path using Redb Storage.</p>
-<p>That's it! You now know how to use GlueSQL to migrate your database schema and data using the CLI.</p>
+<p>When moving between storage types, choose a destination that supports the
+features used by the exported SQL, such as indexes.</p>
+<p>To export an existing Sled database before Sled Storage is removed, select it
+explicitly:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>gluesql<span class="w"> </span>--storage<span class="o">=</span>sled<span class="w"> </span>--path<span class="w"> </span>~/glue_data<span class="w"> </span>--dump<span class="w"> </span>./dump.sql
+</span></code></pre></div>
+<p>Sled Storage remains deprecated. SQL dump is available for the other storage
+types as well.</p>
 
 
 
