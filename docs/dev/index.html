@@ -358,6 +358,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#slatedb-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SlateDB Storage
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#json-storage" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -417,6 +428,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         Mongo Storage
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#redis-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Redis Storage
       </span>
     </span>
   </a>
@@ -7795,6 +7817,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#slatedb-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SlateDB Storage
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#json-storage" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -7854,6 +7887,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         Mongo Storage
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#redis-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Redis Storage
       </span>
     </span>
   </a>
@@ -7995,13 +8039,15 @@
 </span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="cm">*/</span>
 </span></code></pre></div>
 <h2 id="supported-reference-storages">Supported Reference Storages<a class="headerlink" href="#supported-reference-storages" title="Permanent link">&para;</a></h2>
-<p>GlueSQL provides a variety of reference storages out of the box, including simple in-memory storage, key-value databases, and log file-based storage like JSON &amp; JSONL. These reference storages are readily available for use and can be easily adapted to a variety of storage systems. Additionally, GlueSQL is constantly expanding its list of supported storages, making it a versatile tool for developers.</p>
+<p>GlueSQL provides reference storages for in-memory data, embedded databases, local files, object stores, and external databases. See the <a href="storages/intro/">storage documentation</a> for setup, examples, and limitations.</p>
 <h3 id="memory-storage">Memory Storage<a class="headerlink" href="#memory-storage" title="Permanent link">&para;</a></h3>
 <p>Memory Storage is a foundational storage option designed for in-memory, non-persistent data. It is a simple yet robust storage option that can be used in production environments.</p>
 <h3 id="shared-memory-storage">Shared Memory Storage<a class="headerlink" href="#shared-memory-storage" title="Permanent link">&para;</a></h3>
 <p>Shared Memory Storage is a storage option designed to provide more comfortable usage of Memory Storage in concurrent environments. It wraps the Memory Storage with a read-write lock and an atomic reference count, allowing you to clone the storage instance and use it effortlessly across multiple threads. All storage instances will refer to the same data, making it a convenient option for concurrent environments.</p>
 <h3 id="redb-storage">Redb Storage<a class="headerlink" href="#redb-storage" title="Permanent link">&para;</a></h3>
 <p>Redb Storage leverages the <a href="https://docs.rs/redb">redb</a> embedded database for persistent storage with transactional support. It keeps all tables in a single database file, offering another simple way to keep your data on disk while enjoying GlueSQL's query capabilities.</p>
+<h3 id="slatedb-storage">SlateDB Storage<a class="headerlink" href="#slatedb-storage" title="Permanent link">&para;</a></h3>
+<p><a href="storages/supported-storages/slatedb-storage/">SlateDB Storage</a> stores GlueSQL schemas and rows in an embedded key-value engine backed by object storage, including Amazon S3 and Cloudflare R2. It supports reads, writes, and transactions, while SlateDB manages caching and compaction.</p>
 <h3 id="json-storage">JSON Storage<a class="headerlink" href="#json-storage" title="Permanent link">&para;</a></h3>
 <p>With GlueSQL, you can use JSONL or JSON files as a database that supports SQL and Query Builder, making it a powerful option for developers who need to work with JSON data. JSON Storage is a storage system that uses two types of files: a schema file (optional) and a data file. The schema file is written in Standard SQL and stores the structure of the table, while the data file contains the actual data and supports two file formats: <code>*.json</code> and <code>*.jsonl</code>. JSON Storage supports all DML features, but is particularly specialized for SELECT and INSERT.</p>
 <h3 id="csv-storage">CSV Storage<a class="headerlink" href="#csv-storage" title="Permanent link">&para;</a></h3>
@@ -8016,13 +8062,13 @@ The data is stored by creating a directory with the same name as the table and s
 <p>Git Storage is a custom storage option in GlueSQL that integrates seamlessly with a Git repository, allowing you to version-control your data directly within Git. This storage option automatically handles add and commit operations, ensuring your data changes are tracked. For remote operations like pull and push, GitStorage provides methods that developers can manually invoke, giving you full control over synchronization with remote repositories.</p>
 <h3 id="mongo-storage">Mongo Storage<a class="headerlink" href="#mongo-storage" title="Permanent link">&para;</a></h3>
 <p>With Mongo storage, you can use mongodb as a storage for SQL queries. You can use all the features supported by GlueSQL, such as aggregations and joins, which were previously difficult to handle on an unstructured database. In particular, you can use GlueSQL's powerful schema system on mongodb, which is as strong as an RDBMS.</p>
+<h3 id="redis-storage">Redis Storage<a class="headerlink" href="#redis-storage" title="Permanent link">&para;</a></h3>
+<p><a href="storages/supported-storages/redis-storage/">Redis Storage</a> stores GlueSQL schemas and rows in a running Redis server. A namespace keeps each database's keys separate within the server.</p>
 <h3 id="composite-storage">Composite Storage<a class="headerlink" href="#composite-storage" title="Permanent link">&para;</a></h3>
 <p>Composite Storage is a powerful feature of GlueSQL that allows you to bundle together multiple existing storages, enabling you to perform JOIN operations across two distinct storages. This makes it useful for scenarios where data has to be queried or moved across different storage systems through the same SQL interface.</p>
 <h2 id="adapting-gluesql-to-your-environment-creating-custom-storage">Adapting GlueSQL to Your Environment: Creating Custom Storage<a class="headerlink" href="#adapting-gluesql-to-your-environment-creating-custom-storage" title="Permanent link">&para;</a></h2>
-<p>GlueSQL is designed to be adaptable to a wide variety of environments, including file systems, key-value databases, complex NoSQL databases, and remote APIs. To create a custom storage for GlueSQL, you only need to implement the Store and StoreMut traits provided by GlueSQL. These traits allow you to support SELECT queries and modify data, such as INSERT, UPDATE, and DELETE.</p>
-<p>If you want to support additional features, such as schema changes, transactions, or custom functions, you can implement the corresponding traits. However, these traits are optional, and you can choose to implement only the ones that are relevant to your storage system.</p>
-<p>To make it even easier to develop custom storages, GlueSQL provides a Test Suite that allows you to test your storage implementation against a set of standard SQL queries. This ensures that your storage system is compatible with GlueSQL and can handle common SQL operations.</p>
-<p>Overall, creating a custom storage for GlueSQL is a straightforward process that allows you to adapt SQL and the Query Builder to your environment with ease.</p>
+<p>Connect GlueSQL to your files, databases, or APIs through the storage traits. <code>Store</code> handles reads and <code>StoreMut</code> handles writes. Additional traits support features such as transactions, indexes, and custom functions.</p>
+<p>See the <a href="storages/developing-custom-storages/intro/">custom storage guide</a> for implementation details and the <a href="storages/developing-custom-storages/using-test-suite/">Test Suite</a> for shared SQL tests.</p>
 <h2 id="gluesql-custom-storage-let-us-handle-it-for-you">GlueSQL Custom Storage: Let Us Handle It for You<a class="headerlink" href="#gluesql-custom-storage-let-us-handle-it-for-you" title="Permanent link">&para;</a></h2>
 <p>Although anyone can develop a custom storage for GlueSQL with ease, our GlueSQL team can also implement and maintain it for you. This is especially recommended for NoSQL databases with their own query planner and execution layer, as adapting GlueSQL to them requires a deep understanding of GlueSQL's planner and storage layer details. We welcome not only database companies but also any services that want to support SQL and GlueSQL query interfaces. As GlueSQL is rapidly adding and improving features, we can help you develop and manage your custom storage effectively if you entrust it to us. If you're interested, please contact us at \<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#97;&#101;&#104;&#111;&#111;&#110;&#64;&#103;&#108;&#117;&#101;&#115;&#113;&#108;&#46;&#99;&#111;&#109;">&#116;&#97;&#101;&#104;&#111;&#111;&#110;&#64;&#103;&#108;&#117;&#101;&#115;&#113;&#108;&#46;&#99;&#111;&#109;</a>.</p>
 <h2 id="contribution">Contribution<a class="headerlink" href="#contribution" title="Permanent link">&para;</a></h2>

@@ -7564,28 +7564,29 @@
 
 <h1 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h1>
 <p>With GlueSQL, you can adapt SQL and the Query Builder to a wide variety of environments. This includes file systems, key-value databases, complex NoSQL databases, and even remote APIs. As long as a system supports reading, it can support SELECT queries. If it supports both reading and writing, it can support most SQL operations, including UPDATE and DELETE.</p>
-<p>To implement GlueSQL, you only need to know two things:
-1. Understanding Store traits
-2. Using the Test Suite</p>
+<p>Custom storage development has two main parts:</p>
+<ol>
+<li>Understanding Store traits</li>
+<li>Using the Test Suite</li>
+</ol>
 <p>These topics are covered in more detail in their respective pages, but here we will provide a brief overview.</p>
 <h2 id="understanding-store-traits">Understanding Store Traits<a class="headerlink" href="#understanding-store-traits" title="Permanent link">&para;</a></h2>
-<p>GlueSQL is available in both Rust and JavaScript environments, with plans to expand its support to other languages. Since the GlueSQL project itself is written in Rust, using Rust is essential for developing custom storages. To create a custom storage, you need to implement the Store traits provided by GlueSQL. There are currently 9 traits:</p>
+<p>A Rust storage implements these traits:</p>
 <ul>
-<li><code>Store</code> - A trait for read operations to support SELECT queries.</li>
-<li><code>StoreMut</code> - A trait for modifying data, such as INSERT, UPDATE, and DELETE.</li>
-<li><code>AlterTable</code> - A trait for supporting schema changes.</li>
-<li><code>Transaction</code> - A trait for supporting transactions.</li>
-<li><code>CustomFunction</code> - A trait for supporting user-level custom functions.</li>
-<li><code>CustomFunctionMut</code> - A trait for creating or deleting user-level custom functions.</li>
-<li><code>Index</code> - A trait for supporting non-clustered indexes. This trait allows you to process pre-registered indexes.</li>
-<li><code>IndexMut</code> - A trait for creating or deleting non-clustered indexes.</li>
-<li><code>Metadata</code> - A trait for querying metadata.</li>
+<li><code>Store</code> - Reads schemas and rows.</li>
+<li><code>StoreMut</code> - Writes schemas and rows.</li>
+<li><code>AlterTable</code> - Changes table schemas.</li>
+<li><code>Transaction</code> - Begins, commits, and rolls back transactions.</li>
+<li><code>CustomFunction</code> - Reads user-defined functions.</li>
+<li><code>CustomFunctionMut</code> - Creates and deletes user-defined functions.</li>
+<li><code>Index</code> - Reads rows through secondary indexes.</li>
+<li><code>IndexMut</code> - Creates and drops secondary indexes.</li>
+<li><code>Metadata</code> - Returns table metadata.</li>
+<li><code>Planner</code> - Plans queries.</li>
 </ul>
-<p>To develop a custom storage, you can implement these 9 traits. Although this may seem like a lot of work, don't worry. All traits except for <code>Store</code> and <code>StoreMut</code> are optional. In other words, you don't have to implement them. If you don't want to support the <code>AlterTable</code> trait, simply don't implement it. It's that simple.</p>
-<p>Furthermore, if you only want to support SELECT queries, you don't need to implement <code>StoreMut</code>. By implementing only the <code>Store</code> trait, you can create a custom storage that supports SQL SELECT queries.</p>
+<p><code>Store</code> requires four read methods. For the other traits, start with empty implementations and override the methods your storage needs. For example, <code>impl Planner for MyStorage {}</code> uses GlueSQL's default planner. Each trait's page describes its defaults.</p>
 <h2 id="using-the-test-suite">Using the Test Suite<a class="headerlink" href="#using-the-test-suite" title="Permanent link">&para;</a></h2>
-<p>The minimum requirement for developing a custom storage is implementing the Store traits. However, you may want to verify that your implementation is correct. That's where the Test Suite comes in.</p>
-<p>GlueSQL provides a test case library to make it easy to validate custom storage development. Developers can implement the desired Store traits and use the Test Suite to verify that their implementation is correct. The line coverage of GlueSQL's core project is almost 99%, which means that passing the Test Suite alone can complete most of the feature verification. All you need to do is ensure your custom storage passes the Test Suite and write additional tests for any specialized features specific to your storage.</p>
+<p>The <a href="../using-test-suite/">Test Suite</a> provides shared tests for the SQL features your storage supports. You can add tests for behavior specific to your implementation, such as persistence across restarts or transaction isolation.</p>
 
 
 

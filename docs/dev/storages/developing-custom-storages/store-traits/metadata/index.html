@@ -7493,9 +7493,8 @@
                   
 
 <h1 id="metadata">Metadata<a class="headerlink" href="#metadata" title="Permanent link">&para;</a></h1>
-<p>The <code>Metadata</code> trait is an optional implementation for providing additional metadata support in GlueSQL. GlueSQL does not enforce any specific metadata implementation, allowing custom storage developers to decide which type of metadata, such as create time, modify time, etc., they want to provide.</p>
-<p>Implementing the <code>Metadata</code> trait can be beneficial in cases where users need to access and manage metadata related to tables, columns, or other database objects. This can help users understand the structure and properties of their data, ensuring proper management and organization.</p>
-<p>Currently, the <code>Metadata</code> trait supports the <code>scan_table_meta</code> method for retrieving table metadata. The metadata provided by the storage can be queried using the data dictionary table <code>GLUE_TABLES</code>.</p>
+<p>The <code>Metadata</code> trait lets a storage expose additional information about its tables. GlueSQL does not require a fixed set of properties; each storage decides what to provide, such as creation or modification times.</p>
+<p>Implement <code>scan_table_meta</code> to return the metadata for each table. Users can query these properties through the <code>GLUE_OBJECTS</code> data dictionary table.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">type</span><span class="w"> </span><span class="nc">ObjectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">pub</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="nc">MetaIter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span><span class="w"> </span><span class="nb">Iterator</span><span class="o">&lt;</span><span class="n">Item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Result</span><span class="o">&lt;</span><span class="p">(</span><span class="n">ObjectName</span><span class="p">,</span><span class="w"> </span><span class="n">BTreeMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&gt;&gt;&gt;</span><span class="p">;</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -7505,7 +7504,6 @@
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>By implementing the <code>Metadata</code> trait, custom storage developers can provide users with a way to access and manage metadata related to various database objects. This can be particularly useful in situations where users need to understand the properties of their data or maintain a well-organized database structure.</p>
 
 
 

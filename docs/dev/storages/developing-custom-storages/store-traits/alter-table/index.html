@@ -7493,8 +7493,8 @@
                   
 
 <h1 id="altertable">AlterTable<a class="headerlink" href="#altertable" title="Permanent link">&para;</a></h1>
-<p>The <code>AlterTable</code> trait corresponds to the SQL ALTER TABLE statement and is used for modifying existing schemas. It is not necessary to implement the <code>AlterTable</code> trait. If you are dealing with data that is difficult to modify schema-wise or schemaless data, there is no need to implement the <code>AlterTable</code> trait. It is an optional trait that custom storage developers can choose to implement.</p>
-<p>Similar to the <code>Store</code> &amp; <code>StoreMut</code> combination, if you implement the <code>AlterTable</code> trait, you can use additional tests in the Test Suite to verify your implementation. There are currently four types of methods supported by <code>AlterTable</code>:</p>
+<p><code>AlterTable</code> handles SQL ALTER TABLE statements. Its default methods use <code>Store</code> and <code>StoreMut</code>. Override them for storage-specific schema changes, such as updating secondary indexes.</p>
+<p>It provides four methods:</p>
 <ol>
 <li>
 <p><code>rename_schema</code>: Corresponds to the SQL statement <code>ALTER TABLE {table-name} RENAME TO {other-name};</code>. This method renames a schema.</p>

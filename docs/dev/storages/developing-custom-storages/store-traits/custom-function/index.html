@@ -7493,9 +7493,9 @@
                   
 
 <h1 id="customfunction">CustomFunction<a class="headerlink" href="#customfunction" title="Permanent link">&para;</a></h1>
-<p>The <code>CustomFunction</code> trait is an optional trait for supporting user-level custom functions. Through the <code>CustomFunction</code> trait, you can retrieve custom functions stored in the storage system. You can choose to implement the <code>CustomFunction</code> trait alone or together with the <code>CustomFunctionMut</code> trait.</p>
-<p>In some cases, you might want to provide storage-specific functions pre-built and separately available for each storage system. In such cases, you can implement the <code>CustomFunction</code> trait and create additional functions stored in advance when using it. To achieve this, the <code>CustomFunction</code> and <code>CustomFunctionMut</code> traits are provided separately for implementation.</p>
-<p>There are two methods available:</p>
+<p><code>CustomFunction</code> reads user-defined functions from storage. Override its methods to expose functions; their defaults return unsupported errors.</p>
+<p>For example, a storage can provide a fixed set of functions through <code>CustomFunction</code>. Use <code>CustomFunctionMut</code> to support creating and deleting functions.</p>
+<p>It provides two methods:</p>
 <ol>
 <li>
 <p><code>fetch_function</code>: This method retrieves a custom function from the storage system using the provided function name.</p>

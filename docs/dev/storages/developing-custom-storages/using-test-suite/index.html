@@ -6728,6 +6728,23 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Using the Test Suite
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="././" class="md-nav__link md-nav__link--active">
         
   
@@ -6743,6 +6760,59 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-shared-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Running the Shared Tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-select-only-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Testing SELECT-only Storage
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-specific-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Storage-specific Tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -7368,6 +7438,11 @@
                       
                     
                     
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -7379,6 +7454,47 @@
   
     
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-shared-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Running the Shared Tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-select-only-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Testing SELECT-only Storage
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-specific-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Storage-specific Tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -7469,8 +7585,9 @@
                   
 
 <h1 id="using-the-test-suite">Using the Test Suite<a class="headerlink" href="#using-the-test-suite" title="Permanent link">&para;</a></h1>
-<p>The GlueSQL Test Suite is a valuable tool for validating your custom storage implementation. By using the provided test sets, you can ensure that your storage implementation adheres to the required specifications and works as expected with GlueSQL.</p>
-<p>To use the Test Suite, you will need to implement the <code>Tester</code> trait for your custom storage. A great reference for this process is the <code>MemoryStorage</code> implementation in the GlueSQL source code. Here's an example of how the <code>MemoryStorage</code> implementation looks like:</p>
+<p>The Test Suite checks shared SQL behavior.</p>
+<h2 id="running-the-shared-tests">Running the Shared Tests<a class="headerlink" href="#running-the-shared-tests" title="Permanent link">&para;</a></h2>
+<p>Implement <code>Tester</code> to run the shared tests against your storage. For example, MemoryStorage uses:</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">use</span><span class="w"> </span><span class="p">{</span><span class="n">gluesql_core</span><span class="p">::</span><span class="n">prelude</span><span class="p">::</span><span class="n">Glue</span><span class="p">,</span><span class="w"> </span><span class="n">gluesql_memory_storage</span><span class="p">::</span><span class="n">MemoryStorage</span><span class="p">,</span><span class="w"> </span><span class="n">test_suite</span><span class="p">::</span><span class="o">*</span><span class="p">};</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">struct</span><span class="w"> </span><span class="nc">MemoryTester</span><span class="w"> </span><span class="p">{</span>
@@ -7490,7 +7607,7 @@
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>Once you have implemented the <code>Tester</code> trait, you can easily add the relevant test sets for the traits you have implemented in your custom storage. Here's how the <code>MemoryStorage</code> implementation adds the test sets:</p>
+<p>Once you have implemented the <code>Tester</code> trait, add the test sets for the features your storage supports. Here's how the <code>MemoryStorage</code> implementation adds the test sets:</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">generate_store_tests</span><span class="o">!</span><span class="p">(</span><span class="n">test</span><span class="p">,</span><span class="w"> </span><span class="n">MemoryTester</span><span class="p">);</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">generate_alter_table_tests</span><span class="o">!</span><span class="p">(</span><span class="n">test</span><span class="p">,</span><span class="w"> </span><span class="n">MemoryTester</span><span class="p">);</span>
@@ -7499,24 +7616,28 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">generate_custom_function_tests</span><span class="o">!</span><span class="p">(</span><span class="n">test</span><span class="p">,</span><span class="w"> </span><span class="n">MemoryTester</span><span class="p">);</span>
 </span></code></pre></div>
-<p>The MemoryStorage example demonstrates the use of the four test sets from the Test Suite, indicating that it has implemented the <code>Store</code>, <code>StoreMut</code>, <code>AlterTable</code>, <code>CustomFunction</code>, <code>CustomFunctionMut</code>, and <code>Metadata</code> traits. However, you don't need to implement all Store traits for your custom storage. Instead, you can choose to implement only the traits that are relevant to your use case, and use the corresponding test sets from the Test Suite for validation.</p>
+<p>This registers tests for reads, writes, schema changes, custom functions, and metadata. Choose the test sets for the features your storage supports.</p>
 <p>The Test Suite provides test sets for the following traits:</p>
 <ul>
-<li><code>generate_store_tests!</code> - Tests for <code>Store</code> and <code>StoreMut</code> implementations. (Note that <code>Store</code> and <code>StoreMut</code> are required for all other test sets.)</li>
+<li><code>generate_store_tests!</code> - Tests for <code>Store</code> and <code>StoreMut</code> implementations.</li>
 <li><code>generate_alter_table_tests!</code> - Tests for the <code>AlterTable</code> trait implementation.</li>
 <li><code>generate_custom_function_tests!</code> - Tests for the <code>CustomFunction</code> and <code>CustomFunctionMut</code> trait implementations.</li>
 <li><code>generate_index_tests!</code> - Tests for the <code>Index</code> and <code>IndexMut</code> trait implementations.</li>
 <li><code>generate_transaction_tests!</code> - Tests for the <code>Transaction</code> trait implementation.</li>
 <li><code>generate_metadata_table_tests!</code> - Tests for the <code>Metadata</code> trait implementation.</li>
 </ul>
-<p>Additionally, the Test Suite provides combined test sets for cases where you have implemented multiple optional traits:</p>
+<p>Additionally, the Test Suite provides combined test sets for storage features used together:</p>
 <ul>
 <li><code>generate_alter_table_index_tests!</code> - Tests for the <code>AlterTable</code>, <code>Index</code>, and <code>IndexMut</code> trait implementations.</li>
 <li><code>generate_transaction_alter_table_tests!</code> - Tests for the <code>Transaction</code> and <code>AlterTable</code> trait implementations.</li>
 <li><code>generate_transaction_index_tests!</code> - Tests for the <code>Transaction</code>, <code>Index</code>, and <code>IndexMut</code> trait implementations.</li>
 <li><code>generate_metadata_index_tests!</code> - Tests for the <code>Metadata</code>, <code>Index</code>, and <code>IndexMut</code> trait implementations.</li>
 </ul>
-<p>In summary, the GlueSQL Test Suite is an essential tool for validating your custom storage implementation. By using the provided test sets and the <code>MemoryStorage</code> implementation as an example, you can ensure your storage works correctly with GlueSQL and adheres to the necessary specifications.</p>
+<h2 id="testing-select-only-storage">Testing SELECT-only Storage<a class="headerlink" href="#testing-select-only-storage" title="Permanent link">&para;</a></h2>
+<p>The shared suite does not provide a SELECT-only test set. <code>generate_store_tests!</code> includes INSERT, UPDATE, and DELETE tests. Its SELECT cases can also depend on CREATE TABLE and INSERT to prepare data, so a read-only adapter cannot run the complete set.</p>
+<p>Use the storage crate's integration tests to check SELECT-only adapters against data prepared outside SQL. For a file adapter, this can be a fixture file included with the tests. Open it through the adapter, run SELECT using <code>Glue</code>, and compare the returned rows with the expected data.</p>
+<h2 id="storage-specific-tests">Storage-specific Tests<a class="headerlink" href="#storage-specific-tests" title="Permanent link">&para;</a></h2>
+<p>Keep storage-specific checks, such as reopening database files, transaction isolation, and backend failures, in your storage crate's integration tests. See the <a href="../../../development/review-policy/testing/#storage-integration-tests">testing policy</a> for the boundary between shared SQL cases and storage-specific tests.</p>
 
 
 

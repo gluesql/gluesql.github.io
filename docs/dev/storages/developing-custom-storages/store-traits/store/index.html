@@ -7493,7 +7493,7 @@
                   
 
 <h1 id="store">Store<a class="headerlink" href="#store" title="Permanent link">&para;</a></h1>
-<p>The <code>Store</code> trait is the most essential trait to implement for custom storage. Simply by implementing the Store trait, you can support SELECT queries in SQL. You may want to analyze and retrieve data from log files or external APIs using SQL. In this case, having only SELECT queries available is sufficient, and there might not be any need for data modification. In such scenarios, implementing GlueSQL's <code>Store</code> trait alone would be adequate.</p>
+<p><code>Store</code> reads schemas and rows for SELECT queries. Implement its four methods to query data from a database, file, or API.</p>
 <p>Here are the four methods required to implement the <code>Store</code> trait:</p>
 <ol>
 <li>

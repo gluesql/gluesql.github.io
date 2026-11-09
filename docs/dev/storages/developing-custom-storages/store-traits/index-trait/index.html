@@ -7493,18 +7493,9 @@
                   
 
 <h1 id="index">Index<a class="headerlink" href="#index" title="Permanent link">&para;</a></h1>
-<p>The <code>Index</code> trait is designed to support non-clustered indexes. If you only need to support pre-built non-clustered indexes, implementing the <code>Index</code> trait without the <code>IndexMut</code> trait is sufficient. Note that clustered indexes (PRIMARY KEY) are automatically supported by the <code>Store</code> &amp; <code>StoreMut</code> implementations. The <code>Index</code> trait is specifically for non-clustered index support.</p>
-<p>Currently, GlueSQL's query planner only supports a logical planner, so the performance of finding non-clustered indexes is not optimal yet, but it is being improved. If you want to use non-clustered indexes more precisely, using the Query Builder to directly specify the index you want to use can be a good approach.</p>
-<p>A brief explanation of non-clustered and clustered indexes:</p>
-<ul>
-<li>
-<p>Non-clustered index: A non-clustered index is an index that doesn't affect the physical ordering of the data rows in the table. Instead, it maintains a separate data structure that contains a reference to the actual data rows, allowing for faster search operations without rearranging the data itself.</p>
-</li>
-<li>
-<p>Clustered index: A clustered index determines the physical order of the data in the table. In other words, the data rows are stored on disk in the same order as the index. There can be only one clustered index per table, which is usually defined by the PRIMARY KEY constraint.</p>
-</li>
-</ul>
-<p>There is one method to implement for the <code>Index</code> trait:</p>
+<p><code>Index</code> reads rows using the secondary index selected in the query plan. Implement <code>scan_indexed_data</code> to support index lookups; the default returns an unsupported error.</p>
+<p>Primary-key lookups use <code>Store</code> and do not need secondary-index support.</p>
+<p>It provides one method:</p>
 <ol>
 <li><code>scan_indexed_data</code>: This method retrieves indexed data from the storage system using the provided table name, index name, sorting order, and comparison value.</li>
 </ol>

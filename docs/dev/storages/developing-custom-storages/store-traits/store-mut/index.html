@@ -7493,8 +7493,8 @@
                   
 
 <h1 id="storemut">StoreMut<a class="headerlink" href="#storemut" title="Permanent link">&para;</a></h1>
-<p>While the <code>Store</code> trait is for supporting SELECT queries and reading data, the <code>StoreMut</code> trait is for modifying data. Implementing the <code>StoreMut</code> trait requires the implementation of the <code>Store</code> trait as well. By implementing both the <code>Store</code> and <code>StoreMut</code> traits, you can support most of the commonly used SQL statements. Additionally, you can use the Test Suite to utilize the integration test set provided by GlueSQL. Custom storage developers can verify their own Store &amp; StoreMut implementations by checking if they pass all the tests provided in the Test Suite.</p>
-<p>Here are the five methods required to implement the <code>StoreMut</code> trait:</p>
+<p><code>StoreMut</code> writes schemas and rows for CREATE TABLE, INSERT, UPDATE, DELETE, and DROP TABLE. Override the methods your storage supports. The defaults return unsupported errors, which a read-only adapter can keep.</p>
+<p>It provides five methods:</p>
 <ol>
 <li>
 <p><code>insert_schema</code>: This method is responsible for inserting a new schema into the storage system.</p>
