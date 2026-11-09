@@ -7640,13 +7640,24 @@
                   
 
 <h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h1>
+<p>Tests are maintained code and executable documentation. <strong>Both insufficient
+and excessive testing are problems.</strong> Missing tests leave required behavior
+unchecked; unnecessary tests add maintenance work without verifying a distinct
+behavior, condition, or responsibility. Add cases that fill gaps and remove
+cases that add no verification value.</p>
+<p>A reader should be able to understand what a test verifies without the original
+discussion or change history. Review the maintenance cost of test setup,
+helpers, fault injection, and production code changes made to support them.</p>
+<p>One scenario can cover several branches. Different behaviors may need separate
+examples even when they use the same branch.</p>
 <h2 id="unit-tests">Unit tests<a class="headerlink" href="#unit-tests" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p><strong>Test every reachable branch and check transformation results.</strong></p>
-<p>Build cases from the implementation under test. Use inputs that reach each
-branch, and assert the returned value or state change. A test that fails
-before reaching the target code does not test that code's error handling.</p>
+<p>Start with the behavior and expected result, then inspect the implementation
+for missing cases. Use inputs that reach each branch, and assert the returned
+value or state change. A test that fails before reaching the target code
+does not test that code's error handling.</p>
 </li>
 <li>
 <p><strong>Test the caller's own behavior when it calls another function.</strong></p>
@@ -7697,17 +7708,15 @@ just to let tests access private code.</p>
 </li>
 </ul>
 <h2 id="sql-fixtures">SQL fixtures<a class="headerlink" href="#sql-fixtures" title="Permanent link">&para;</a></h2>
-<p>The SQL fixtures in <code>test-suite/fixtures</code> are executable documentation for
-people and tools. Group cases by SQL feature and behavior. Use representative
-examples that show successful usage and expected errors. Give each case a clear
-name, and keep its setup, SQL, and expected results easy to read.</p>
+<p>Group the SQL fixtures in <code>test-suite/fixtures</code> by feature and behavior. Use
+representative examples that show successful usage and expected errors. Give
+each case a clear name, and keep its setup, SQL, and expected results easy to
+read.</p>
 <p>The fixtures also serve a unit-testing role for the execution layer.
 For each behavior covered by a fixture, test every executor branch and error
 path that SQL can reach. Run the cases through the production SQL pipeline and
 assert their results. When a case tests storage behavior, also check the stored
 state. Readable examples and branch coverage are both required.</p>
-<p>One scenario can cover several branches. Different SQL behaviors may need
-separate examples even when they use the same branch.</p>
 <p>Constructing an AST or plan directly does not prove that SQL can reach the same
 behavior. For guards that require a manually constructed plan or inconsistent
 storage, use the setup and assertions in <a href="../errors/#error-prefixes">Error prefixes</a>.</p>
@@ -7746,9 +7755,10 @@ Do not run the planner being tested to build the expected plan.</p>
 <h2 id="inputs-and-helpers">Inputs and helpers<a class="headerlink" href="#inputs-and-helpers" title="Permanent link">&para;</a></h2>
 <p>Keep the inputs and expected results visible in each test case. Also show the
 setup that determines the behavior being tested.</p>
-<p>Use helpers for repeated parsing, calls, and assertions. Do not hide choices
-that the test checks inside a helper, such as variants, IDs, defaults, or
-traversal rules.</p>
+<p>Extract repeated parsing, calls, or assertions when a helper makes the tests
+easier to understand and change. Keeping a short sequence inline can make a
+case easier to follow. Do not hide choices that the test checks inside a helper,
+such as variants, IDs, defaults, or traversal rules.</p>
 
 
 
