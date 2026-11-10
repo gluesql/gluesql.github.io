@@ -6560,6 +6560,23 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Transaction
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="././" class="md-nav__link md-nav__link--active">
         
   
@@ -6575,6 +6592,37 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#automatic-and-explicit-transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Automatic and explicit transactions
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -7370,6 +7418,11 @@
                       
                     
                     
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -7381,6 +7434,25 @@
   
     
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#automatic-and-explicit-transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Automatic and explicit transactions
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -7504,6 +7576,21 @@
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">commit</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nb">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span><span class="p">;</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
 </span></code></pre></div>
+<h2 id="automatic-and-explicit-transactions">Automatic and explicit transactions<a class="headerlink" href="#automatic-and-explicit-transactions" title="Permanent link">&para;</a></h2>
+<p><code>begin(true)</code> is used for automatic transactions around the planning and execution
+of one SQL statement. Its return value controls how the transaction is finished:</p>
+<ul>
+<li>Return <code>Ok(true)</code> when the call starts a transaction that should be committed
+  automatically on success or rolled back on failure.</li>
+<li>Return <code>Ok(false)</code> when the call should not be followed by an automatic commit
+  or rollback, such as when reusing an existing transaction.</li>
+</ul>
+<p>An explicit <code>BEGIN</code> calls <code>begin(false)</code>. Keep that transaction open until
+<code>COMMIT</code> or <code>ROLLBACK</code>. Statements within it should reuse the transaction and
+return <code>Ok(false)</code> from <code>begin(true)</code>.</p>
+<p>The default implementation returns <code>Ok(false)</code> for <code>begin(true)</code> and an
+unsupported-operation error for <code>begin(false)</code>. Its <code>commit</code> and <code>rollback</code>
+methods do nothing and return <code>Ok(())</code>.</p>
 
 
 
