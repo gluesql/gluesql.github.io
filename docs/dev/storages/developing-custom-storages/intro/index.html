@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://gluesql.org/docs/dev/storages/developing-custom-storages/intro/">
       
       
-        <link rel="prev" href="../../supported-storages/slatedb-storage/">
+        <link rel="prev" href="../../supported-storages/sqlite-storage/">
       
       
         <link rel="next" href="../store-traits/store/">
@@ -6334,6 +6334,33 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../supported-storages/sqlite-storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  SQLite Storage
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -6761,6 +6788,33 @@
     
   
   Metadata
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../store-traits/native-query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  NativeQuery
 
     
   </span>
@@ -7582,6 +7636,7 @@
 <li><code>Index</code> - Reads rows through secondary indexes.</li>
 <li><code>IndexMut</code> - Creates and drops secondary indexes.</li>
 <li><code>Metadata</code> - Returns table metadata.</li>
+<li><code>NativeQuery</code> - Executes native read queries produced by a storage's planner.</li>
 <li><code>Planner</code> - Plans queries.</li>
 </ul>
 <p><code>Store</code> requires four read methods. For the other traits, start with empty implementations and override the methods your storage needs. For example, <code>impl Planner for MyStorage {}</code> uses GlueSQL's default planner. Each trait's page describes its defaults.</p>

@@ -517,6 +517,9 @@
         <loc>https://gluesql.org/docs/dev/storages/supported-storages/slatedb-storage/</loc>
       </url>
       <url>
+        <loc>https://gluesql.org/docs/dev/storages/supported-storages/sqlite-storage/</loc>
+      </url>
+      <url>
         <loc>https://gluesql.org/docs/dev/storages/developing-custom-storages/intro/</loc>
       </url>
       <url>
@@ -545,6 +548,9 @@
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/storages/developing-custom-storages/store-traits/metadata/</loc>
+      </url>
+      <url>
+        <loc>https://gluesql.org/docs/dev/storages/developing-custom-storages/store-traits/native-query/</loc>
       </url>
       <url>
         <loc>https://gluesql.org/docs/dev/storages/developing-custom-storages/using-test-suite/</loc>
