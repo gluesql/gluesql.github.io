@@ -1,0 +1,1477 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Translate 이후 스키마와 스토리지 정보를 결합해 실행 결정을 만드는 GlueSQL 플래너의 역할과 현재 모습, 발전 방향을 살펴봅니다">
+      
+      
+        <meta name="author" content="Taehoon Moon">
+      
+      
+        <link rel="canonical" href="https://gluesql.org/notes/updates/2026/07-30-gluesql-planner-overview/">
+      
+      
+        <link rel="prev" href="../08-03-gluesql-query-builder/">
+      
+      
+        <link rel="next" href="../07-27-gluesql-store-traits/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/gluesql-logo.png">
+      <meta name="generator" content="zensical-0.0.50">
+    
+    
+  
+    
+      
+        <title>GlueSQL의 planner는 어떤 일을 할까요 - GlueSQL 노트</title>
+      
+    
+  
+
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../../assets/stylesheets/modern/main.62c9b9cc.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  
+  <meta property="og:site_name" content="GlueSQL 노트">
+  <meta property="og:image" content="https://gluesql.org/notes/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GlueSQL 노트, 오픈소스 커뮤니티 블로그">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://gluesql.org/notes/assets/og.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="네비게이션"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gluesql-planner" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="GlueSQL 노트" class="md-header__button md-logo" aria-label="GlueSQL 노트" data-md-component="logo">
+      
+  <img src="../../../assets/gluesql-logo.png" alt="GlueSQL 노트">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="네비게이션">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GlueSQL 노트
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GlueSQL의 planner는 어떤 일을 할까요
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="검색">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="검색">
+  <button type="button" class="md-search__button">
+    검색
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="탭" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  홈
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../blog/" class="md-tabs__link">
+          
+  
+  블로그
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://gluesql.org/docs/" class="md-tabs__link">
+        
+  
+  공식 문서
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://github.com/gluesql/gluesql" class="md-tabs__link">
+        
+  
+  GitHub
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="GlueSQL 노트" class="md-nav__button md-logo" aria-label="GlueSQL 노트" data-md-component="logo">
+      
+  <img src="../../../assets/gluesql-logo.png" alt="GlueSQL 노트">
+
+    </a>
+    GlueSQL 노트
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  홈
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../blog/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  블로그
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  블로그
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-08-national-ai-service-recruitment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  국민AI서비스혁신추진단 전문임기제 공무원 11월 채용 안내
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-04-gluesql-development-directions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 현재와 앞으로의 개발 방향
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-10-gluesql-js-opfs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  다시, 브라우저에서 쓰는 GlueSQL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-27-national-ai-service-recruitment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  국민AI서비스혁신추진단 전문임기제 공무원 채용 안내
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-26-invisible-work-keeps-code-alive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  보이지 않는 일이 코드를 오래 살게 합니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-24-finding-gluesql-contributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL에서 기여할 문제를 찾고 코드를 읽는 방법
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-08-gluesql-july-contributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL 월간 기여 기록: 2026년 7월
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-06-gluesql-query-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 쿼리 계획이 실행 파이프라인으로 바뀌었습니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-03-gluesql-query-builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 Query Builder는 실행 계획을 직접 만듭니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 planner는 어떤 일을 할까요
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 planner는 어떤 일을 할까요
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SQL과 실행 사이에 플래너가 있습니다
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SQL과 실행 사이에 플래너가 있습니다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        현재 각 단계에서 사용하는 정보가 다릅니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        플래너는 실행 전에 결정을 남깁니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sql_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SQL에는 실행 방법이 적혀 있지 않습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        최적화가 아닌 실행 준비도 있습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gluesql" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        GlueSQL에서는 스키마가 없는 테이블도 함께 다룹니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        스토리지도 실행 계획을 만드는 데 참여합니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        현재 구조와 지향점을 함께 봅니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        더 살펴볼 수 있는 질문들
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-27-gluesql-store-traits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL은 Store traits로 스토리지와 SQL 엔진을 연결합니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-22-gluesql-translate-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL에는 왜 translate 모듈이 있을까요
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-21-open-source-contribution-opportunities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  오픈소스에 기여할 기회가 많은 이유
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-20-gluesql-sql-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL test suite를 SQL fixture로 재구성
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-19-gluesql-line-coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 line coverage 98%를 읽는 법
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://gluesql.org/docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  공식 문서
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/gluesql/gluesql" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GitHub
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SQL과 실행 사이에 플래너가 있습니다
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SQL과 실행 사이에 플래너가 있습니다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        현재 각 단계에서 사용하는 정보가 다릅니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        플래너는 실행 전에 결정을 남깁니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sql_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SQL에는 실행 방법이 적혀 있지 않습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        최적화가 아닌 실행 준비도 있습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gluesql" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        GlueSQL에서는 스키마가 없는 테이블도 함께 다룹니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        스토리지도 실행 계획을 만드는 데 참여합니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        현재 구조와 지향점을 함께 봅니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        더 살펴볼 수 있는 질문들
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<p><strong>2026년 7월 30일 · Planner overview</strong></p>
+<h1 id="gluesql-planner">GlueSQL의 planner는 어떤 일을 할까요</h1>
+<p>Planner라는 이름을 처음 접하면 쿼리를 더 빠르게 실행할 방법을 고르는 옵티마이저(optimizer)를 먼저 떠올릴 수 있습니다. 하지만 GlueSQL의 플래너는 그보다 넓은 일을 맡고 있습니다.</p>
+<p>스키마와 스토리지가 제공하는 기능을 확인하고, 기본 키(primary key)와 인덱스를 이용할 위치를 찾습니다. JOIN의 실행 방법을 선택하고, 집계와 표현식을 실행 계층(executor)이 사용할 수 있도록 준비합니다. 스키마를 미리 정의하지 않은 테이블도 같은 실행 계층에서 처리할 수 있도록 쿼리를 변환합니다.</p>
+<p>GlueSQL의 플래너는 현재도 역할과 내부 구조를 계속 다듬고 있습니다. 지금 코드의 구성과 처리 순서를 완성된 설계처럼 설명하면 빠르게 낡을 수 있고, 지향점만 설명하면 아직 구현되지 않은 기능을 현재 모습처럼 보이게 할 수 있습니다.</p>
+<p>이번 글에서는 구체적인 내부 구조보다 GlueSQL의 플래너가 맡아야 하는 역할을 중심으로 살펴봅니다. 현재 구현을 설명할 때는 지금 가능한 일과 앞으로 발전시킬 영역을 구분합니다.</p>
+<h2 id="sql">SQL과 실행 사이에 플래너가 있습니다</h2>
+<p>GlueSQL에서 SQL 한 문장은 다음 단계를 거쳐 실행됩니다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>SQL
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>→ parse
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>→ translate
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>→ planner
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>→ executor
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>→ storage
+</span></code></pre></div>
+<p>파서는 SQL 문법을 읽습니다. <a href="../07-22-gluesql-translate-module/"><code>translate</code> 모듈</a>은 외부 파서의 AST를 GlueSQL이 지원하는 내부 AST로 옮깁니다.</p>
+<p>Translate 단계에서는 쿼리가 참조하는 테이블의 스키마와 스토리지가 제공하는 기능을 아직 확인하지 않습니다. 같은 SQL이라도 어떤 컬럼이 기본 키인지, 사용할 수 있는 인덱스가 있는지, 테이블에 스키마가 정의되어 있는지에 따라 실행 준비가 달라질 수 있습니다.</p>
+<p>현재 GlueSQL은 translate가 만든 내부 AST를 <code>StatementPlan</code>으로 옮긴 뒤 스토리지의 <a href="https://github.com/gluesql/gluesql/blob/main/core/src/store/planner.rs"><code>Planner</code></a>에 전달합니다. Rust Query Builder로 만든 쿼리도 파싱과 translate를 거치지 않을 뿐, 같은 플래너와 실행 계층으로 이어집니다.</p>
+<p>플래너는 쿼리에 스키마와 스토리지 정보를 결합해 실행 계층에 필요한 결정을 실행 계획(plan)에 남깁니다. 실행 계층은 그 결정을 이용해 스토리지에서 실제 데이터를 읽고 쿼리를 실행합니다.</p>
+<h3 id="_1">현재 각 단계에서 사용하는 정보가 다릅니다</h3>
+<ul>
+<li><strong>Translate</strong> — SQL 문법과 GlueSQL이 지원하는 AST를 다룹니다. 실제 테이블의 스키마는 아직 모릅니다.</li>
+<li><strong>Planner</strong> — 쿼리의 AST와 리터럴, 파라미터에 스키마와 인덱스 메타데이터를 결합합니다.</li>
+<li><strong>Executor</strong> — 실행 계획에 기록된 결정에 따라 스토리지에서 실제 행을 읽고 연산합니다.</li>
+</ul>
+<p>단계가 내려갈수록 판단에 사용할 수 있는 정보가 늘어납니다. Translate가 SQL의 구조를 표현하면, 플래너는 실제 스키마와 스토리지의 기능을 바탕으로 실행 전에 알 수 있는 내용을 실행 계획에 남깁니다. 실행 계층에 이르러서야 실제 행을 읽습니다.</p>
+<p>현재 GlueSQL의 플래너는 스키마 메타데이터를 이용해 규칙 기반으로 실행 계획을 만듭니다. 실제 데이터의 양과 분포를 바탕으로 실행 비용을 비교하는 기능은 아직 구현되어 있지 않습니다. 이는 플래너 역할의 한계라기보다, 앞으로 플래너를 발전시키며 다룰 수 있는 영역입니다.</p>
+<h2 id="_2">플래너는 실행 전에 결정을 남깁니다</h2>
+<p>GlueSQL의 플래너가 하는 일은 한 가지 기능으로 설명하기 어렵습니다. 현재 구현에서는 다음과 같은 판단이 서로 연결되어 있습니다.</p>
+<ul>
+<li>쿼리에 실제 스키마와 스토리지의 기능을 연결합니다.</li>
+<li>기본 키 조회와 인덱스 스캔, JOIN의 실행 방법을 선택합니다.</li>
+<li>집계와 표현식을 실행 계층이 정해진 순서로 평가할 수 있도록 준비합니다.</li>
+<li>GlueSQL이 지원하는 여러 형태의 테이블을 공통 실행 계층이 처리할 수 있는 표현으로 바꿉니다.</li>
+</ul>
+<p>이 역할들을 현재의 특정 함수나 처리 단계와 일대일로 대응시킬 필요는 없습니다. 세부 책임과 실행 순서는 계속 정리되고 있지만, 실행 계층이 SQL의 의미를 다시 해석하거나 실행 방법을 그때마다 선택하지 않도록 미리 결정을 남긴다는 목적은 같습니다.</p>
+<h2 id="sql_1">SQL에는 실행 방법이 적혀 있지 않습니다</h2>
+<p>다음 테이블과 쿼리를 생각해보겠습니다.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">Player</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">active</span><span class="w"> </span><span class="nb">BOOLEAN</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">);</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">FROM</span><span class="w"> </span><span class="n">Player</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">TRUE</span><span class="p">;</span>
+</span></code></pre></div>
+<p>SQL에는 <code>Player</code>에서 어떤 결과가 필요한지는 적혀 있지만, 행을 어떻게 가져올지는 적혀 있지 않습니다.</p>
+<p>플래너가 기본 키를 확인하기 전의 상태를 간단히 표현하면 다음과 같습니다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Table: Player
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Access path: 없음
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Selection: id = 1 AND active = TRUE
+</span></code></pre></div>
+<p>플래너는 스토리지에서 가져온 스키마를 통해 <code>id</code>가 기본 키라는 사실을 확인합니다. <code>id = 1</code>에서 값 <code>1</code>은 행을 읽기 전에 알 수 있으므로, 이 조건을 기본 키 조회에 사용할 수 있습니다.</p>
+<p>실행 계획을 만든 뒤의 상태는 다음처럼 바뀝니다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Table: Player
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Access path: PrimaryKey(1)
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Selection: active = TRUE
+</span></code></pre></div>
+<p>실행 계층은 이제 테이블의 모든 행을 <code>scan_data</code>로 읽지 않고, <code>fetch_data</code>를 이용해 키가 1인 행을 찾습니다. 접근 경로(access path)에 반영된 <code>id = 1</code>은 <code>selection</code>에서 제거하고, 가져온 행에서 계속 확인해야 하는 <code>active = TRUE</code>만 남깁니다.</p>
+<p>이 과정은 성능만의 문제가 아닙니다. 접근 경로로 옮긴 조건을 <code>selection</code>에서 잘못 제거하거나 다른 테이블의 조건을 사용하면 쿼리 결과 자체가 달라질 수 있습니다.</p>
+<p>플래너가 실행 방법을 바꿀 때는 SQL의 의미가 그대로 유지되는지도 함께 보장해야 합니다.</p>
+<h2 id="_3">최적화가 아닌 실행 준비도 있습니다</h2>
+<p>기본 키 조회만 보면 플래너를 옵티마이저와 같은 의미로 생각하기 쉽습니다. 집계 계획은 플래너가 실행 전에 필요한 구조를 준비하기도 한다는 점을 보여줍니다.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">team_id</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">player_count</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">Player</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">team_id</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+</span></code></pre></div>
+<p>이 쿼리에서 <code>COUNT(*)</code> 결과는 출력과 <code>HAVING</code>, <code>ORDER BY</code>에서 사용됩니다. 실행 계층이 이 표현식들을 올바른 순서로 평가하려면, 어떤 집계를 계산하고 그 결과를 어디에서 사용할지 미리 정해야 합니다.</p>
+<p>현재 GlueSQL의 플래너는 계산할 집계 표현식을 수집하고, 같은 결과를 사용하는 위치를 <code>aggregate slot</code>에 연결합니다. 실행 계층은 집계를 계산한 뒤 그 결과를 <code>HAVING</code>, 출력과 정렬 과정에서 사용할 수 있습니다.</p>
+<p><code>Aggregate slot</code>을 나타내는 내부 구조는 앞으로 달라질 수 있습니다. 하지만 쿼리를 실행하기 전에 어떤 계산이 필요하고 그 결과를 어디에서 사용할지 정리하는 일은 플래너가 맡아야 할 역할로 남습니다.</p>
+<h2 id="gluesql">GlueSQL에서는 스키마가 없는 테이블도 함께 다룹니다</h2>
+<p>GlueSQL은 컬럼을 미리 정의한 테이블뿐 아니라 스키마를 지정하지 않은 테이블도 지원합니다. 스키마리스(schemaless) 테이블은 행 전체를 하나의 맵 값처럼 다룹니다.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">Player</span><span class="p">;</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">FROM</span><span class="w"> </span><span class="n">Player</span><span class="p">;</span>
+</span></code></pre></div>
+<p>스키마가 있는 테이블에서는 <code>name</code>을 미리 정의된 컬럼으로 읽을 수 있습니다. 스키마리스 테이블에는 같은 컬럼 정의가 없으므로, 현재 GlueSQL은 행 전체를 담은 <code>_doc</code>에서 필드를 읽는 표현식으로 쿼리를 바꿉니다.</p>
+<p>개념적으로는 다음과 같습니다.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">_doc</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">Player</span><span class="p">;</span>
+</span></code></pre></div>
+<p>이 작업은 더 빠른 알고리즘을 선택하는 최적화가 아닙니다. 테이블에 스키마가 있는지에 따라 사용자가 작성한 표현식을 실행 가능한 형태로 바꾸는 계획 과정입니다.</p>
+<p>참조를 나타내는 구체적인 방식과 각 단계의 책임도 계속 정리하고 있습니다. 다만 스키마가 있는 테이블과 스키마리스 테이블을 같은 SQL 인터페이스와 실행 계층으로 연결하려면, 실행 전에 테이블의 정보를 확인하고 적절한 표현으로 바꾸는 과정이 필요하다는 점은 변하지 않습니다.</p>
+<h2 id="_4">스토리지도 실행 계획을 만드는 데 참여합니다</h2>
+<p>GlueSQL에서는 <code>Planner</code>도 스토리지가 구현하는 trait입니다. 대부분의 스토리지는 공통 계획 과정을 사용하고, 필요한 경우 스토리지에 맞는 계획을 추가할 수 있습니다.</p>
+<p>현재 <a href="https://github.com/gluesql/gluesql/blob/main/storages/sled-storage/src/planner.rs"><code>SledStorage의 Planner</code></a>는 비클러스터형 인덱스(non-clustered index)를 사용할 수 있는 조건을 찾습니다. 사용할 수 있는 인덱스가 있다면 테이블의 접근 경로에 인덱스 스캔을 기록하고, 실행 계층은 일반적인 <code>scan_data</code> 대신 <code>scan_indexed_data</code>를 사용합니다.</p>
+<p>이 구조는 <a href="../07-27-gluesql-store-traits/">Store traits</a>가 단순히 행을 읽고 쓰는 API에 머물지 않는 이유이기도 합니다.</p>
+<p>여러 스토리지가 공통 플래너와 실행 계층을 재사용하면서도 자신이 제공하는 조회 방법을 실행 계획에 반영할 수 있습니다. 새로운 스토리지를 연결할 때 SQL의 모든 실행 과정을 다시 만드는 대신 공통 계획으로 시작하고, 필요한 기능이 있다면 스토리지에 맞는 계획을 더할 수 있습니다.</p>
+<p>여러 종류의 스토리지를 같은 SQL 인터페이스로 연결하려는 GlueSQL에서는 공통 계획과 스토리지별 계획의 경계를 나누는 것도 중요합니다.</p>
+<h2 id="_5">현재 구조와 지향점을 함께 봅니다</h2>
+<p>GlueSQL의 플래너는 처음부터 완성된 옵티마이저 구조를 한 번에 만든 것이 아닙니다. 인덱스와 hash join, 스키마리스 처리와 집계 바인딩처럼 실제 기능에 필요한 결정을 하나씩 플래너로 옮겨왔습니다.</p>
+<p>2026년에는 <a href="https://github.com/gluesql/gluesql/commit/6058f70fb4e2fb14350c231da00d5a8e6c7ae498"><code>StatementPlan</code>을 도입한 변경</a>을 통해 SQL의 의미를 표현하는 AST와, 계획 및 실행에 필요한 구조를 분리하기 시작했습니다.</p>
+<p>현재 <code>StatementPlan</code>에는 여전히 <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, <code>ORDER BY</code>처럼 SQL 문법과 가까운 형태가 많이 남아 있습니다. 동시에 테이블 접근 경로와 JOIN 알고리즘, <code>aggregate slot</code>처럼 구체적인 실행 결정도 함께 담습니다. 논리 계획(logical plan)과 물리 실행 계획(physical execution plan)이 완전히 나뉜 구조라기보다 두 역할이 함께 발전하는 과정에 있습니다.</p>
+<p>컬럼 참조가 어느 relation과 컬럼을 가리키는지 확정하는 일과 타입 변환(type coercion)의 일부도 아직 실행 계층에 남아 있습니다. 통계와 비용을 이용해 여러 실행 방법을 비교하거나 JOIN 순서를 바꾸는 비용 기반 최적화(cost-based optimization)도 현재 플래너에는 구현되어 있지 않습니다.</p>
+<p>GlueSQL은 이 상태를 최종 구조로 두기보다 다음 방향으로 플래너를 계속 정리하고 있습니다.</p>
+<ul>
+<li>문법에 가까운 표현을 실행 계층이 사용할 수 있는 참조와 연산자로 바꿉니다.</li>
+<li>SQL 절을 나열한 형태에서 실제 실행 순서가 드러나는 실행 계획 구조로 옮깁니다.</li>
+<li>플래너가 내린 결정과 실행 계층이 수행할 일을 더 명확히 나눕니다.</li>
+<li>스토리지가 제공하는 기능과 앞으로 활용할 비용 정보를 실행 계획에 반영할 수 있게 합니다.</li>
+</ul>
+<p>이 변화는 현재 코드에 단계적으로 반영되고 있습니다. 따라서 지금 보이는 함수 이름과 처리 순서를 플래너의 최종 구조로 이해하기보다, SQL을 실행 가능한 계획으로 바꾸기 위해 책임을 나누어가는 과정으로 보는 편이 정확합니다.</p>
+<h2 id="_6">더 살펴볼 수 있는 질문들</h2>
+<p>이번 글은 플래너의 각 기능을 모두 설명하는 문서가 아니라, 이후 내용을 읽기 위한 개요(overview)입니다. 앞으로 다룰 글의 제목과 순서를 미리 정하기보다, 플래너를 이해하기 위해 다음과 같은 질문들을 생각해볼 수 있습니다.</p>
+<ul>
+<li>
+<p><strong>SQL은 무엇을 의미할까요?</strong><br />
+  이름 참조 연결(identifier binding)과 쿼리 범위(query scope), 타입 계획(type planning)처럼 실행 계층이 행을 읽기 전에 확정해야 할 의미가 있습니다.</p>
+</li>
+<li>
+<p><strong>같은 의미를 어떻게 실행할까요?</strong><br />
+  테이블 스캔과 접근 경로, JOIN 알고리즘과 스토리지의 기능처럼 같은 결과를 만드는 여러 실행 방법을 비교할 수 있습니다.</p>
+</li>
+<li>
+<p><strong>결정을 어떤 실행 계획으로 남길까요?</strong><br />
+  AST와 논리 계획, 물리 실행 계획과 연산자 파이프라인(operator pipeline)처럼 플래너의 판단을 실행 계층이 사용할 수 있는 구조를 생각해볼 수 있습니다.</p>
+</li>
+<li>
+<p><strong>여러 스토리지를 위해 무엇이 달라져야 할까요?</strong><br />
+  공통 플래너와 스토리지별 계획, 연산을 스토리지로 내리는 pushdown과 비용처럼 하나의 SQL 인터페이스를 유지하면서도 각 스토리지의 특성을 활용하는 방법을 살펴볼 수 있습니다.</p>
+</li>
+</ul>
+<blockquote>
+<p>GlueSQL에서 플래너는 SQL 문장을 스토리지에서 실행할 수 있는 결정으로 바꾸는 계층입니다.</p>
+</blockquote>
+<p>스키마와 스토리지 정보를 결합하고, 실행 방법을 선택하고, 실행 전에 필요한 구조를 준비하는 일은 이 한 경계 안에서 서로 연결되어 있습니다. 플래너의 역할을 이해하는 것은 쿼리가 파서와 translate를 지난 뒤 실제 데이터에 도달하기까지 GlueSQL이 어떤 판단을 하는지 이해하는 일입니다.</p>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+  
+
+<footer class="notes-footer" id="site-footer">
+  <div class="notes-footer__inner md-grid">
+    <div class="notes-footer__intro">
+      <p class="notes-footer__name">GlueSQL 노트</p>
+      <p>GlueSQL 커뮤니티에서 운영하는 블로그입니다.</p>
+    </div>
+    <nav aria-labelledby="footer-notes">
+      <h2 id="footer-notes">둘러보기</h2>
+      
+  <ul class="notes-footer__links">
+    
+      
+      
+      
+        <li><a href="../../..">홈</a></li>
+      
+    
+      
+      
+      
+        <li><a href="../../../blog/">블로그</a></li>
+      
+    
+      
+      
+      
+    
+      
+      
+      
+    
+  </ul>
+
+    </nav>
+    <nav aria-labelledby="footer-gluesql">
+      <h2 id="footer-gluesql">GlueSQL</h2>
+      
+  <ul class="notes-footer__links">
+    
+      
+      
+      
+    
+      
+      
+      
+    
+      
+      
+      
+        <li><a href="https://gluesql.org/docs/">공식 문서</a></li>
+      
+    
+      
+      
+      
+        <li><a href="https://github.com/gluesql/gluesql">GitHub</a></li>
+      
+    
+  </ul>
+
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../../..","features":["navigation.tabs","navigation.tabs.sticky","navigation.sections","navigation.indexes","navigation.top","toc.follow"],"search":"../../../assets/javascripts/workers/search.b6b7e04f.min.js","tags":null,"translations":{"clipboard.copied":"클립보드에 복사됨","clipboard.copy":"클립보드로 복사","search.result.more.one":"이 문서에서 1개의 검색 결과 더 보기","search.result.more.other":"이 문서에서 #개의 검색 결과 더 보기","search.result.none":"검색어와 일치하는 문서가 없습니다","search.result.one":"1개의 일치하는 문서","search.result.other":"#개의 일치하는 문서","search.result.placeholder":"검색어를 입력하세요","search.result.term.missing":"포함되지 않은 검색어","select.version":"버전 선택"},"version":null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7f30b55.min.js"></script>
+      
+    
+  </body>
+</html>

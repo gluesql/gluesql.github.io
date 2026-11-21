@@ -1,0 +1,311 @@
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("../assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+  font-style: normal;
+  font-weight: 45 920;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "D2Coding";
+  src: url("../assets/fonts/D2Coding.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "D2Coding";
+  src: url("../assets/fonts/D2CodingBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --md-text-font: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", system-ui, sans-serif;
+  --md-code-font: "D2Coding", "SFMono-Regular", Consolas, monospace;
+  --notes-ink: #082e5c;
+  --notes-ink-strong: #06264b;
+  --notes-ink-soft: #536176;
+  --notes-orange: #ff4d2e;
+  --notes-cyan: #06b7e8;
+  --notes-code-link-color: #06b7e8;
+  --notes-code-link-hover-color: #ff8a80;
+  --notes-sky: #eaf8fc;
+  --notes-cream: #fff8ed;
+  --notes-white: #fffdf8;
+  --notes-line: #c9dfe7;
+  --notes-line-warm: #eadbca;
+}
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: var(--notes-cream);
+  --md-default-fg-color: var(--notes-ink);
+  --md-default-fg-color--light: var(--notes-ink-soft);
+  --md-default-fg-color--lighter: #7a8798;
+  --md-primary-fg-color: var(--notes-cream);
+  --md-primary-bg-color: var(--notes-ink-strong);
+  --md-accent-fg-color: var(--notes-orange);
+  --md-typeset-a-color: #086e9d;
+  --md-code-bg-color: #0a2944;
+  --md-code-fg-color: #effff1;
+  --md-code-hl-number-color: #ff8a80;
+  --md-code-hl-special-color: #ff80ab;
+  --md-code-hl-function-color: #d79bea;
+  --md-code-hl-constant-color: #b7a9f4;
+  --md-code-hl-keyword-color: #7aa7ff;
+  --md-code-hl-string-color: #55d28f;
+  --md-code-hl-name-color: #effff1;
+  --md-code-hl-operator-color: #b5c4d1;
+  --md-code-hl-punctuation-color: #91a6b8;
+  --md-code-hl-comment-color: #9fb1c1;
+  --md-code-hl-generic-color: #b5c4d1;
+  --md-code-hl-variable-color: #d7e3ef;
+}
+
+body {
+  background: var(--notes-cream);
+  color: var(--notes-ink);
+  font-size: 16px;
+  line-height: 1.75;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--notes-cyan);
+  color: var(--notes-ink-strong);
+}
+
+.md-header,
+.md-tabs {
+  border-bottom: 1px solid var(--notes-line-warm);
+  background: rgba(255, 248, 237, 0.96);
+  color: var(--notes-ink-strong);
+  box-shadow: none;
+}
+
+.md-header__title,
+.md-tabs__link,
+.md-nav__title,
+.md-nav__link {
+  color: var(--notes-ink-strong);
+}
+
+.md-header__title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.md-header__source {
+  display: none;
+}
+
+/* Place the trailing external links apart from the site's own tabs. */
+.md-tabs__item:not(:has(> a[href^="https://"])) + .md-tabs__item:has(> a[href^="https://"]) {
+  margin-inline-start: auto;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  width: 2.1rem;
+  height: 2.1rem;
+  object-fit: contain;
+}
+
+.md-tabs__link--active,
+.md-tabs__link:hover,
+.md-nav__link--active,
+.md-nav__link:hover {
+  color: var(--notes-orange);
+}
+
+.md-search__form {
+  border: 1px solid var(--notes-line-warm);
+  border-radius: 10px;
+  background: var(--notes-white);
+}
+
+.md-main__inner {
+  margin-top: 2.5rem;
+}
+
+.md-content__inner {
+  padding-bottom: 5rem;
+}
+
+.md-typeset {
+  color: var(--notes-ink);
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  color: var(--notes-ink-strong);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.md-typeset h1 {
+  margin-bottom: 1.5rem;
+  font-size: clamp(2rem, 4.5vw, 2.6rem);
+  line-height: 1.2;
+}
+
+.md-typeset h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-size: 1.55rem;
+}
+
+.md-typeset h3 {
+  font-size: 1.1rem;
+}
+
+.md-typeset p,
+.md-typeset li {
+  line-height: 1.8;
+}
+
+.md-typeset a {
+  font-weight: 700;
+  text-underline-offset: 0.2em;
+}
+
+.md-typeset a code {
+  color: var(--notes-code-link-color);
+}
+
+.md-typeset a:focus code,
+.md-typeset a:hover code {
+  background-color: var(--md-code-bg-color);
+  color: var(--notes-code-link-hover-color);
+}
+
+.md-typeset dl {
+  margin: 1.2rem 0 2.5rem;
+  border-top: 1px solid var(--notes-line-warm);
+}
+
+.md-typeset dt {
+  margin: 0;
+  padding: 1.15rem 0 0.35rem;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.md-typeset dt a {
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.22em;
+}
+
+[dir="ltr"] .md-typeset dd {
+  margin: 0;
+  border-bottom: 1px solid var(--notes-line-warm);
+  padding: 0 0 1.15rem;
+  color: var(--notes-ink-soft);
+}
+
+.md-typeset dd p {
+  margin: 0;
+}
+
+.md-typeset code {
+  border-radius: 6px;
+  padding: 0.15em 0.36em;
+}
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--notes-line);
+  border-radius: 12px;
+  background: var(--notes-white);
+  box-shadow: none;
+}
+
+.md-typeset table:not([class]) th {
+  background: var(--notes-sky);
+  color: var(--notes-ink-strong);
+  font-weight: 800;
+}
+
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  border-color: var(--notes-line);
+  padding: 0.8rem 0.9rem;
+}
+
+.md-sidebar__scrollwrap {
+  scrollbar-color: var(--notes-line) transparent;
+}
+
+.notes-footer {
+  border-top: 1px solid var(--notes-line-warm);
+  background: var(--notes-ink-strong);
+  color: var(--notes-cream);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.notes-footer__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 2rem;
+  padding: 2rem 0.8rem;
+}
+
+.notes-footer p,
+.notes-footer h2,
+.notes-footer__links {
+  margin: 0;
+}
+
+.notes-footer__intro p + p {
+  margin-top: 0.45rem;
+  color: var(--notes-line);
+}
+
+.notes-footer__name {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.notes-footer h2 {
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.notes-footer__links {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.notes-footer a {
+  color: var(--notes-line);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.notes-footer a:hover,
+.notes-footer a:focus-visible {
+  color: var(--notes-cream);
+}
+
+.notes-footer a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (max-width: 38em) {
+  .notes-footer__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .notes-footer__intro {
+    grid-column: 1 / -1;
+  }
+}

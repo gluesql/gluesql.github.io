@@ -1,0 +1,1343 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="2026년 7월에 병합된 16개의 Pull Request를 쿼리 정확성, 스토리지, Rust API와 기여 기반의 변화로 묶어 살펴봅니다">
+      
+      
+        <meta name="author" content="Taehoon Moon">
+      
+      
+        <link rel="canonical" href="https://gluesql.org/notes/updates/2026/08-08-gluesql-july-contributions/">
+      
+      
+        <link rel="prev" href="../08-24-finding-gluesql-contributions/">
+      
+      
+        <link rel="next" href="../08-06-gluesql-query-pipeline/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/gluesql-logo.png">
+      <meta name="generator" content="zensical-0.0.50">
+    
+    
+  
+    
+      
+        <title>GlueSQL 월간 기여 기록: 2026년 7월 - GlueSQL 노트</title>
+      
+    
+  
+
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../../assets/stylesheets/modern/main.62c9b9cc.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  
+  <meta property="og:site_name" content="GlueSQL 노트">
+  <meta property="og:image" content="https://gluesql.org/notes/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GlueSQL 노트, 오픈소스 커뮤니티 블로그">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://gluesql.org/notes/assets/og.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="네비게이션"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gluesql-2026-7" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="GlueSQL 노트" class="md-header__button md-logo" aria-label="GlueSQL 노트" data-md-component="logo">
+      
+  <img src="../../../assets/gluesql-logo.png" alt="GlueSQL 노트">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="네비게이션">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GlueSQL 노트
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GlueSQL 월간 기여 기록: 2026년 7월
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="검색">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="검색">
+  <button type="button" class="md-search__button">
+    검색
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="탭" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  홈
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../blog/" class="md-tabs__link">
+          
+  
+  블로그
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://gluesql.org/docs/" class="md-tabs__link">
+        
+  
+  공식 문서
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://github.com/gluesql/gluesql" class="md-tabs__link">
+        
+  
+  GitHub
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="GlueSQL 노트" class="md-nav__button md-logo" aria-label="GlueSQL 노트" data-md-component="logo">
+      
+  <img src="../../../assets/gluesql-logo.png" alt="GlueSQL 노트">
+
+    </a>
+    GlueSQL 노트
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  홈
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../blog/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  블로그
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  블로그
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-08-national-ai-service-recruitment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  국민AI서비스혁신추진단 전문임기제 공무원 11월 채용 안내
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-04-gluesql-development-directions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 현재와 앞으로의 개발 방향
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-10-gluesql-js-opfs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  다시, 브라우저에서 쓰는 GlueSQL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-27-national-ai-service-recruitment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  국민AI서비스혁신추진단 전문임기제 공무원 채용 안내
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-26-invisible-work-keeps-code-alive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  보이지 않는 일이 코드를 오래 살게 합니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-24-finding-gluesql-contributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL에서 기여할 문제를 찾고 코드를 읽는 방법
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL 월간 기여 기록: 2026년 7월
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL 월간 기여 기록: 2026년 7월
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SQL이 조용히 잘못 동작하지 않도록
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        스토리지는 서로 다른 방식으로 단단해졌습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rust-struct-gluesql-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Rust struct와 GlueSQL row 사이의 거리를 줄였습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        다음 기여를 위한 기반도 바뀌었습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        11명이 만든 16개의 변화
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-06-gluesql-query-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 쿼리 계획이 실행 파이프라인으로 바뀌었습니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-03-gluesql-query-builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 Query Builder는 실행 계획을 직접 만듭니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-30-gluesql-planner-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 planner는 어떤 일을 할까요
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-27-gluesql-store-traits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL은 Store traits로 스토리지와 SQL 엔진을 연결합니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-22-gluesql-translate-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL에는 왜 translate 모듈이 있을까요
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-21-open-source-contribution-opportunities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  오픈소스에 기여할 기회가 많은 이유
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-20-gluesql-sql-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL test suite를 SQL fixture로 재구성
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-19-gluesql-line-coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 line coverage 98%를 읽는 법
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://gluesql.org/docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  공식 문서
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/gluesql/gluesql" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GitHub
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SQL이 조용히 잘못 동작하지 않도록
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        스토리지는 서로 다른 방식으로 단단해졌습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rust-struct-gluesql-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Rust struct와 GlueSQL row 사이의 거리를 줄였습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        다음 기여를 위한 기반도 바뀌었습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        11명이 만든 16개의 변화
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<p><strong>2026년 8월 8일 · 2026년 7월 월간 기여</strong></p>
+<h1 id="gluesql-2026-7">GlueSQL 월간 기여 기록: 2026년 7월</h1>
+<p>프로젝트의 한 달을 돌아보면 새로운 기능이나 가장 큰 변경부터 떠올리기 쉽습니다. 하지만 실제 변화는 서로 다른 크기의 Pull Request가 이어지며 만들어집니다. 눈에 보이는 기능을 추가하는 작업도 있고, 잘못된 결과를 막거나 테스트와 문서를 다음 사람이 읽기 좋게 만드는 작업도 있습니다.</p>
+<p>2026년 7월에는 GlueSQL 저장소에 <strong>16개의 Pull Request가 병합</strong>되었습니다. 작성자는 모두 <strong>11명</strong>입니다. 하나의 거대한 기능이 7월을 대표했다기보다, 쿼리의 정확성과 오류 처리, 스토리지의 안정성과 성능, Rust API와 기여 환경이 여러 방향에서 함께 다듬어진 달이었습니다.</p>
+<table>
+<thead>
+<tr>
+<th>집계 항목</th>
+<th style="text-align: right;">2026년 7월</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>병합된 Pull Request</td>
+<td style="text-align: right;">16개</td>
+</tr>
+<tr>
+<td>Pull Request 작성자</td>
+<td style="text-align: right;">11명</td>
+</tr>
+<tr>
+<td>집계 기준</td>
+<td style="text-align: right;">GitHub의 병합 시각</td>
+</tr>
+</tbody>
+</table>
+<p>이 글은 2026년 7월 1일부터 31일까지 병합된 Pull Request를 기준으로 합니다. 7월보다 먼저 시작했더라도 7월에 병합된 작업은 포함하고, 아직 열려 있거나 병합되지 않고 닫힌 작업은 포함하지 않았습니다. Issue와 Discussion, 병합되지 않은 제안까지 다루는 프로젝트 전체 활동 기록이라기보다, 실제 코드베이스에 들어온 변화를 PR을 통해 돌아보는 월간 기록입니다.</p>
+<h2 id="sql">SQL이 조용히 잘못 동작하지 않도록</h2>
+<p>데이터베이스에서 지원하지 않는 입력을 오류로 돌려주는 일은 새로운 SQL을 실행하는 것만큼 중요합니다. 실행할 수 없는 구문을 받아들인 뒤 일부만 사용하거나, 잘못된 계획으로 다른 결과를 돌려주면 사용자는 성공한 쿼리를 더 의심하기 어렵기 때문입니다.</p>
+<p><strong>다중 column <code>IN</code> subquery 오류 처리 · <a href="https://github.com/gluesql/gluesql/pull/1936">#1936</a> · <a href="https://github.com/ssseft">@ssseft</a></strong></p>
+<p><code>IN (subquery)</code>에 column이 여러 개인 subquery가 들어오면 기존에는 첫 column만 사용했습니다. 이제는 이 입력을 거절하고, 결과 row가 없는 경우에도 projection 자체가 두 column이라면 같은 오류를 반환합니다. 실제 데이터가 우연히 비어 있는지와 관계없이, <code>IN</code>이 요구하는 입력 구조를 먼저 확인하게 되었습니다.</p>
+<p><strong>JOIN과 table factor 계획 보완 · <a href="https://github.com/gluesql/gluesql/pull/1943">#1943</a>, <a href="https://github.com/gluesql/gluesql/pull/1961">#1961</a> · <a href="https://github.com/red-sprout">@red-sprout</a></strong></p>
+<p>JOIN query에서는 primary key 조건을 잘못된 relation의 접근 경로로 사용하는 문제를 수정했습니다. Planner가 안전하게 연결할 수 없는 조건은 <code>WHERE</code>에 그대로 남기고, 첫 번째 <code>FROM</code> relation에 속한 조건만 primary key 조회에 사용합니다. Derived table의 subquery와 <code>SERIES</code> 크기 표현식도 안쪽까지 살펴보고 실행 전에 평가할 수 있는지를 확인하도록 보완했습니다.</p>
+<p>두 작업은 모두 SQL의 겉모양만 확인하지 않고, column과 relation이 실제로 어느 범위에 속하는지 계획 단계에서 확인하는 변화입니다. GlueSQL planner가 query를 실행 가능한 결정으로 바꾸는 과정은 <a href="../07-30-gluesql-planner-overview/">planner를 살펴본 글</a>에서 더 자세히 볼 수 있습니다.</p>
+<p><strong>지원하지 않는 SQL option의 오류 구조화 · <a href="https://github.com/gluesql/gluesql/pull/1972">#1972</a>, <a href="https://github.com/gluesql/gluesql/pull/1980">#1980</a> · <a href="https://github.com/sweetpark">@sweetpark</a></strong></p>
+<p>GlueSQL이 지원하지 않는 <code>CREATE TEMPORARY TABLE</code>, <code>CREATE TABLE ... LIKE</code>, <code>CREATE TABLE ... CLONE</code> option을 조용히 무시하지 않고 translate error로 돌려주도록 했습니다. 이어서 여러 unsupported option 오류가 문자열 대신 전용 enum을 사용하게 바뀌었습니다. 사용자에게 보이는 메시지는 유지하면서, 코드 안에서 가능한 오류 이유를 compiler가 확인할 수 있는 닫힌 목록으로 만들었습니다.</p>
+<p>Parser가 읽을 수 있는 문법과 GlueSQL이 지원하는 SQL은 같지 않습니다. <a href="../07-22-gluesql-translate-module/">translate 모듈을 살펴본 글</a>에서 설명한 이 경계가 7월에는 구체적인 오류와 type으로 더 분명해졌습니다.</p>
+<h2 id="_1">스토리지는 서로 다른 방식으로 단단해졌습니다</h2>
+<p>GlueSQL은 공통 Store traits 위에서 여러 스토리지를 연결하지만, 파일 형식과 잠금, transaction과 scan 성능은 각 구현이 별도로 다뤄야 합니다. 7월의 storage 관련 PR 네 개도 서로 다른 종류의 문제를 해결했습니다.</p>
+<p><strong>Redb v3 storage format과 migration · <a href="https://github.com/gluesql/gluesql/pull/1901">#1901</a> · <a href="https://github.com/edomaur">@edomaur</a></strong></p>
+<p>새로운 Redb v3 storage format을 도입하고 기존 Redb 파일을 옮길 migration 경로를 마련했습니다. 새 형식을 사용하는 것만으로 끝내지 않고, 이전 형식의 데이터를 보존하며 이동하는 과정과 migration이 필요한 경우의 오류를 함께 다뤘습니다. 이 PR은 5월에 시작되었지만 실제 코드베이스에는 7월에 들어왔습니다.</p>
+<p><strong>Sled lock 해제 대기 · <a href="https://github.com/gluesql/gluesql/pull/1944">#1944</a> · <a href="https://github.com/panarch">@panarch</a></strong></p>
+<p>Sled가 flush 뒤 잠시 database file lock을 유지할 때, storage를 즉시 다시 여는 작업이 실패하지 않도록 lock 해제를 기다렸다가 재시도하게 했습니다. 일반적인 open과 migration 경로가 같은 동작을 사용하고, lock 해제와 timeout, 다른 종류의 오류를 각각 검증합니다.</p>
+<p><strong><code>CompositeStorage</code> rollback 수정 · <a href="https://github.com/gluesql/gluesql/pull/1963">#1963</a> · <a href="https://github.com/seosangwon">@seosangwon</a></strong></p>
+<p><code>CompositeStorage::rollback()</code>이 내부 storage의 <code>commit()</code>을 호출하던 코드를 <code>rollback()</code> 호출로 바로잡았습니다. 변경된 코드는 한 줄이지만, transaction을 되돌린다는 API의 의미를 지키는 데 필요한 수정입니다. 변경한 줄의 수만으로 기여의 중요도를 판단하기 어려운 사례이기도 합니다.</p>
+<p><strong>Parquet row streaming · <a href="https://github.com/gluesql/gluesql/pull/1968">#1968</a> · <a href="https://github.com/dgg1dbg">@dgg1dbg</a></strong></p>
+<p>Parquet scan을 시작할 때 모든 row를 <code>Vec</code>으로 읽지 않고, 필요한 row를 iterator에서 순서대로 가져오도록 바꿨습니다. 전체 결과를 미리 materialize하지 않으므로 <code>LIMIT</code>처럼 앞부분만 필요한 query는 나머지 row를 읽기 전에 멈출 수 있습니다.</p>
+<p>PR에 기록된 250,000 row, 5.8 MiB 파일의 warm-cache benchmark에서는 다음과 같은 차이가 측정되었습니다. 이 수치는 모든 Parquet workload의 일반적인 성능을 뜻하기보다, 전체 row를 먼저 읽던 비용이 query 종류에 따라 어떻게 달라졌는지를 보여줍니다.</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align: right;">변경 전</th>
+<th style="text-align: right;">변경 후</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SELECT * FROM Foo LIMIT 10</code></td>
+<td style="text-align: right;">71.0 ms</td>
+<td style="text-align: right;">1.11 ms</td>
+</tr>
+<tr>
+<td><code>SELECT COUNT(*) FROM Foo</code></td>
+<td style="text-align: right;">83.9 ms</td>
+<td style="text-align: right;">74.9 ms</td>
+</tr>
+</tbody>
+</table>
+<p>공통 SQL test suite만으로 storage 고유의 파일 처리와 동시성, 성능까지 모두 보장할 수는 없습니다. 7월의 변화는 <a href="../07-27-gluesql-store-traits/">Store traits 글</a>에서 구분했던 공통 동작 계약과 storage별 책임이 실제 기여에서 어떻게 함께 다뤄지는지 보여줍니다.</p>
+<h2 id="rust-struct-gluesql-row">Rust struct와 GlueSQL row 사이의 거리를 줄였습니다</h2>
+<p>SQL을 실행하는 기능뿐 아니라 Rust application에서 row를 넣고 꺼내는 방법도 이어서 개선되었습니다.</p>
+<p><strong><code>ToGlueRow</code>와 <code>values_from</code> · <a href="https://github.com/gluesql/gluesql/pull/1948">#1948</a> · <a href="https://github.com/juhee200">@juhee200</a></strong></p>
+<p>Rust struct에서 column metadata와 row value를 만드는 <code>ToGlueRow</code> derive macro를 추가했습니다. Query Builder의 <code>values_from</code>을 사용하면 struct 목록을 insert할 column과 value로 변환할 수 있고, field 이름과 column 이름이 다를 때 rename도 지정할 수 있습니다. 비어 있는 입력과 field 수가 맞지 않는 경우의 오류, compile-fail과 runtime 동작도 함께 검증했습니다.</p>
+<p><strong>Derive의 generic 지원 · <a href="https://github.com/gluesql/gluesql/pull/1955">#1955</a> · <a href="https://github.com/ShreyasUday">@ShreyasUday</a></strong></p>
+<p><code>ToGlueRow</code> derive가 lifetime과 type, const generic, <code>where</code> clause를 보존하도록 확장했습니다. 단순한 struct 예제에서 동작하는 macro를 실제 Rust type 정의에도 적용할 수 있도록 경계를 넓힌 작업입니다.</p>
+<p><strong><code>FromGlueRow</code> module 분리 · <a href="https://github.com/gluesql/gluesql/pull/1956">#1956</a> · <a href="https://github.com/juhee200">@juhee200</a></strong></p>
+<p>반대 방향의 변환을 담당하는 <code>FromGlueRow</code> derive 구현을 별도 module로 분리했습니다. 새로운 API를 추가한 PR과 generic 지원, 내부 module 정리가 며칠 사이에 이어지며 row 변환 기능의 사용성과 유지보수 구조를 함께 다듬었습니다.</p>
+<p>GlueSQL의 <a href="../08-03-gluesql-query-builder/">Query Builder</a>가 실행 계획을 Rust API로 구성하는 입구라면, <code>ToGlueRow</code>와 <code>FromGlueRow</code>는 application의 Rust data와 GlueSQL row를 연결하는 입구입니다. 서로 다른 계층의 API지만, SQL 문자열만이 아닌 Rust type을 통해 GlueSQL을 사용하는 범위를 넓힌다는 점에서 연결됩니다.</p>
+<h2 id="_2">다음 기여를 위한 기반도 바뀌었습니다</h2>
+<p>사용자가 바로 접하는 기능이 아니더라도, 테스트와 coverage, 문서가 바뀌면 이후 기여를 시작하고 검토하는 방법이 달라집니다.</p>
+<p><strong>SQL fixture 전환 · <a href="https://github.com/gluesql/gluesql/pull/1941">#1941</a> · <a href="https://github.com/panarch">@panarch</a></strong></p>
+<p>SQL 기반 integration test 184개를 Rust test body에서 <code>.sql</code> fixture로 옮겼습니다. 372개 파일이 바뀐 7월의 가장 큰 PR이지만, 목적은 변경량 자체가 아니라 실행할 SQL과 기대 결과를 같은 자리에서 읽을 수 있게 만드는 것이었습니다. 이 작업의 구조와 기준은 <a href="../07-20-gluesql-sql-fixtures/">SQL fixture 글</a>에 별도로 정리했습니다.</p>
+<p><strong>Coverage 도구 전환 · <a href="https://github.com/gluesql/gluesql/pull/1938">#1938</a> · <a href="https://github.com/panarch">@panarch</a></strong></p>
+<p>Coverage 수집 도구를 <code>grcov</code>에서 Cargo 명령과 가까운 <code>cargo-llvm-cov</code>로 바꿨습니다. CI와 비슷한 측정을 contributor가 로컬에서도 재현하기 쉬운 형태로 정리한 변화입니다.</p>
+<p><strong><code>main</code> coverage report 갱신 · <a href="https://github.com/gluesql/gluesql/pull/1954">#1954</a> · <a href="https://github.com/aswitocom">@aswitocom</a></strong></p>
+<p>문서만 바뀐 commit이 <code>main</code>에 들어와도 coverage workflow가 실행되게 했습니다. Pull Request 단계에서 불필요한 coverage 실행은 피하면서, 병합된 <code>main</code>의 coverage report는 실제 HEAD와 맞도록 조정했습니다.</p>
+<p><strong>Rust getting started 문서 갱신 · <a href="https://github.com/gluesql/gluesql/pull/1940">#1940</a> · <a href="https://github.com/Bortlesboat">@Bortlesboat</a></strong></p>
+<p>Rust getting started 문서의 GlueSQL version을 당시 현재 release인 0.19.0으로 갱신하고, 기본으로 제공되는 storage feature 목록을 crate manifest와 맞췄습니다. 문서의 설치 예제가 현재 package와 어긋나지 않도록 유지하는 것도 사용자가 프로젝트를 처음 실행하게 만드는 기여입니다.</p>
+<h2 id="11-16">11명이 만든 16개의 변화</h2>
+<p>7월에 병합된 Pull Request를 작성한 사람은 <a href="https://github.com/aswitocom">@aswitocom</a>, <a href="https://github.com/Bortlesboat">@Bortlesboat</a>, <a href="https://github.com/dgg1dbg">@dgg1dbg</a>, <a href="https://github.com/edomaur">@edomaur</a>, <a href="https://github.com/juhee200">@juhee200</a>, <a href="https://github.com/panarch">@panarch</a>, <a href="https://github.com/red-sprout">@red-sprout</a>, <a href="https://github.com/seosangwon">@seosangwon</a>, <a href="https://github.com/ShreyasUday">@ShreyasUday</a>, <a href="https://github.com/ssseft">@ssseft</a>, <a href="https://github.com/sweetpark">@sweetpark</a>입니다.</p>
+<p>어떤 PR은 새로운 API를 추가했고, 어떤 PR은 잘못된 query 결과나 transaction 동작을 바로잡았습니다. 수백 개의 파일을 옮긴 작업과 한 줄을 수정한 작업, 오래 진행한 storage migration과 며칠 사이 이어진 derive macro 개선이 모두 같은 달의 코드베이스를 만들었습니다.</p>
+<p>앞으로도 월간 기여 기록에서는 가장 큰 PR을 순서대로 나열하기보다, 병합된 변화가 한 달 동안 GlueSQL을 어느 방향으로 움직였는지 살펴보려고 합니다. 7월에는 SQL을 더 엄격하게 해석하고, storage의 경계 조건을 보완하고, Rust API와 다음 기여의 기반을 함께 다듬었습니다.</p>
+<blockquote>
+<p>월간 기여 기록은 가장 큰 변경을 뽑는 글이 아니라, 서로 다른 크기의 기여가 한 달 동안 프로젝트를 어떻게 움직였는지 남기는 기록입니다.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+  
+
+<footer class="notes-footer" id="site-footer">
+  <div class="notes-footer__inner md-grid">
+    <div class="notes-footer__intro">
+      <p class="notes-footer__name">GlueSQL 노트</p>
+      <p>GlueSQL 커뮤니티에서 운영하는 블로그입니다.</p>
+    </div>
+    <nav aria-labelledby="footer-notes">
+      <h2 id="footer-notes">둘러보기</h2>
+      
+  <ul class="notes-footer__links">
+    
+      
+      
+      
+        <li><a href="../../..">홈</a></li>
+      
+    
+      
+      
+      
+        <li><a href="../../../blog/">블로그</a></li>
+      
+    
+      
+      
+      
+    
+      
+      
+      
+    
+  </ul>
+
+    </nav>
+    <nav aria-labelledby="footer-gluesql">
+      <h2 id="footer-gluesql">GlueSQL</h2>
+      
+  <ul class="notes-footer__links">
+    
+      
+      
+      
+    
+      
+      
+      
+    
+      
+      
+      
+        <li><a href="https://gluesql.org/docs/">공식 문서</a></li>
+      
+    
+      
+      
+      
+        <li><a href="https://github.com/gluesql/gluesql">GitHub</a></li>
+      
+    
+  </ul>
+
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../../..","features":["navigation.tabs","navigation.tabs.sticky","navigation.sections","navigation.indexes","navigation.top","toc.follow"],"search":"../../../assets/javascripts/workers/search.b6b7e04f.min.js","tags":null,"translations":{"clipboard.copied":"클립보드에 복사됨","clipboard.copy":"클립보드로 복사","search.result.more.one":"이 문서에서 1개의 검색 결과 더 보기","search.result.more.other":"이 문서에서 #개의 검색 결과 더 보기","search.result.none":"검색어와 일치하는 문서가 없습니다","search.result.one":"1개의 일치하는 문서","search.result.other":"#개의 일치하는 문서","search.result.placeholder":"검색어를 입력하세요","search.result.term.missing":"포함되지 않은 검색어","select.version":"버전 선택"},"version":null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7f30b55.min.js"></script>
+      
+    
+  </body>
+</html>

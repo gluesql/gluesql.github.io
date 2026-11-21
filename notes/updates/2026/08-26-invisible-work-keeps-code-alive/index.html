@@ -1,0 +1,1380 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Rust never 타입의 10년 안정화 과정을 따라 눈에 잘 띄지 않는 정돈과 호환성 작업, AI 시대에 기술 부채를 줄이는 기여의 가치를 살펴봅니다">
+      
+      
+        <meta name="author" content="Taehoon Moon">
+      
+      
+        <link rel="canonical" href="https://gluesql.org/notes/updates/2026/08-26-invisible-work-keeps-code-alive/">
+      
+      
+        <link rel="prev" href="../08-27-national-ai-service-recruitment/">
+      
+      
+        <link rel="next" href="../08-24-finding-gluesql-contributions/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/gluesql-logo.png">
+      <meta name="generator" content="zensical-0.0.50">
+    
+    
+  
+    
+      
+        <title>보이지 않는 일이 코드를 오래 살게 합니다 - GlueSQL 노트</title>
+      
+    
+  
+
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../../assets/stylesheets/modern/main.62c9b9cc.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  
+  <meta property="og:site_name" content="GlueSQL 노트">
+  <meta property="og:image" content="https://gluesql.org/notes/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GlueSQL 노트, 오픈소스 커뮤니티 블로그">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://gluesql.org/notes/assets/og.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="네비게이션"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="GlueSQL 노트" class="md-header__button md-logo" aria-label="GlueSQL 노트" data-md-component="logo">
+      
+  <img src="../../../assets/gluesql-logo.png" alt="GlueSQL 노트">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="네비게이션">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GlueSQL 노트
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              보이지 않는 일이 코드를 오래 살게 합니다
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="검색">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="검색">
+  <button type="button" class="md-search__button">
+    검색
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="탭" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  홈
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../blog/" class="md-tabs__link">
+          
+  
+  블로그
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://gluesql.org/docs/" class="md-tabs__link">
+        
+  
+  공식 문서
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://github.com/gluesql/gluesql" class="md-tabs__link">
+        
+  
+  GitHub
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="GlueSQL 노트" class="md-nav__button md-logo" aria-label="GlueSQL 노트" data-md-component="logo">
+      
+  <img src="../../../assets/gluesql-logo.png" alt="GlueSQL 노트">
+
+    </a>
+    GlueSQL 노트
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  홈
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../blog/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  블로그
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  블로그
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-08-national-ai-service-recruitment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  국민AI서비스혁신추진단 전문임기제 공무원 11월 채용 안내
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-04-gluesql-development-directions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 현재와 앞으로의 개발 방향
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-10-gluesql-js-opfs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  다시, 브라우저에서 쓰는 GlueSQL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-27-national-ai-service-recruitment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  국민AI서비스혁신추진단 전문임기제 공무원 채용 안내
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  보이지 않는 일이 코드를 오래 살게 합니다
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  보이지 않는 일이 코드를 오래 살게 합니다
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        눈에 보이는 변화는 <code>!</code> 하나입니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        어려웠던 일은 문법을 허용하는 것이 아니었습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        부채는 코드의 양보다 기억해야 할 규칙의 수에 쌓입니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        정돈의 결과는 아무 일도 일어나지 않는 모습으로 나타납니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        AI는 기존 규칙을 더 빠르게 증폭합니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        다음 코드를 덜 복잡하게 만드는 기여
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-24-finding-gluesql-contributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL에서 기여할 문제를 찾고 코드를 읽는 방법
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-08-gluesql-july-contributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL 월간 기여 기록: 2026년 7월
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-06-gluesql-query-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 쿼리 계획이 실행 파이프라인으로 바뀌었습니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-03-gluesql-query-builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 Query Builder는 실행 계획을 직접 만듭니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-30-gluesql-planner-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 planner는 어떤 일을 할까요
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-27-gluesql-store-traits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL은 Store traits로 스토리지와 SQL 엔진을 연결합니다
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-22-gluesql-translate-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL에는 왜 translate 모듈이 있을까요
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-21-open-source-contribution-opportunities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  오픈소스에 기여할 기회가 많은 이유
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-20-gluesql-sql-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL test suite를 SQL fixture로 재구성
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-19-gluesql-line-coverage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GlueSQL의 line coverage 98%를 읽는 법
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://gluesql.org/docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  공식 문서
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/gluesql/gluesql" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  GitHub
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        눈에 보이는 변화는 <code>!</code> 하나입니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        어려웠던 일은 문법을 허용하는 것이 아니었습니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        부채는 코드의 양보다 기억해야 할 규칙의 수에 쌓입니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        정돈의 결과는 아무 일도 일어나지 않는 모습으로 나타납니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        AI는 기존 규칙을 더 빠르게 증폭합니다
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        다음 코드를 덜 복잡하게 만드는 기여
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<p><strong>2026년 8월 26일 · 오픈소스 기여</strong></p>
+<h1 id="_1">보이지 않는 일이 코드를 오래 살게 합니다</h1>
+<p>새로운 기능은 비교적 알아보기 쉽습니다. 전에는 할 수 없던 일이 가능해지고, 사용자는 달라진 결과를 바로 확인할 수 있습니다. 반면 기존 규칙을 정리하고 예외를 줄이는 작업은 결과가 눈에 잘 띄지 않습니다. 아무것도 새로 생기지 않은 것처럼 보이거나, 성공했을 때 오히려 아무 일도 일어나지 않은 것처럼 보이기도 합니다.</p>
+<p>2026년 8월 24일 Rust의 <a href="https://github.com/rust-lang/rust/pull/155499">never 타입 안정화 Pull Request</a>가 병합되었습니다. <code>!</code>를 완전한 타입으로 제안한 <a href="https://github.com/rust-lang/rfcs/blob/master/text/1216-bang-type.md">RFC 1216</a>은 2015년에 시작되었고, <a href="https://github.com/rust-lang/rust/issues/35121">tracking Issue #35121</a>은 2016년에 열렸습니다. 마지막 안정화를 이끈 <a href="https://github.com/WaffleLapkin">@WaffleLapkin</a>은 다섯 번의 안정화 시도가 끝까지 이어지지 못한 뒤, 자신도 2년 넘게 이 작업을 해왔다고 <a href="https://blog.ihatereality.space/0C-never-type/">짧은 글</a>에 남겼습니다.</p>
+<p>10년 뒤 바깥으로 드러난 변화는 <code>!</code> 한 글자입니다. 하지만 이 작업의 가치는 새로운 문법 하나를 더한 데만 있지 않습니다. 언어 안에 함께 남아 있던 서로 다른 규칙을 정리하고, 기존 사용자가 새 규칙으로 이동할 수 있게 준비하고, 앞으로 같은 우회 방법을 반복하지 않아도 되게 한 데 있습니다.</p>
+<h2 id="_2">눈에 보이는 변화는 <code>!</code> 하나입니다</h2>
+<p>Rust의 <code>!</code>는 가능한 값이 하나도 없는 타입입니다. 별도의 결과를 돌려주지 않고 정상적으로 끝나는 함수는 <code>()</code>를 사용합니다. <code>()</code>에는 <code>()</code>라는 값이 하나 있지만, <code>!</code>에는 만들 수 있는 값 자체가 없습니다.</p>
+<p>그래서 호출한 곳으로 돌아오지 않는 함수는 다음처럼 표현할 수 있습니다.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">fn</span><span class="w"> </span><span class="nf">wait_forever</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">loop</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>panic!()</code>, 프로세스 종료, 끝나지 않는 <code>loop</code>, <code>return</code>과 <code>break</code>처럼 현재 흐름을 벗어나는 표현식도 같은 성질을 가집니다. 값을 만들지 않기 때문에 <code>!</code>는 다른 타입이 필요한 위치에 놓일 수 있습니다.</p>
+<p>Rust에는 이미 <code>-&gt; !</code>처럼 이 성질을 사용하는 문법이 있었습니다. 새 안정화의 핵심은 <code>!</code>를 특별한 반환 표식으로만 두지 않고, 제네릭 코드와 타입 인자에서도 다른 타입처럼 사용할 수 있게 하는 것입니다. 안정화가 정식 버전에 도착하면 실패할 수 없는 결과를 다음처럼 직접 표현할 수 있습니다.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">type</span><span class="w"> </span><span class="nc">CannotFail</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="o">!&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p><code>Err</code> 안에 넣을 <code>!</code> 값을 만들 수 없으므로 <code>CannotFail&lt;T&gt;</code>는 <code>Ok(T)</code>만 가질 수 있습니다.</p>
+<p>여기서 한 가지 질문이 생깁니다. 실패할 수 없다면 <code>Result&lt;T, !&gt;</code> 대신 그냥 <code>T</code>를 반환하면 되지 않을까요?</p>
+<p>하나의 함수만 놓고 보면 맞습니다. 하지만 여러 구현이 같은 인터페이스를 따라야 할 때는 이야기가 달라집니다.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">trait</span><span class="w"> </span><span class="n">Source</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="k">type</span><span class="w"> </span><span class="nc">Error</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nb">Result</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="bp">Self</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>파일에서 값을 읽는 구현은 I/O 오류가 발생할 수 있습니다. 반면 이미 메모리에 들어 있는 값을 반환하는 구현은 실패할 이유가 없습니다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>FileSource   -&gt; Result&lt;String, std::io::Error&gt;
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>MemorySource -&gt; Result&lt;String, !&gt;
+</span></code></pre></div>
+<p><code>!</code>를 사용하면 호출하는 쪽은 두 구현을 같은 <code>Result</code> 방식으로 다룰 수 있습니다. 동시에 <code>MemorySource</code>가 실패하지 않는다는 사실도 타입에 남습니다. 실패하지 않는 경우만을 위해 별도의 인터페이스를 만들 필요도 없습니다.</p>
+<p>지금까지는 variant가 하나도 없는 별도 <code>enum</code>이나 표준 라이브러리의 <a href="https://doc.rust-lang.org/std/convert/enum.Infallible.html"><code>Infallible</code></a>이 이 자리를 대신했습니다. <code>Infallible</code>도 만들 수 있는 값이 없기 때문에 같은 역할을 하지만, 라이브러리에서 별도 타입으로 마련한 표현입니다. <code>!</code>가 완전한 타입이 되면 같은 개념을 언어의 한 가지 규칙으로 설명할 수 있습니다.</p>
+<p>사용자가 보게 될 변화만 놓고 보면 별도 타입 대신 <code>!</code>를 쓸 수 있다는 정도입니다. 이미 우회 방법이 있었으므로 급하게 해결해야 할 기능 부족처럼 보이지도 않습니다.</p>
+<h2 id="_3">어려웠던 일은 문법을 허용하는 것이 아니었습니다</h2>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">fn</span><span class="w"> </span><span class="nf">number_or_stop</span><span class="p">(</span><span class="n">ready</span><span class="p">:</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">u32</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">        </span><span class="mi">42</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="fm">panic!</span><span class="p">(</span><span class="s">&quot;not ready&quot;</span><span class="p">)</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>if</code>의 두 분기는 보통 같은 타입의 값을 만들어야 합니다. 위 코드에서 첫 번째 분기는 <code>u32</code>를 만들지만, <code>panic!()</code>을 호출한 분기는 값을 돌려주지 않고 실행을 끝냅니다. 이쪽에서 실제 값이 돌아올 일이 없으므로 전체 <code>if</code> 표현식은 <code>u32</code>로 볼 수 있습니다.</p>
+<p>이처럼 주변에서 <code>u32</code>를 요구하는 경우에는 <code>!</code>가 놓일 자리가 분명합니다. 문제는 컴파일러가 주변 코드만 보고 어떤 타입이 필요한지 결정할 수 없는 경우였습니다. Rust 컴파일러는 오랫동안 이때 <code>!</code>를 <code>()</code>로 추론하는 fallback을 사용했습니다. 실행이 이어지지 않는다는 의미가, 값 하나를 가진 unit 타입으로 바뀌는 예외 규칙이었던 셈입니다.</p>
+<p>이 규칙을 <code>!</code>로 바로 바꾸면 의미는 더 자연스러워지지만, 기존 fallback에 기대던 제네릭 코드와 <code>?</code> 표현식 일부는 더 이상 컴파일되지 않을 수 있습니다. 실제로 Rust 1.41을 목표로 한 안정화는 회귀가 발견되어 되돌려졌습니다.</p>
+<p>그렇다고 기존 동작을 영구히 남긴 채 <code>!</code>만 타입으로 허용하면 언어에는 두 설명이 함께 남습니다.</p>
+<ul>
+<li><code>!</code>는 값이 존재하지 않는 타입입니다.</li>
+<li>단, 컴파일러가 타입을 정하지 못하면 값이 하나인 <code>()</code>로 취급합니다.</li>
+</ul>
+<p>이 두 규칙을 함께 유지할수록 컴파일러와 라이브러리 구현, 문서와 사용자 코드가 모두 예외를 기억해야 합니다. 새로운 기능을 빨리 제공하는 대신 이후의 작업이 계속 이 차이를 고려하도록 만들 수도 있습니다.</p>
+<p>Rust는 <a href="https://doc.rust-lang.org/edition-guide/rust-2024/never-type-fallback.html">2024 Edition의 never type fallback 변경</a>에서 먼저 fallback을 <code>!</code>로 바꾸고, 영향을 받는 코드를 찾는 lint와 마이그레이션 안내를 제공했습니다. 이후 모든 Edition에 같은 fallback을 적용하고 <code>Infallible</code>을 <code>!</code>의 별칭으로 만들며, 이전 fallback을 전제로 하던 lint도 제거하는 순서로 나아갔습니다.</p>
+<h2 id="_4">부채는 코드의 양보다 기억해야 할 규칙의 수에 쌓입니다</h2>
+<p>기술 부채를 코드가 지저분하거나 파일이 큰 상태로만 생각하기 쉽습니다. 하지만 서로 비슷한 두 타입이 같은 역할을 하고, 오래된 호환 규칙이 특정 경로에서만 적용되고, 새 기능을 만들 때마다 그 차이를 확인해야 하는 상태도 부채입니다.</p>
+<p>이런 부채는 당장 동작하지 않는 버그가 아닐 수 있습니다. 각각의 경로에는 테스트가 있고 사용 중인 코드도 있습니다. 그래서 유지하는 편이 안전해 보입니다. 하지만 새 기능을 추가할 때마다 어느 규칙을 따라야 하는지 판단해야 하고, 한쪽만 수정하면 다른 쪽이 빠질 수 있습니다.</p>
+<p>never 타입 안정화에서 정리한 것도 이런 차이였습니다.</p>
+<table>
+<thead>
+<tr>
+<th>함께 존재하던 개념</th>
+<th>정리한 방향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>diverging expression</code>의 <code>!</code>와 완전한 타입으로서의 <code>!</code></td>
+<td>하나의 타입으로 설명</td>
+</tr>
+<tr>
+<td>타입을 정하지 못할 때 <code>()</code>로 바꾸는 fallback</td>
+<td><code>!</code>의 의미를 그대로 유지</td>
+</tr>
+<tr>
+<td>별도 빈 <code>enum</code>인 <code>Infallible</code></td>
+<td><code>!</code>의 별칭으로 통합</td>
+</tr>
+<tr>
+<td>이전 fallback 의존성을 찾는 임시 lint</td>
+<td>마이그레이션 뒤 제거</td>
+</tr>
+</tbody>
+</table>
+<p>여기서 lint와 Edition 단계는 최종 구조에 영원히 남길 기능이 아니라, 기존 생태계를 데리고 이동하기 위한 장치였습니다. 정돈은 과거의 선택을 잘못으로 규정하고 지우는 일이 아닙니다. 그 선택이 필요했던 이유를 확인하고, 더 이상 필요하지 않게 만드는 과정에 가깝습니다.</p>
+<h2 id="_5">정돈의 결과는 아무 일도 일어나지 않는 모습으로 나타납니다</h2>
+<p>새 기능의 성공은 전에는 실패하던 예제가 동작하는 모습으로 보여줄 수 있습니다. 호환성과 정돈 작업의 성공은 반대로 나타납니다.</p>
+<ul>
+<li>기존 crate가 예상하지 못한 방식으로 깨지지 않습니다.</li>
+<li>영향을 받는 코드는 안정화 전에 경고를 통해 발견됩니다.</li>
+<li>마이그레이션이 끝난 뒤에는 임시 호환 경로와 lint를 제거할 수 있습니다.</li>
+<li>다음 컴파일러와 라이브러리 작업은 더 적은 예외를 전제로 시작합니다.</li>
+</ul>
+<p>최종 PR에는 never 타입과 fallback 변경만이 아니라 실제 crate를 대상으로 한 호환성 실험, 회귀를 줄이기 위한 컴파일러 수정, <code>Infallible</code>을 <code>!</code>와 통합하기 위한 라이브러리 논의, 새 동작을 설명하는 문서 작업이 함께 연결되어 있습니다. 이 중 많은 일은 사용자가 직접 호출할 API를 만들지 않습니다. 오히려 사용자가 별다른 문제를 느끼지 않도록 하기 위한 작업입니다.</p>
+<p>그래서 이런 기여는 크기를 알아보기 어렵습니다. 변경된 화면도 없고 벤치마크 숫자가 크게 오르지도 않습니다. 성공한 날에도 대부분의 Rust 코드는 전날과 똑같이 컴파일됩니다. 하지만 이후의 타입 시스템과 제네릭 라이브러리는 더 일관된 규칙 위에서 만들어질 수 있습니다.</p>
+<h2 id="ai">AI는 기존 규칙을 더 빠르게 증폭합니다</h2>
+<p>AI 코딩 에이전트는 주변 코드에서 비슷한 구현을 찾고, 현재 발생한 오류를 고치고, 반복되는 변경을 여러 파일에 적용하는 일을 빠르게 할 수 있습니다. <a href="../07-21-open-source-contribution-opportunities/">이전 글</a>에서는 이 실행 속도가 사람이 시간을 배정하지 못했던 오픈소스 작업을 앞으로 옮길 수 있다고 이야기했습니다.</p>
+<p>같은 능력은 기존 코드의 부채도 빠르게 퍼뜨릴 수 있습니다. 코드베이스 안에 두 개의 비슷한 경로와 임시 우회 방법이 함께 있다면, AI는 그것이 역사적으로 남은 예외인지 앞으로 따라야 할 규칙인지 저절로 알지 못합니다. 주어진 테스트를 통과시키기 위해 이미 있는 분기를 복사하거나 그 위에 변환을 하나 더 얹는 선택은 가까운 문제를 해결하지만, 전체 규칙을 더 분명하게 만들지는 않습니다.</p>
+<p>AI가 기술 부채를 만든다는 말이 AI가 언제나 잘못된 코드를 작성한다는 뜻은 아닙니다. 현재 작업의 목적이 누락된 동작 하나를 추가하는 데만 있다면, 에이전트도 그 범위에 맞춰 가장 가까운 해법을 찾습니다. 어떤 경로를 장기적으로 없앨지, 호환성 비용을 언제 감당할지, 여러 모듈이 함께 지켜야 할 규칙을 무엇으로 둘지는 별도의 판단입니다.</p>
+<p>코드를 만드는 비용이 낮아질수록 이 판단은 더 중요해집니다. 좋지 않은 관습 하나가 더 많이 복제될 수도 있지만, 잘 정리된 타입과 API, 분명한 테스트 경계도 더 넓게 반복될 수 있기 때문입니다.</p>
+<blockquote>
+<p>AI는 현재의 규칙을 빠르게 확장할 수 있습니다. 그래서 어떤 규칙을 남길 것인지 정하는 일은 이전보다 더 중요해졌습니다.</p>
+</blockquote>
+<p>AI는 정돈 작업에도 유용합니다. 오래된 사용 경로를 검색하고, 영향을 받는 코드를 분류하고, 반복적인 마이그레이션과 테스트 초안을 준비할 수 있습니다. 다만 무엇을 추가할지만이 아니라, 어떤 예외와 우회 방법을 없앨지도 작업의 목표로 먼저 정해야 합니다.</p>
+<h2 id="_6">다음 코드를 덜 복잡하게 만드는 기여</h2>
+<p>GlueSQL에서도 사용자에게 바로 보이는 SQL 기능만 프로젝트를 앞으로 움직이는 것은 아닙니다. <a href="../08-06-gluesql-query-pipeline/">실행 파이프라인을 정리한 작업</a>은 planner가 결정할 내용과 executor가 실행할 내용을 타입으로 나누었습니다. 이 작업의 가치는 새로운 SQL 문법을 추가한 데 있지 않았습니다. 이후 구현과 리뷰에서 같은 판단을 반복하지 않게 하는 기반을 마련했습니다.</p>
+<p><a href="../08-24-finding-gluesql-contributions/">최근 기여 사례를 살펴본 글</a>의 <code>HashJoinPlanner</code> 이름 정리도 실행 결과를 바꾸지 않았습니다. 하지만 이름과 실제 책임을 맞추면서 다음 사람이 이름만 보고도 이 단계가 선택적인 최적화임을 알 수 있게 했습니다.</p>
+<p>이런 변화는 변경량이나 새로운 기능의 수로는 충분히 설명되지 않습니다. 한 가지 개념을 여러 이름으로 부르던 상태를 정리하고, 임시 분기를 제거할 수 있는 마이그레이션을 만들고, 잘못된 패턴이 다시 들어오지 않게 테스트와 lint를 남기는 일은 다음 기여자의 비용을 낮춥니다.</p>
+<p>오픈소스에서 인정받기 쉬운 결과는 대체로 눈에 보입니다. 새로운 기능, 빨라진 숫자, 닫힌 Issue가 그렇습니다. 반면 앞으로 필요할 설명의 수를 줄인 사람, 기존 사용자를 지키면서 예외를 없앤 사람, 다음 구현이 더 단순해질 기반을 만든 사람의 기여는 결과 안에 조용히 남습니다.</p>
+<p>never 타입을 안정화한 뒤 @WaffleLapkin은 “I feel… empty. Just like the never type.”이라고 짧게 적었습니다. 10년의 역사와 자신이 보낸 2년을 길게 설명하는 대신 남긴 농담이었습니다.</p>
+<p>그동안의 작업이 눈에 보이는 거대한 기능으로 나타난 것은 아닙니다. 이제 Rust는 값이 존재하지 않는다는 한 가지 개념을 더 적은 예외로 설명할 수 있게 되었습니다. 이후 Rust를 사용하는 사람은 그동안 쌓인 예외를 모두 알지 않아도 더 일관된 타입 규칙을 사용할 수 있습니다.</p>
+<blockquote>
+<p>눈에 잘 띄지 않아도, 다음 사람이 불필요한 복잡성을 떠안지 않게 만드는 일은 코드를 오래 살게 합니다.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+  
+
+<footer class="notes-footer" id="site-footer">
+  <div class="notes-footer__inner md-grid">
+    <div class="notes-footer__intro">
+      <p class="notes-footer__name">GlueSQL 노트</p>
+      <p>GlueSQL 커뮤니티에서 운영하는 블로그입니다.</p>
+    </div>
+    <nav aria-labelledby="footer-notes">
+      <h2 id="footer-notes">둘러보기</h2>
+      
+  <ul class="notes-footer__links">
+    
+      
+      
+      
+        <li><a href="../../..">홈</a></li>
+      
+    
+      
+      
+      
+        <li><a href="../../../blog/">블로그</a></li>
+      
+    
+      
+      
+      
+    
+      
+      
+      
+    
+  </ul>
+
+    </nav>
+    <nav aria-labelledby="footer-gluesql">
+      <h2 id="footer-gluesql">GlueSQL</h2>
+      
+  <ul class="notes-footer__links">
+    
+      
+      
+      
+    
+      
+      
+      
+    
+      
+      
+      
+        <li><a href="https://gluesql.org/docs/">공식 문서</a></li>
+      
+    
+      
+      
+      
+        <li><a href="https://github.com/gluesql/gluesql">GitHub</a></li>
+      
+    
+  </ul>
+
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../../..","features":["navigation.tabs","navigation.tabs.sticky","navigation.sections","navigation.indexes","navigation.top","toc.follow"],"search":"../../../assets/javascripts/workers/search.b6b7e04f.min.js","tags":null,"translations":{"clipboard.copied":"클립보드에 복사됨","clipboard.copy":"클립보드로 복사","search.result.more.one":"이 문서에서 1개의 검색 결과 더 보기","search.result.more.other":"이 문서에서 #개의 검색 결과 더 보기","search.result.none":"검색어와 일치하는 문서가 없습니다","search.result.one":"1개의 일치하는 문서","search.result.other":"#개의 일치하는 문서","search.result.placeholder":"검색어를 입력하세요","search.result.term.missing":"포함되지 않은 검색어","select.version":"버전 선택"},"version":null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7f30b55.min.js"></script>
+      
+    
+  </body>
+</html>
